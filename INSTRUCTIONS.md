@@ -1,8 +1,7 @@
-# LEARNING_AGENT.md
+# INSTRUCTIONS.md
 # ─────────────────────────────────────────────────────────────────────────────
-# THIS FILE IS AN EXECUTABLE MISSION, NOT A DOCUMENT TO DISCUSS.
-# When Claude Code reads this file it must BEGIN EXECUTING IMMEDIATELY.
-# Do not summarise. Do not explain. Do not ask questions. Just execute.
+# Claude Code instructions — read this file and execute the steps below.
+# Note: currently written for Claude Code. Other agent runtimes are not yet supported.
 # ─────────────────────────────────────────────────────────────────────────────
 
 ## STEP 0 — READ INPUTS & DETECT MODE

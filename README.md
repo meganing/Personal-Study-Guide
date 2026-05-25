@@ -1,16 +1,32 @@
-# Learning Agent — AI-Powered Study & Assignment Tool
+# study-pack-generator
 
-An intelligent learning agent that automatically generates comprehensive, ADHD-friendly study materials from course content. Transforms lecture slides, PDFs, and assignment briefs into structured learning packs with schedules, flashcards, practice quizzes, and more.
+A Claude Code script that reads your course materials and generates a personalized, ADHD-friendly study pack. Transforms lecture slides, PDFs, and assignment briefs into structured outputs with schedules, flashcards, practice quizzes, and more.
 
-## 🎯 What It Does
+## Why ADHD-friendly?
 
-The Learning Agent analyzes your course materials and creates personalized study packs in three modes:
+The study output is specifically designed for ADHD learners — this is the most distinctive thing about it:
 
-- **📚 Study Mode**: ADHD-friendly study schedules with concept summaries, flashcards, and practice materials
-- **📝 Assignment Mode**: Step-by-step completion guides for individual assignments  
-- **🔧 Solver Mode**: Complete working solutions with comprehension guides
+- **25-minute task blocks** with clear end goals
+- **Mandatory 10-minute breaks** every 50 minutes
+- **Direct action language** ("Open this file, read it twice")
+- **Active learning tasks** (write, say aloud, draw)
+- **Visual analogies** for abstract concepts
+- **Common mistake warnings** to prevent confusion
+- **Multiple learning modalities** (visual, auditory, kinesthetic)
 
-## 🚀 Quick Start
+## Compatibility
+
+Currently built for Claude Code. Support for other AI agents/runners is planned for a future release.
+
+## Output Modes
+
+Pick one of three presets when you run it:
+
+- **📚 Study mode**: ADHD-friendly study schedules with concept summaries, flashcards, and practice materials
+- **📝 Assignment mode**: Step-by-step completion guides for individual assignments
+- **🔧 Solver mode**: Complete working solutions with comprehension guides
+
+## Quick Start
 
 ### Prerequisites
 - Python 3.x
@@ -30,24 +46,24 @@ The Learning Agent analyzes your course materials and creates personalized study
    CANVAS_URL=https://your-institution.instructure.com
    ```
 
-3. **Run the agent:**
+3. **Run it:**
    ```bash
    # Auto-detect mode from course materials
    ./run.sh COURSE-CODE 10
 
-   # Specify mode explicitly  
+   # Specify a preset explicitly
    ./run.sh SYS-102 10 --mode study
    ./run.sh CS-201 8 --mode assignment
    ./run.sh MATH-301 6 --mode solver
    ```
 
-## 📖 Usage Examples
+## Usage Examples
 
-### Study Mode (Exam Prep)
+### Study mode (exam prep)
 ```bash
 ./run.sh SYS-102 10 --mode study
 ```
-**Creates:**
+**Uses Claude to generate:**
 - Hour-by-hour ADHD-friendly study schedule
 - Concept summaries with analogies and common mistakes
 - 30 flashcards (CSV for Anki import)
@@ -56,29 +72,29 @@ The Learning Agent analyzes your course materials and creates personalized study
 - "Say it out loud" scripts for active learning
 - Danger questions targeting examiner traps
 
-### Assignment Mode (Project Guidance)
+### Assignment mode (project guidance)
 ```bash
 ./run.sh CS-301 12 --mode assignment
 ```
-**Creates:**
+**Uses Claude to generate:**
 - Overview of all assignments with time estimates
 - Step-by-step completion guides for each assignment
 - Code scaffolds and implementation approaches
 - Relevant lecture material references
 - Common mistakes and testing strategies
 
-### Solver Mode (Working Solutions)
+### Solver mode (working solutions)
 ```bash
 ./run.sh PHYS-201 8 --mode solver
 ```
-**Creates:**
+**Uses Claude to generate:**
 - Complete working solution (ready to submit)
 - Comprehensive understanding guide
 - Code walkthrough with explanations
 - Questions you must be able to answer
 - 30-minute crash course for solution comprehension
 
-## 🎮 Command Options
+## Command Options
 
 ```bash
 ./run.sh <course> <hours> [options]
@@ -91,13 +107,13 @@ Options:
 Examples:
   ./run.sh SEN-109 10                           # Auto-detect mode
   ./run.sh SEN-109 10 --mode study              # Study pack for exam
-  ./run.sh SEN-109 10 --mode assignment         # Assignment guides  
+  ./run.sh SEN-109 10 --mode assignment         # Assignment guides
   ./run.sh SEN-109 10 --skip-fetch --mode study # Use existing files
 ```
 
-## 📁 File Organization
+## File Organization
 
-### Input Structure
+### Input structure
 ```
 course-materials/
 ├── COURSE-CODE/
@@ -110,7 +126,7 @@ course-materials/
 │   └── project/               # Manual file drop (--source=local)
 ```
 
-### Output Structure
+### Output structure
 ```
 course-materials/COURSE-CODE/outputs/
 ├── 00_HOW_TO_USE.md           # Start here - usage guide
@@ -127,28 +143,16 @@ course-materials/COURSE-CODE/outputs/
 └── solver/                    # Complete solutions
 ```
 
-## 🧠 ADHD-Friendly Features
+## Canvas Integration
 
-The study mode is specifically designed for ADHD learners:
-
-- **25-minute task blocks** with clear end goals
-- **Mandatory 10-minute breaks** every 50 minutes  
-- **Direct action language** ("Open this file, read it twice")
-- **Active learning tasks** (write, say aloud, draw)
-- **Visual analogies** for abstract concepts
-- **Common mistake warnings** to prevent confusion
-- **Multiple learning modalities** (visual, auditory, kinesthetic)
-
-## 🔧 Canvas Integration
-
-### Automatic Fetching
-The agent automatically fetches:
+### Automatic fetching
+Fetches from Canvas automatically:
 - Lecture slides and course files
 - Assignment briefs and rubrics
 - Course syllabus and schedule
 - Any linked external resources
 
-### Manual File Drop
+### Manual file drop
 For courses without Canvas access:
 ```bash
 ./run.sh COURSE-CODE 10 --source=local
@@ -156,7 +160,7 @@ For courses without Canvas access:
 # Supports: .pdf .pptx .txt .md .py .js .cpp .zip and more
 ```
 
-## 📚 Supported File Types
+## Supported File Types
 
 - **Lectures:** PDF, PPTX, TXT, MD
 - **Code:** PY, JS, TS, CPP, C, RS, JAVA
@@ -164,37 +168,37 @@ For courses without Canvas access:
 - **Archives:** ZIP, TAR, RAR (auto-extracted)
 - **Assignments:** Any text-based format
 
-## 🎯 Assessment Coverage
+## Assessment Coverage
 
-### Study Mode Maps to Common Assessment Types:
+### Study mode maps to common assessment types:
 - **Exams:** Comprehensive study schedules with practice questions
-- **Quizzes:** Targeted concept summaries and flashcards  
+- **Quizzes:** Targeted concept summaries and flashcards
 - **Projects:** Technical concept foundation for implementation
 - **Labs:** Hands-on skill development with theoretical backing
 
-### Assignment Mode Handles:
+### Assignment mode handles:
 - **Programming projects** with code scaffolds
 - **Research papers** with outline and source guidance
 - **Problem sets** with step-by-step solutions
 - **Design projects** with methodology and evaluation
 
-## ⚙️ Customization
+## Customization
 
-### Study Hours
+### Study hours
 Adjust total study time based on course difficulty:
 - **Light courses:** 4-6 hours
-- **Standard courses:** 8-12 hours  
+- **Standard courses:** 8-12 hours
 - **Heavy courses:** 15-20 hours
 
-### Learning Preferences
-The agent adapts to different learning needs:
+### Learning preferences
+Claude adapts output to different learning needs:
 - Visual learners get diagrams and concept maps
 - Auditory learners get speaking scripts and explanations
 - Kinesthetic learners get hands-on exercises and building tasks
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
-### Common Issues
+### Common issues
 
 **"No materials found"**
 ```bash
@@ -215,15 +219,15 @@ cat .env
 - Check that course materials exist in expected directories
 - Try running with `--skip-fetch` if materials already exist
 
-### Getting Help
+### Getting help
 1. Check the course-materials directory structure
 2. Verify Canvas API permissions
 3. Ensure all prerequisites are installed
 4. Run with manual file drop mode for debugging
 
-## 🔮 Advanced Usage
+## Advanced Usage
 
-### Batch Processing
+### Batch processing
 ```bash
 # Process multiple courses
 for course in SYS-102 CS-201 MATH-301; do
@@ -231,7 +235,7 @@ for course in SYS-102 CS-201 MATH-301; do
 done
 ```
 
-### Custom Study Plans
+### Custom study plans
 Edit the generated study schedule to fit your calendar:
 ```bash
 # Generated schedule is in:
@@ -249,23 +253,23 @@ course-materials/COURSE-CODE/outputs/03_study_schedule.md
 # 5. Import and start daily review
 ```
 
-## 🤝 Contributing
+## Contributing
 
-This learning agent is designed to be extensible:
+This project is designed to be extensible:
 
-- **New modes:** Add to `LEARNING_AGENT.md` instruction set
+- **New presets:** Add to `INSTRUCTIONS.md`
 - **File types:** Extend parsing in `canvas_fetcher.py`
 - **Learning styles:** Customize output templates
 - **Assessment types:** Add new question formats
 
-## 📄 License
+## License
 
 [Specify your license here]
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
-Built with Claude Code for intelligent content analysis and generation. Designed for neurodivergent learners and evidence-based study techniques.
+Built with Claude Code for content analysis and generation. Designed for neurodivergent learners and evidence-based study techniques.
 
 ---
 
-**Need help?** Open an issue or check the troubleshooting section above. The learning agent works best with well-organized course materials and clear learning objectives.
+**Need help?** Open an issue or check the troubleshooting section above. Works best with well-organized course materials and clear learning objectives.

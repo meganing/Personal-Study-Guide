@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────────────
-# run.sh — Learning Agent launcher
+# run.sh — study-pack-generator launcher
 # See README.md for full usage guide
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -39,7 +39,7 @@ done
 # ── Help / usage ──────────────────────────────────────────────────────────────
 if [[ -z "$COURSE" || "$COURSE" == "--help" || "$COURSE" == "-h" ]]; then
   echo ""
-  echo -e "${BOLD}Learning Agent${RESET} — AI-powered study & assignment tool"
+  echo -e "${BOLD}study-pack-generator${RESET} — Claude-powered study & assignment tool"
   echo ""
   echo -e "${BOLD}Usage:${RESET}"
   echo -e "  ./run.sh <course> <hours> [--mode <mode>] [--skip-fetch]"
@@ -164,17 +164,17 @@ fi
 
 # ── Step 2: Run agent ─────────────────────────────────────────────────────────
 if [[ "$MODE" == "auto" ]]; then
-  banner "Step 2/2 — Running learning agent (auto-detecting mode)"
+  banner "Step 2/2 — Generating study pack (auto-detecting mode)"
   MODE_LINE="Auto-detect the mode from the files present in the course folder."
 else
-  banner "Step 2/2 — Running learning agent (mode: ${MODE})"
+  banner "Step 2/2 — Generating study pack (mode: ${MODE})"
   MODE_LINE="The mode is: ${MODE}. Do not auto-detect — use this mode exactly."
 fi
 
 mkdir -p "$OUTPUTS_DIR"
 mkdir -p "${OUTPUTS_DIR}/assignments"
 
-AGENT_PROMPT="Read LEARNING_AGENT.md and execute every instruction in it exactly as written. Do not explain, do not summarise, do not ask questions — just execute all phases now. INPUTS: Course materials folder: ${MATERIALS_DIR}/ Study/work hours: ${HOURS} ${MODE_LINE} Write all output files to: ${OUTPUTS_DIR}/ Write assignment files to: ${OUTPUTS_DIR}/assignments/ Write solver files to: ${OUTPUTS_DIR}/solver/ If source is local, project files are in: ${MATERIALS_DIR}/project/ Begin with Step 0 immediately."
+AGENT_PROMPT="Read INSTRUCTIONS.md and execute every instruction in it exactly as written. Do not explain, do not summarise, do not ask questions — just execute all phases now. INPUTS: Course materials folder: ${MATERIALS_DIR}/ Study/work hours: ${HOURS} ${MODE_LINE} Write all output files to: ${OUTPUTS_DIR}/ Write assignment files to: ${OUTPUTS_DIR}/assignments/ Write solver files to: ${OUTPUTS_DIR}/solver/ If source is local, project files are in: ${MATERIALS_DIR}/project/ Begin with Step 0 immediately."
 
 echo "$AGENT_PROMPT" | claude --model claude-sonnet-4-20250514
 
