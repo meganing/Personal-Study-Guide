@@ -21,7 +21,7 @@ COURSE="${1:-}"
 HOURS="${2:-5}"
 MODE="auto"
 SKIP_FETCH=false
-SOURCE=""   # canvas | local — only asked for assignment/solver modes
+SOURCE=""   # canvas | local
 
 for i in $(seq 1 $#); do
   case "${!i}" in
@@ -85,13 +85,12 @@ command -v python3 &>/dev/null || die "python3 not found. Install Python 3."
 command -v claude  &>/dev/null || die "claude not found. Run: npm install -g @anthropic-ai/claude-code"
 ok "All checks passed"
 
-# ── Ask file source for assignment/solver modes ───────────────────────────────
-if [[ "$MODE" == "assignment" || "$MODE" == "solver" ]] && \
-   [[ "$SKIP_FETCH" == false ]] && [[ -z "$SOURCE" ]]; then
+# ── Ask file source (all modes unless --skip-fetch or --source already set) ───
+if [[ "$SKIP_FETCH" == false ]] && [[ -z "$SOURCE" ]]; then
 
   echo ""
   divider
-  echo -e "${BOLD}  Where are your project/assignment files?${RESET}"
+  echo -e "${BOLD}  Where are your course files?${RESET}"
   divider
   echo -e "  ${CYAN}1)${RESET} Canvas  — fetch automatically from Canvas"
   echo -e "  ${CYAN}2)${RESET} Local   — I will drop the files in myself"
@@ -105,11 +104,6 @@ if [[ "$MODE" == "assignment" || "$MODE" == "solver" ]] && \
     *) die "Invalid choice. Enter 1 or 2." ;;
   esac
   echo ""
-fi
-
-# Default to canvas for study mode (lectures always from Canvas)
-if [[ "$MODE" == "study" || "$MODE" == "auto" ]]; then
-  SOURCE="canvas"
 fi
 
 # ── Step 1A: Canvas fetch ─────────────────────────────────────────────────────

@@ -1,6 +1,6 @@
 # study-pack-generator
 
-A Claude Code script that reads your course materials and generates a personalized, ADHD-friendly study pack. Transforms lecture slides, PDFs, and assignment briefs into structured outputs with schedules, flashcards, practice quizzes, and more.
+An AI workflow that reads your course materials or project descriptions and generates a personalized, ADHD-friendly study pack. Transforms lecture slides, PDFs, and assignment briefs into structured outputs with schedules, flashcards, practice quizzes, and more.
 
 ## Why ADHD-friendly?
 
