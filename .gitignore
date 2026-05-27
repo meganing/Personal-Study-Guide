@@ -15,6 +15,7 @@ Thumbs.db
 # Course materials (may contain sensitive data)
 course-materials/*/files/
 course-materials/*/outputs/
+course-materials/*/project/
 
 # Python
 __pycache__/
@@ -39,3 +40,5 @@ pip-log.txt
 # Temporary files
 *.tmp
 *.temp
+
+

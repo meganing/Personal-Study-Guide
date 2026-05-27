@@ -260,7 +260,7 @@ This learning agent is designed to be extensible:
 
 ## 📄 License
 
-[Specify your license here]
+MIT 
 
 ## 🙏 Acknowledgments
 
