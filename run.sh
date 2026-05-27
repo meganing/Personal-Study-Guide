@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────────────
-# run.sh — Learning Agent launcher
+# run.sh — study-pack-generator launcher
 # See README.md for full usage guide
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -21,7 +21,7 @@ COURSE="${1:-}"
 HOURS="${2:-5}"
 MODE="auto"
 SKIP_FETCH=false
-SOURCE=""   # canvas | local — only asked for assignment/solver modes
+SOURCE=""   # canvas | local
 
 for i in $(seq 1 $#); do
   case "${!i}" in
@@ -39,7 +39,7 @@ done
 # ── Help / usage ──────────────────────────────────────────────────────────────
 if [[ -z "$COURSE" || "$COURSE" == "--help" || "$COURSE" == "-h" ]]; then
   echo ""
-  echo -e "${BOLD}Learning Agent${RESET} — AI-powered study & assignment tool"
+  echo -e "${BOLD}study-pack-generator${RESET} — Claude-powered study & assignment tool"
   echo ""
   echo -e "${BOLD}Usage:${RESET}"
   echo -e "  ./run.sh <course> <hours> [--mode <mode>] [--skip-fetch]"
@@ -85,13 +85,12 @@ command -v python3 &>/dev/null || die "python3 not found. Install Python 3."
 command -v claude  &>/dev/null || die "claude not found. Run: npm install -g @anthropic-ai/claude-code"
 ok "All checks passed"
 
-# ── Ask file source for assignment/solver modes ───────────────────────────────
-if [[ "$MODE" == "assignment" || "$MODE" == "solver" ]] && \
-   [[ "$SKIP_FETCH" == false ]] && [[ -z "$SOURCE" ]]; then
+# ── Ask file source (all modes unless --skip-fetch or --source already set) ───
+if [[ "$SKIP_FETCH" == false ]] && [[ -z "$SOURCE" ]]; then
 
   echo ""
   divider
-  echo -e "${BOLD}  Where are your project/assignment files?${RESET}"
+  echo -e "${BOLD}  Where are your course files?${RESET}"
   divider
   echo -e "  ${CYAN}1)${RESET} Canvas  — fetch automatically from Canvas"
   echo -e "  ${CYAN}2)${RESET} Local   — I will drop the files in myself"
@@ -105,11 +104,6 @@ if [[ "$MODE" == "assignment" || "$MODE" == "solver" ]] && \
     *) die "Invalid choice. Enter 1 or 2." ;;
   esac
   echo ""
-fi
-
-# Default to canvas for study mode (lectures always from Canvas)
-if [[ "$MODE" == "study" || "$MODE" == "auto" ]]; then
-  SOURCE="canvas"
 fi
 
 # ── Step 1A: Canvas fetch ─────────────────────────────────────────────────────
@@ -164,17 +158,17 @@ fi
 
 # ── Step 2: Run agent ─────────────────────────────────────────────────────────
 if [[ "$MODE" == "auto" ]]; then
-  banner "Step 2/2 — Running learning agent (auto-detecting mode)"
+  banner "Step 2/2 — Generating study pack (auto-detecting mode)"
   MODE_LINE="Auto-detect the mode from the files present in the course folder."
 else
-  banner "Step 2/2 — Running learning agent (mode: ${MODE})"
+  banner "Step 2/2 — Generating study pack (mode: ${MODE})"
   MODE_LINE="The mode is: ${MODE}. Do not auto-detect — use this mode exactly."
 fi
 
 mkdir -p "$OUTPUTS_DIR"
 mkdir -p "${OUTPUTS_DIR}/assignments"
 
-AGENT_PROMPT="Read LEARNING_AGENT.md and execute every instruction in it exactly as written. Do not explain, do not summarise, do not ask questions — just execute all phases now. INPUTS: Course materials folder: ${MATERIALS_DIR}/ Study/work hours: ${HOURS} ${MODE_LINE} Write all output files to: ${OUTPUTS_DIR}/ Write assignment files to: ${OUTPUTS_DIR}/assignments/ Write solver files to: ${OUTPUTS_DIR}/solver/ If source is local, project files are in: ${MATERIALS_DIR}/project/ Begin with Step 0 immediately."
+AGENT_PROMPT="Read INSTRUCTIONS.md and execute every instruction in it exactly as written. Do not explain, do not summarise, do not ask questions — just execute all phases now. INPUTS: Course materials folder: ${MATERIALS_DIR}/ Study/work hours: ${HOURS} ${MODE_LINE} Write all output files to: ${OUTPUTS_DIR}/ Write assignment files to: ${OUTPUTS_DIR}/assignments/ Write solver files to: ${OUTPUTS_DIR}/solver/ If source is local, project files are in: ${MATERIALS_DIR}/project/ Begin with Step 0 immediately."
 
 echo "$AGENT_PROMPT" | claude --model claude-sonnet-4-20250514
 
