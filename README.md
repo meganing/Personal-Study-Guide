@@ -1,8 +1,8 @@
-# study-pack-generator
+# Study-pack-generator
 
 An AI workflow that reads your course materials or project descriptions and generates a personalized, ADHD-friendly study pack. Transforms lecture slides, PDFs, and assignment briefs into structured outputs with schedules, flashcards, practice quizzes, and more.
 
-## Why ADHD-friendly?
+## ADHD-friendly
 
 The study output is specifically designed for ADHD learners — this is the most distinctive thing about it:
 
@@ -116,7 +116,7 @@ Examples:
 ### Input structure
 ```
 course-materials/
-├── COURSE-CODE/
+├── COURSE-CODE (or project name)/
 │   ├── manifest.json           # Course metadata
 │   ├── assignments.json        # Assignment details
 │   ├── files/
