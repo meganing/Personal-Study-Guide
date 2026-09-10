@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__COURSE_TITLE__ — Assignment Guides</title>
+<style>
+  :root{
+    --bg:#faf8f5; --bg-alt:#ffffff; --bg-raised:#f1ede6;
+    --text:#1a1a1a; --text-dim:#5b5b5b; --border:#e5e1da;
+    --accent:#6d54e0; --accent-ink:#ffffff; --accent-soft:#efeafd;
+    --good:#0f9d68; --good-soft:#e3f7ee;
+    --bad:#e5484d; --bad-soft:#fdeaea;
+    --warn:#b8790a; --warn-soft:#fdf1de;
+    --radius:16px; --radius-sm:10px;
+    --shadow:0 1px 2px rgba(20,16,8,.04), 0 8px 24px rgba(20,16,8,.06);
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#15161c; --bg-alt:#1c1e26; --bg-raised:#242631;
+      --text:#f2f1ee; --text-dim:#a7a7b2; --border:#2d2f3a;
+      --accent:#9b86ff; --accent-ink:#15161c; --accent-soft:#2a2450;
+      --good:#3ecf8e; --good-soft:#0f2e24;
+      --bad:#ff6b70; --bad-soft:#3a1c1e;
+      --warn:#f0b64c; --warn-soft:#3a2c10;
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#15161c; --bg-alt:#1c1e26; --bg-raised:#242631;
+    --text:#f2f1ee; --text-dim:#a7a7b2; --border:#2d2f3a;
+    --accent:#9b86ff; --accent-ink:#15161c; --accent-soft:#2a2450;
+    --good:#3ecf8e; --good-soft:#0f2e24;
+    --bad:#ff6b70; --bad-soft:#3a1c1e;
+    --warn:#f0b64c; --warn-soft:#3a2c10;
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.5}
+  button{font:inherit;cursor:pointer}
+  .app{display:flex;min-height:100vh}
+  aside{width:270px;flex:none;border-right:1px solid var(--border);background:var(--bg-alt);
+    padding:18px 14px;position:sticky;top:0;height:100vh;overflow:auto}
+  aside h1{font-size:15px;margin:0 0 2px}
+  aside .hint{font-size:11.5px;color:var(--text-dim);margin:0 0 14px}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:10px 10px;border-radius:10px;cursor:pointer;
+    margin-bottom:4px;border:1px solid transparent}
+  .nav-item:hover{background:var(--bg-raised)}
+  .nav-item.active{background:var(--accent-soft);border-color:var(--accent)}
+  .nav-item .dot{width:8px;height:8px;border-radius:50%;background:var(--border);flex:none}
+  .nav-item.complete .dot{background:var(--good)}
+  .nav-item .nt{flex:1;min-width:0}
+  .nav-item .nt b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .nav-item .nt small{color:var(--text-dim);font-size:11px}
+  main{flex:1;min-width:0;padding:30px 34px 80px;max-width:880px}
+  .topbar{display:flex;justify-content:flex-end;margin-bottom:6px}
+  .icon-btn{border:1px solid var(--border);background:var(--bg-alt);color:var(--text);border-radius:10px;
+    width:36px;height:36px;display:grid;place-items:center}
+  h2{font-size:22px;margin:6px 0 2px}
+  .meta-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .pill{font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--bg-raised);color:var(--text-dim)}
+  .pill.accent{background:var(--accent-soft);color:var(--accent)}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0 20px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--border)}
+  th{color:var(--text-dim);font-weight:700;font-size:11.5px;text-transform:uppercase}
+  tr:hover td{background:var(--bg-raised)}
+  .card{background:var(--bg-alt);border:1px solid var(--border);border-radius:var(--radius);
+    padding:16px 18px;margin-bottom:14px;box-shadow:var(--shadow)}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 0;font-size:13.5px;border-bottom:1px dashed var(--border)}
+  .checklist label:last-child{border-bottom:none}
+  .checklist input{margin-top:3px;width:17px;height:17px;accent-color:var(--accent)}
+  .checklist label.done span{text-decoration:line-through;color:var(--text-dim)}
+  .progress-bar{height:7px;border-radius:99px;background:var(--bg-raised);overflow:hidden;margin:10px 0 4px}
+  .progress-bar > i{display:block;height:100%;background:var(--good);width:0%;transition:width .3s}
+  .step{border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;background:var(--bg-alt);overflow:hidden}
+  .step-head{padding:13px 15px;display:flex;gap:10px;align-items:center;cursor:pointer}
+  .step-head .num{background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:12px;
+    width:24px;height:24px;border-radius:50%;display:grid;place-items:center;flex:none}
+  .step-head b{flex:1;font-size:14px}
+  .step-head small{color:var(--text-dim);font-size:11.5px}
+  .chev{color:var(--text-dim);transition:transform .18s}
+  .step.open .chev{transform:rotate(180deg)}
+  .step-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+  .step.open .step-body{max-height:2000px}
+  .step-inner{padding:0 15px 16px;font-size:13.5px}
+  .step-inner p{margin:6px 0}
+  pre{background:var(--bg-raised);border:1px solid var(--border);border-radius:10px;padding:12px 14px;
+    overflow:auto;font-size:12.5px;position:relative}
+  pre code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  .copy-btn{position:absolute;top:8px;right:8px;font-size:11px;padding:4px 8px;border-radius:6px;
+    border:1px solid var(--border);background:var(--bg-alt);color:var(--text)}
+  .done-crit{margin-top:8px;padding:8px 10px;background:var(--good-soft);color:var(--good);border-radius:8px;font-size:12.5px}
+  .warn-box{background:var(--warn-soft);border-left:3px solid var(--warn);border-radius:8px;padding:9px 12px;margin:8px 0;font-size:12.5px}
+  .hint-item{background:var(--accent-soft);border-radius:8px;padding:9px 12px;margin:6px 0;font-size:12.5px;display:none}
+  .hint-item.show{display:block}
+  .btn{border:1px solid var(--border);background:var(--bg-alt);color:var(--text);border-radius:10px;padding:8px 13px;font-size:12.5px;font-weight:600}
+  .btn:hover{border-color:var(--accent)}
+  section{display:none}
+  section.active{display:block}
+  @media (max-width:800px){
+    .app{flex-direction:column}
+    aside{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--border)}
+    main{padding:20px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <h1 id="sideTitle">__COURSE_TITLE__</h1>
+    <p class="hint">Assignment guides</p>
+    <div id="navRoot"></div>
+  </aside>
+  <main>
+    <div class="topbar"><button class="icon-btn" id="themeToggle" title="Toggle theme">◐</button></div>
+    <section id="view-overview" class="active">
+      <h2>Assignment overview</h2>
+      <p id="ovBudget" style="color:var(--text-dim);font-size:13.5px"></p>
+      <table>
+        <thead><tr><th>#</th><th>Name</th><th>Type</th><th>Est. hours</th><th>Due</th></tr></thead>
+        <tbody id="ovTable"></tbody>
+      </table>
+    </section>
+    <div id="assignmentViews"></div>
+  </main>
+</div>
+
+<script id="pack-data" type="application/json">
+__ASSIGNMENT_DATA_JSON__
+</script>
+
+<script>
+(function(){
+  "use strict";
+  const DATA = JSON.parse(document.getElementById('pack-data').textContent);
+  const NS = 'assignpack:' + (DATA.course||'course') + ':' + (DATA.generated_at||'v1') + ':';
+  function store(k,v){ try{ localStorage.setItem(NS+k, JSON.stringify(v)); }catch(e){} }
+  function load(k,f){ try{ const v=localStorage.getItem(NS+k); return v===null?f:JSON.parse(v); }catch(e){ return f; } }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  const themeBtn = document.getElementById('themeToggle');
+  function applyTheme(t){ if(t) document.documentElement.setAttribute('data-theme', t); else document.documentElement.removeAttribute('data-theme'); }
+  applyTheme(load('theme', null));
+  themeBtn.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const currentlyDark = current ? current==='dark' : sysDark;
+    const next = currentlyDark ? 'light':'dark';
+    applyTheme(next); store('theme', next);
+  });
+
+  document.getElementById('sideTitle').textContent = DATA.course || 'Assignments';
+
+  // overview
+  const ov = DATA.overview || {};
+  document.getElementById('ovBudget').textContent = `Total estimated: ${ov.total_hours||'?'}h` + (ov.recommended_start ? ` · Recommended start: ${ov.recommended_start}` : '');
+  const ovBody = document.getElementById('ovTable');
+  (ov.assignments||[]).forEach((a,i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${i+1}</td><td>${esc(a.name)}</td><td>${esc(a.type)}</td><td>${esc(a.est_hours)}h</td><td>${esc(a.due||'—')}</td>`;
+    ovBody.appendChild(tr);
+  });
+
+  function reqProgress(a){
+    const total = (a.requirements||[]).length;
+    if(!total) return 1;
+    const done = (a.requirements||[]).filter((r,ri)=>load('req:'+a.id+':'+ri,false)).length;
+    return done/total;
+  }
+
+  // nav
+  const navRoot = document.getElementById('navRoot');
+  const viewsRoot = document.getElementById('assignmentViews');
+  const overviewNav = document.createElement('div');
+  overviewNav.className = 'nav-item active';
+  overviewNav.innerHTML = `<span class="dot"></span><div class="nt"><b>Overview</b><small>All assignments</small></div>`;
+  overviewNav.addEventListener('click', () => switchView('overview'));
+  navRoot.appendChild(overviewNav);
+
+  (DATA.assignments||[]).forEach((a, ai) => {
+    const navItem = document.createElement('div');
+    navItem.className = 'nav-item';
+    navItem.innerHTML = `<span class="dot"></span><div class="nt"><b>${esc(a.name)}</b><small>${esc(a.type)} · ${esc(a.est_hours)}h</small></div>`;
+    navItem.addEventListener('click', () => switchView(a.id));
+    navRoot.appendChild(navItem);
+
+    const view = document.createElement('section');
+    view.id = 'view-' + a.id;
+    view.innerHTML = `
+      <h2>${esc(a.name)}</h2>
+      <div class="meta-row">
+        <span class="pill accent">${esc(a.type)}</span>
+        <span class="pill">${esc(a.est_hours)}h estimated</span>
+        <span class="pill">Due: ${esc(a.due||'unknown')}</span>
+      </div>
+      <div class="card"><p>${esc(a.summary)}</p></div>
+
+      ${(a.requirements&&a.requirements.length) ? `
+      <h3>✅ Requirements</h3>
+      <div class="card checklist" id="req-${a.id}">
+        <div class="progress-bar"><i></i></div>
+        ${a.requirements.map((r,ri)=>`<label><input type="checkbox" data-ri="${ri}"><span>${esc(r)}</span></label>`).join('')}
+      </div>` : ''}
+
+      ${(a.steps&&a.steps.length) ? `<h3>🗺 Step-by-step guide</h3><div id="steps-${a.id}"></div>` : ''}
+
+      ${(a.lecture_refs&&a.lecture_refs.length) ? `
+      <h3>🔗 Relevant lecture material</h3>
+      <table><thead><tr><th>Concept</th><th>Source</th><th>Slides/Pages</th></tr></thead>
+      <tbody>${a.lecture_refs.map(l=>`<tr><td>${esc(l.concept)}</td><td>${esc(l.source)}</td><td>${esc(l.slides||'')}</td></tr>`).join('')}</tbody></table>` : ''}
+
+      ${(a.common_mistakes&&a.common_mistakes.length) ? `
+      <h3>⚠ Common mistakes</h3>
+      ${a.common_mistakes.map(m=>`<div class="warn-box"><b>${esc(m.mistake)}</b> — ${esc(m.why)}</div>`).join('')}` : ''}
+
+      ${a.testing ? `
+      <h3>🧪 How to test your work</h3>
+      <div class="card"><p>${esc(a.testing.description||'')}</p>
+      ${(a.testing.commands||[]).map(c=>`<pre><code>${esc(c)}</code></pre>`).join('')}</div>` : ''}
+
+      ${(a.hints&&a.hints.length) ? `
+      <h3>💡 If you're stuck</h3>
+      <div class="card" id="hints-${a.id}"><button class="btn">Reveal next hint (${a.hints.length} available)</button><div class="hint-list"></div></div>` : ''}
+    `;
+    viewsRoot.appendChild(view);
+
+    // requirements
+    const reqBox = view.querySelector('#req-'+a.id);
+    if(reqBox){
+      function refreshReq(){
+        const pct = Math.round(reqProgress(a)*100);
+        reqBox.querySelector('.progress-bar i').style.width = pct+'%';
+        navItem.classList.toggle('complete', pct===100);
+      }
+      reqBox.querySelectorAll('input[type=checkbox]').forEach(cb => {
+        const ri = cb.dataset.ri;
+        cb.checked = load('req:'+a.id+':'+ri, false);
+        cb.closest('label').classList.toggle('done', cb.checked);
+        cb.addEventListener('change', () => { store('req:'+a.id+':'+ri, cb.checked); cb.closest('label').classList.toggle('done', cb.checked); refreshReq(); });
+      });
+      refreshReq();
+    }
+
+    // steps
+    const stepsRoot = view.querySelector('#steps-'+a.id);
+    if(stepsRoot){
+      (a.steps||[]).forEach((s, si) => {
+        const key = 'step:'+a.id+':'+si;
+        const div = document.createElement('div');
+        div.className = 'step' + (load(key,false)?' open':'');
+        div.innerHTML = `<div class="step-head">
+            <span class="num">${si+1}</span><b>${esc(s.title)}</b><small>${esc(s.est_minutes||'?')} min</small><span class="chev">▾</span>
+          </div>
+          <div class="step-body"><div class="step-inner">
+            ${s.goal?`<p><b>Goal:</b> ${esc(s.goal)}</p>`:''}
+            <p>${esc(s.how)}</p>
+            ${s.code_scaffold ? `<pre><button class="copy-btn">Copy</button><code>${esc(s.code_scaffold.code)}</code></pre>` : ''}
+            ${s.done_when?`<div class="done-crit">Done when: ${esc(s.done_when)}</div>`:''}
+          </div></div>`;
+        div.querySelector('.step-head').addEventListener('click', () => { div.classList.toggle('open'); store(key, div.classList.contains('open')); });
+        const copyBtn = div.querySelector('.copy-btn');
+        if(copyBtn) copyBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const code = s.code_scaffold.code;
+          if(navigator.clipboard) navigator.clipboard.writeText(code).catch(()=>{});
+          copyBtn.textContent = 'Copied!'; setTimeout(()=>copyBtn.textContent='Copy', 1200);
+        });
+        stepsRoot.appendChild(div);
+      });
+    }
+
+    // hints
+    const hintsBox = view.querySelector('#hints-'+a.id);
+    if(hintsBox){
+      let shown = 0;
+      const listEl = hintsBox.querySelector('.hint-list');
+      const btn = hintsBox.querySelector('button');
+      btn.addEventListener('click', () => {
+        if(shown >= a.hints.length) return;
+        const d = document.createElement('div'); d.className='hint-item show'; d.textContent = a.hints[shown];
+        listEl.appendChild(d);
+        shown++;
+        if(shown>=a.hints.length){ btn.disabled=true; btn.textContent='No more hints'; }
+        else btn.textContent = `Reveal next hint (${a.hints.length-shown} left)`;
+      });
+    }
+  });
+
+  function switchView(id){
+    document.querySelectorAll('#assignmentViews section, #view-overview').forEach(s => s.classList.remove('active'));
+    document.getElementById('view-'+id).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const items = navRoot.querySelectorAll('.nav-item');
+    if(id==='overview') items[0].classList.add('active');
+    else {
+      const idx = (DATA.assignments||[]).findIndex(a=>a.id===id);
+      if(idx>-1) items[idx+1].classList.add('active');
+    }
+    window.scrollTo(0,0);
+  }
+})();
+</script>
+</body>
+</html>

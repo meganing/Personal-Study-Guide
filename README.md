@@ -1,8 +1,8 @@
-# Study-pack-generator
+# study-pack-generator
 
-An AI workflow that reads your course materials or project descriptions and generates a personalized, ADHD-friendly study pack. Transforms lecture slides, PDFs, and assignment briefs into structured outputs with schedules, flashcards, practice quizzes, and more.
+An AI workflow that reads your course materials or project descriptions and generates a personalized, ADHD-friendly study pack. Transforms lecture slides, PDFs, and assignment briefs into a single **interactive HTML page** — flip flashcards, a live-feedback quiz, collapsible concept/step cards, Pomodoro + break timers, and progress tracking, all in one file you just double-click open.
 
-## ADHD-friendly
+## Why ADHD-friendly?
 
 The study output is specifically designed for ADHD learners — this is the most distinctive thing about it:
 
@@ -13,6 +13,31 @@ The study output is specifically designed for ADHD learners — this is the most
 - **Visual analogies** for abstract concepts
 - **Common mistake warnings** to prevent confusion
 - **Multiple learning modalities** (visual, auditory, kinesthetic)
+
+## Interactive HTML output
+
+Every mode produces a single self-contained `index.html` — no server, no build
+step, no internet connection needed. Open it in any browser and:
+
+- **Flip flashcards** — click to reveal, mark "I knew it" / "Still learning",
+  filter by topic/difficulty, shuffle
+- **Live quiz feedback** — multiple choice highlights correct/incorrect
+  instantly; short-answer questions reveal a model answer on demand
+- **Collapsible concept cards, steps, and code walkthroughs** — search/filter,
+  accordion-style, code blocks with a one-click copy button
+- **Built-in timers** — a focus timer per task block and an automatic 10-minute
+  break timer, with a sound when time's up
+- **Progress tracking** — checkboxes, known/learning flashcard state, and a
+  completion ring, all saved in your browser (`localStorage`) so closing and
+  reopening the file picks up where you left off
+- **Dark/light mode** — follows your system theme, with a manual toggle
+- **Printable cheat sheet** — a `Print` button gives a clean, nav-free page
+
+Progress is stored per-browser and per-generation — regenerating a pack starts
+progress fresh, since the content (and therefore task order) may have changed.
+
+Flashcards are also exported as `05a_flashcards.csv` for Anki import, since
+that's a separate workflow worth keeping outside the browser.
 
 ## Compatibility
 
@@ -63,35 +88,36 @@ Pick one of three presets when you run it:
 ```bash
 ./run.sh SYS-102 10 --mode study
 ```
-**Uses Claude to generate:**
-- Hour-by-hour ADHD-friendly study schedule
-- Concept summaries with analogies and common mistakes
-- 30 flashcards (CSV for Anki import)
-- Practice quiz with model answers
-- One-page cheat sheet for exam day
-- "Say it out loud" scripts for active learning
+**Generates one interactive page (`outputs/index.html`) with:**
+- Hour-by-hour ADHD-friendly study schedule — checkable tasks with built-in focus timers
+- Concept summary cards with analogies and common mistakes
+- 30 flip-to-reveal flashcards (also exported as CSV for Anki import)
+- Practice quiz with instant feedback and model answers
+- One-page printable cheat sheet for exam day
+- "Say it out loud" scripts with a practice timer
 - Danger questions targeting examiner traps
 
 ### Assignment mode (project guidance)
 ```bash
 ./run.sh CS-301 12 --mode assignment
 ```
-**Uses Claude to generate:**
-- Overview of all assignments with time estimates
-- Step-by-step completion guides for each assignment
-- Code scaffolds and implementation approaches
+**Generates one interactive page (`outputs/assignments/index.html`) with:**
+- Sidebar overview of all assignments with time estimates
+- Step-by-step completion guide per assignment, with a persisted checklist
+- Code scaffolds with a one-click copy button
 - Relevant lecture material references
 - Common mistakes and testing strategies
+- Hints that reveal one at a time so you don't spoil the rest
 
 ### Solver mode (working solutions)
 ```bash
 ./run.sh PHYS-201 8 --mode solver
 ```
-**Uses Claude to generate:**
-- Complete working solution (ready to submit)
-- Comprehensive understanding guide
-- Code walkthrough with explanations
-- Questions you must be able to answer
+**Generates a runnable solution plus one interactive page (`outputs/solver/index.html`) with:**
+- Complete working solution (ready to submit) in `outputs/solver/solution/`
+- Tabbed comprehension guide: Big Picture, Task Analysis, Solution Notes, Code Walkthrough, Q&A Practice
+- Code walkthrough with collapsible file/section explanations
+- Self-check "questions you must be able to answer" with reveal-answer and a persisted "I can explain this" checklist
 - 30-minute crash course for solution comprehension
 
 ## Command Options
@@ -116,7 +142,7 @@ Examples:
 ### Input structure
 ```
 course-materials/
-├── COURSE-CODE (or project name)/
+├── COURSE-CODE/
 │   ├── manifest.json           # Course metadata
 │   ├── assignments.json        # Assignment details
 │   ├── files/
@@ -129,19 +155,19 @@ course-materials/
 ### Output structure
 ```
 course-materials/COURSE-CODE/outputs/
-├── 00_HOW_TO_USE.md           # Start here - usage guide
-├── 01_topic_map.json          # All course topics analyzed
-├── 02_priority_list.json      # Study priority order
-├── 03_study_schedule.md       # Hour-by-hour plan
-├── 04_concept_summaries.md    # Topic explanations
-├── 05a_flashcards.csv         # Anki import file
-├── 05b_practice_quiz.md       # Exam-style questions
-├── 05c_cheat_sheet.md         # One-page reference
-├── 05d_say_it_out_loud.md     # Speaking practice
-├── 05e_danger_questions.md    # Hard examiner traps
-├── assignments/               # Assignment-specific guides
-└── solver/                    # Complete solutions
+├── index.html                 # ★ START HERE — interactive study pack (study/auto mode)
+├── 01_topic_map.json          # Internal working data — all course topics analyzed
+├── 02_priority_list.json      # Internal working data — study priority order
+├── 05a_flashcards.csv         # Anki import file (same cards as in index.html)
+├── assignments/
+│   └── index.html             # ★ START HERE — interactive assignment guide (assignment mode)
+└── solver/
+    ├── index.html              # ★ START HERE — interactive comprehension guide (solver mode)
+    └── solution/               # Complete, runnable solution files
 ```
+Each `index.html` is self-contained — open it directly in a browser, no server
+or build step required. See [Interactive HTML output](#interactive-html-output)
+above for what's in it.
 
 ## Canvas Integration
 
@@ -236,12 +262,13 @@ done
 ```
 
 ### Custom study plans
-Edit the generated study schedule to fit your calendar:
-```bash
-# Generated schedule is in:
-course-materials/COURSE-CODE/outputs/03_study_schedule.md
-# Modify time blocks, add personal notes, adjust break timing
-```
+The schedule lives as data inside `outputs/index.html`, in a
+`<script id="pack-data" type="application/json">` block. To tweak time blocks,
+add personal notes, or adjust break timing, edit that JSON directly — the page
+re-renders it on load, no build step needed. For bigger changes (different
+topics, different hours), just re-run `./run.sh` — it regenerates the whole
+pack, though note this resets saved progress (see
+[Interactive HTML output](#interactive-html-output)).
 
 ### Integration with Anki
 ```bash
@@ -264,7 +291,7 @@ This project is designed to be extensible:
 
 ## License
 
-MIT 
+[Specify your license here]
 
 ## Acknowledgments
 

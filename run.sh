@@ -21,7 +21,7 @@ COURSE="${1:-}"
 HOURS="${2:-5}"
 MODE="auto"
 SKIP_FETCH=false
-SOURCE=""   # canvas | local
+SOURCE=""   # canvas | local — only asked for assignment/solver modes
 
 for i in $(seq 1 $#); do
   case "${!i}" in
@@ -172,11 +172,15 @@ AGENT_PROMPT="Read INSTRUCTIONS.md and execute every instruction in it exactly a
 
 # Uses your Claude Code default model (whatever you've set via `/model`) unless
 # CLAUDE_MODEL is set in .env or the shell environment to pin a specific one.
-CLAUDE_ARGS=()
+CLAUDE_ARGS=(--permission-mode acceptEdits)
 if [[ -n "${CLAUDE_MODEL:-}" ]]; then
-  CLAUDE_ARGS=(--model "$CLAUDE_MODEL")
+  CLAUDE_ARGS+=(--model "$CLAUDE_MODEL")
 fi
 
+# --permission-mode acceptEdits: this runs non-interactively (prompt piped via
+# stdin, no TTY), so Claude can't ask for per-file write approval. acceptEdits
+# lets it write files without prompting while still gating other tool use —
+# scoped to this script's job of generating files under ${OUTPUTS_DIR}/.
 echo "$AGENT_PROMPT" | claude "${CLAUDE_ARGS[@]}"
 
 # ── Done ──────────────────────────────────────────────────────────────────────
@@ -186,28 +190,38 @@ echo -e "${GREEN}${BOLD}  🎉 Done! Open this file first:${RESET}"
 echo -e "${GREEN}${BOLD}════════════════════════════════════════${RESET}"
 echo ""
 
+START_FILE=""
+
 if [[ "$MODE" == "study" || "$MODE" == "auto" ]]; then
-  echo -e "  ${BOLD}→ START HERE:${RESET}  ${OUTPUTS_DIR}/00_HOW_TO_USE.md"
+  START_FILE="${OUTPUTS_DIR}/index.html"
+  echo -e "  ${BOLD}→ START HERE:${RESET}  ${START_FILE}"
   echo ""
-  echo -e "  ${DIM}Schedule:      ${OUTPUTS_DIR}/03_study_schedule.md"
-  echo -e "  Concepts:      ${OUTPUTS_DIR}/04_concept_summaries.md"
-  echo -e "  Flashcards:    ${OUTPUTS_DIR}/05a_flashcards.csv"
-  echo -e "  Cheat sheet:   ${OUTPUTS_DIR}/05c_cheat_sheet.md"
-  echo -e "  Danger Qs:     ${OUTPUTS_DIR}/05e_danger_questions.md${RESET}"
+  echo -e "  ${DIM}Open it directly in any browser — no server needed."
+  echo -e "  Flashcards also exported for Anki: ${OUTPUTS_DIR}/05a_flashcards.csv${RESET}"
 fi
 
 if [[ "$MODE" == "assignment" ]]; then
-  echo -e "  ${BOLD}→ START HERE:${RESET}  ${OUTPUTS_DIR}/assignments/00_HOW_TO_USE.md"
+  START_FILE="${OUTPUTS_DIR}/assignments/index.html"
+  echo -e "  ${BOLD}→ START HERE:${RESET}  ${START_FILE}"
   echo ""
-  echo -e "  ${DIM}Overview:      ${OUTPUTS_DIR}/assignments/00_assignment_overview.md"
-  echo -e "  Guides:        ${OUTPUTS_DIR}/assignments/assignment_*.md${RESET}"
+  echo -e "  ${DIM}Open it directly in any browser — no server needed.${RESET}"
 fi
 
 if [[ "$MODE" == "solver" ]]; then
-  echo -e "  ${BOLD}→ START HERE:${RESET}  ${OUTPUTS_DIR}/solver/00_HOW_TO_USE.md"
+  START_FILE="${OUTPUTS_DIR}/solver/index.html"
+  echo -e "  ${BOLD}→ START HERE:${RESET}  ${START_FILE}"
   echo ""
   echo -e "  ${DIM}Solution:      ${OUTPUTS_DIR}/solver/solution/"
-  echo -e "  Understand it: ${OUTPUTS_DIR}/solver/02_comprehension_guide.md${RESET}"
+  echo -e "  Open the guide directly in any browser — no server needed.${RESET}"
 fi
 
 echo ""
+
+# ── Open it ───────────────────────────────────────────────────────────────────
+if [[ -f "$START_FILE" ]]; then
+  if command -v open &>/dev/null; then
+    open "$START_FILE"
+  elif command -v xdg-open &>/dev/null; then
+    xdg-open "$START_FILE" &>/dev/null &
+  fi
+fi

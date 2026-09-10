@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__COURSE_TITLE__ — Study Pack</title>
+<style>
+  :root{
+    --bg:#faf8f5; --bg-alt:#ffffff; --bg-raised:#f1ede6;
+    --text:#1a1a1a; --text-dim:#5b5b5b; --border:#e5e1da;
+    --accent:#6d54e0; --accent-ink:#ffffff; --accent-soft:#efeafd;
+    --good:#0f9d68; --good-soft:#e3f7ee;
+    --bad:#e5484d; --bad-soft:#fdeaea;
+    --warn:#b8790a; --warn-soft:#fdf1de;
+    --radius:16px; --radius-sm:10px;
+    --shadow:0 1px 2px rgba(20,16,8,.04), 0 8px 24px rgba(20,16,8,.06);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#15161c; --bg-alt:#1c1e26; --bg-raised:#242631;
+      --text:#f2f1ee; --text-dim:#a7a7b2; --border:#2d2f3a;
+      --accent:#9b86ff; --accent-ink:#15161c; --accent-soft:#2a2450;
+      --good:#3ecf8e; --good-soft:#0f2e24;
+      --bad:#ff6b70; --bad-soft:#3a1c1e;
+      --warn:#f0b64c; --warn-soft:#3a2c10;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#15161c; --bg-alt:#1c1e26; --bg-raised:#242631;
+    --text:#f2f1ee; --text-dim:#a7a7b2; --border:#2d2f3a;
+    --accent:#9b86ff; --accent-ink:#15161c; --accent-soft:#2a2450;
+    --good:#3ecf8e; --good-soft:#0f2e24;
+    --bad:#ff6b70; --bad-soft:#3a1c1e;
+    --warn:#f0b64c; --warn-soft:#3a2c10;
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5; padding-bottom:80px;}
+  a{color:var(--accent)}
+  .wrap{max-width:900px;margin:0 auto;padding:0 20px}
+  header.top{position:sticky;top:0;z-index:50;background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+  .top-inner{max-width:900px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:14px}
+  .title-block{flex:1;min-width:0}
+  .title-block h1{font-size:17px;margin:0;font-weight:700;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+  .title-block .sub{font-size:12px;color:var(--text-dim)}
+  .ring{width:40px;height:40px;border-radius:50%;flex:none;display:grid;place-items:center;
+    background:conic-gradient(var(--accent) calc(var(--pct,0)*1%), var(--bg-raised) 0);position:relative}
+  .ring::after{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--bg-alt)}
+  .ring span{position:relative;font-size:10px;font-weight:700}
+  button{font:inherit;cursor:pointer}
+  .icon-btn{border:1px solid var(--border);background:var(--bg-alt);color:var(--text);
+    border-radius:10px;width:36px;height:36px;display:grid;place-items:center;flex:none}
+  .icon-btn:hover{border-color:var(--accent)}
+  nav.tabs{max-width:900px;margin:10px auto 0;padding:0 20px;display:flex;gap:6px;overflow-x:auto;
+    scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  nav.tabs a{flex:none;padding:7px 13px;border-radius:999px;border:1px solid var(--border);
+    background:var(--bg-alt);color:var(--text-dim);text-decoration:none;font-size:13px;font-weight:600}
+  nav.tabs a:hover{color:var(--text);border-color:var(--accent)}
+  section{max-width:900px;margin:34px auto 0;padding:0 20px;scroll-margin-top:100px}
+  section > h2{font-size:20px;margin:0 0 4px}
+  section > .lede{color:var(--text-dim);font-size:13.5px;margin:0 0 18px}
+  .card{background:var(--bg-alt);border:1px solid var(--border);border-radius:var(--radius);
+    padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow)}
+  .goal-banner{background:var(--accent-soft);border:1px solid var(--accent);border-radius:var(--radius);
+    padding:14px 18px;margin:14px 0 24px;font-size:14px}
+  .goal-banner b{color:var(--accent)}
+
+  /* schedule */
+  .hour-block{margin-bottom:18px}
+  .hour-head{display:flex;align-items:baseline;gap:10px;margin-bottom:8px}
+  .hour-head .badge{background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:12px;
+    padding:3px 10px;border-radius:999px;flex:none}
+  .hour-head h3{margin:0;font-size:16px}
+  .hour-goal{font-size:12.5px;color:var(--text-dim);margin:0 0 10px}
+  .task{display:flex;gap:10px;align-items:flex-start;padding:12px;border:1px solid var(--border);
+    border-radius:var(--radius-sm);margin-bottom:8px;background:var(--bg-alt)}
+  .task.done{opacity:.55}
+  .task.done .task-title{text-decoration:line-through}
+  .task input[type=checkbox]{width:19px;height:19px;flex:none;margin-top:2px;accent-color:var(--accent)}
+  .task-body{flex:1;min-width:0}
+  .task-title{font-weight:700;font-size:14px;margin:0 0 3px}
+  .task-meta{font-size:11px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.03em}
+  .task-text{font-size:13.5px;color:var(--text-dim);margin:6px 0 0}
+  .task-outcome{font-size:12.5px;margin-top:6px;padding:6px 10px;background:var(--good-soft);
+    color:var(--good);border-radius:8px;display:inline-block}
+  .timer-row{margin-top:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .timer-btn{border:1px solid var(--border);background:var(--bg-raised);color:var(--text);
+    border-radius:8px;padding:5px 11px;font-size:12px;font-weight:600}
+  .timer-btn:hover{border-color:var(--accent)}
+  .timer-disp{font-variant-numeric:tabular-nums;font-weight:700;font-size:13px;color:var(--text-dim)}
+  .break-banner{margin:14px 0;padding:14px 16px;border-radius:var(--radius);background:var(--warn-soft);
+    border:1px solid var(--warn);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .break-banner b{color:var(--warn)}
+
+  /* concepts */
+  .concept{border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;background:var(--bg-alt);overflow:hidden}
+  .concept-head{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .concept-head h3{margin:0;font-size:15px}
+  .concept-head .chev{transition:transform .18s;color:var(--text-dim);flex:none}
+  .concept.open .chev{transform:rotate(180deg)}
+  .concept-body{max-height:0;overflow:hidden;transition:max-height .25s ease}
+  .concept.open .concept-body{max-height:600px}
+  .concept-inner{padding:0 16px 16px;font-size:13.5px}
+  .analogy{background:var(--accent-soft);border-radius:10px;padding:10px 12px;margin:10px 0;font-size:13px}
+  .analogy b{color:var(--accent)}
+  .warn-box{background:var(--warn-soft);border-left:3px solid var(--warn);border-radius:8px;
+    padding:9px 12px;margin:10px 0;font-size:12.5px}
+  .key-q{font-size:12.5px;color:var(--text-dim);font-style:italic;margin-top:8px}
+  .search{width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--border);
+    background:var(--bg-alt);color:var(--text);font-size:13.5px;margin-bottom:14px}
+
+  /* flashcards */
+  .deck{display:flex;flex-direction:column;align-items:center;gap:14px}
+  .deck-meta{display:flex;justify-content:space-between;width:100%;max-width:480px;
+    font-size:12px;color:var(--text-dim)}
+  .flip-card{width:100%;max-width:480px;height:230px;perspective:1200px}
+  .flip-inner{position:relative;width:100%;height:100%;transition:transform .5s;
+    transform-style:preserve-3d;cursor:pointer}
+  .flip-card.flipped .flip-inner{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:var(--radius);
+    border:1px solid var(--border);box-shadow:var(--shadow);display:flex;flex-direction:column;
+    align-items:center;justify-content:center;text-align:center;padding:24px;background:var(--bg-alt)}
+  .face.back{transform:rotateY(180deg);background:var(--accent-soft)}
+  .face .tag{position:absolute;top:12px;left:14px;font-size:10px;font-weight:700;text-transform:uppercase;
+    color:var(--text-dim);letter-spacing:.04em}
+  .face .qtext{font-size:16px;font-weight:700}
+  .face .atext{font-size:14.5px}
+  .face .hint{position:absolute;bottom:12px;font-size:11px;color:var(--text-dim)}
+  .deck-controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  .btn{border:1px solid var(--border);background:var(--bg-alt);color:var(--text);border-radius:10px;
+    padding:9px 14px;font-size:13px;font-weight:600}
+  .btn:hover{border-color:var(--accent)}
+  .btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+  .btn.good{background:var(--good-soft);color:var(--good);border-color:var(--good)}
+  .btn.bad{background:var(--bad-soft);color:var(--bad);border-color:var(--bad)}
+  .progress-bar{width:100%;max-width:480px;height:7px;border-radius:99px;background:var(--bg-raised);overflow:hidden}
+  .progress-bar > i{display:block;height:100%;background:var(--good);width:0%;transition:width .3s}
+  select.filter{padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:var(--bg-alt);color:var(--text);font-size:12.5px}
+
+  /* quiz */
+  .q-block{margin-bottom:16px}
+  .q-block h4{font-size:14px;margin:0 0 8px}
+  .opt{display:block;width:100%;text-align:left;padding:10px 12px;border:1px solid var(--border);
+    border-radius:10px;background:var(--bg-alt);margin-bottom:6px;font-size:13.5px}
+  .opt:hover{border-color:var(--accent)}
+  .opt.correct{background:var(--good-soft);border-color:var(--good);color:var(--good)}
+  .opt.incorrect{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+  .opt[disabled]{cursor:default}
+  .explain{font-size:12.5px;color:var(--text-dim);margin-top:6px;padding:8px 10px;background:var(--bg-raised);border-radius:8px;display:none}
+  .explain.show{display:block}
+  textarea.answer{width:100%;min-height:70px;border-radius:10px;border:1px solid var(--border);
+    background:var(--bg-alt);color:var(--text);padding:10px;font:inherit;font-size:13.5px;resize:vertical}
+  .reveal{margin-top:8px}
+  .model-answer{display:none;margin-top:8px;padding:10px 12px;background:var(--good-soft);color:var(--good);
+    border-radius:10px;font-size:13px}
+  .model-answer.show{display:block}
+
+  /* cheat sheet */
+  .sheet{columns:2 260px;column-gap:22px}
+  .sheet-sec{break-inside:avoid;background:var(--bg-alt);border:1px solid var(--border);
+    border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:14px}
+  .sheet-sec h4{margin:0 0 6px;font-size:13px;color:var(--accent)}
+  .sheet-sec ul{margin:0;padding-left:18px;font-size:12.5px}
+  .sheet-sec li{margin-bottom:4px}
+
+  /* speak scripts */
+  .script-card{background:var(--bg-alt);border:1px solid var(--border);border-radius:var(--radius);
+    padding:16px;margin-bottom:12px}
+  .script-card blockquote{margin:8px 0;font-size:15px;font-style:italic;border-left:3px solid var(--accent);
+    padding-left:12px}
+  .tip{display:none;font-size:12.5px;background:var(--accent-soft);color:var(--accent);border-radius:8px;
+    padding:8px 10px;margin-top:8px}
+  .tip.show{display:block}
+
+  /* danger questions */
+  .danger{border:1px solid var(--bad);border-radius:var(--radius);background:var(--bad-soft);margin-bottom:10px;overflow:hidden}
+  .danger-head{padding:13px 15px;display:flex;justify-content:space-between;gap:10px;align-items:center;color:var(--bad);font-weight:700;font-size:13.5px}
+  .danger-body{max-height:0;overflow:hidden;transition:max-height .25s}
+  .danger.open .danger-body{max-height:500px}
+  .danger-inner{padding:0 15px 14px;font-size:13px}
+  .danger-inner .why{color:var(--warn);margin-bottom:6px}
+
+  footer{max-width:900px;margin:50px auto 0;padding:20px;text-align:center;font-size:12px;color:var(--text-dim)}
+  .fab{position:fixed;bottom:18px;right:18px;z-index:60}
+
+  @keyframes confetti-fall{to{transform:translateY(110vh) rotate(360deg);opacity:0}}
+  .confetti{position:fixed;top:-10px;width:8px;height:14px;z-index:80;animation:confetti-fall linear forwards;pointer-events:none}
+
+  @media print{
+    header.top, nav.tabs, .fab, .timer-row, #schedule, #concepts, #flashcards, #quiz, #speak, #danger{display:none !important}
+    #cheatsheet{display:block !important;margin-top:0}
+    body{padding:0}
+    .sheet{columns:2 auto}
+  }
+  @media (max-width:560px){ .sheet{columns:1} }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="ring" id="progressRing"><span id="progressPct">0%</span></div>
+    <div class="title-block">
+      <h1 id="courseTitle">__COURSE_TITLE__</h1>
+      <div class="sub" id="courseSub">Study pack</div>
+    </div>
+    <button class="icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">◐</button>
+  </div>
+  <nav class="tabs">
+    <a href="#schedule">📅 Schedule</a>
+    <a href="#concepts">🧠 Concepts</a>
+    <a href="#flashcards">🃏 Flashcards</a>
+    <a href="#quiz">📝 Quiz</a>
+    <a href="#cheatsheet">📄 Cheat Sheet</a>
+    <a href="#speak">🗣 Say It Aloud</a>
+    <a href="#danger">⚠️ Danger Zone</a>
+  </nav>
+</header>
+
+<section id="intro">
+  <div class="goal-banner"><b>Goal:</b> <span id="introGoal"></span></div>
+</section>
+
+<section id="schedule">
+  <h2>📅 Study schedule</h2>
+  <p class="lede">Work through this in order. Check off each task as you finish it — your progress is saved automatically in this browser.</p>
+  <div id="scheduleRoot"></div>
+</section>
+
+<section id="concepts">
+  <h2>🧠 Concept summaries</h2>
+  <p class="lede">Open a card when you're stuck on a topic mid-session.</p>
+  <input class="search" id="conceptSearch" placeholder="Filter concepts…">
+  <div id="conceptsRoot"></div>
+</section>
+
+<section id="flashcards">
+  <h2>🃏 Flashcards</h2>
+  <p class="lede">Click a card to flip it. Mark whether you knew it — cards you don't know come back around sooner. (Also exported as <code>05a_flashcards.csv</code> for Anki.)</p>
+  <div style="display:flex;gap:10px;justify-content:center;margin-bottom:10px;flex-wrap:wrap">
+    <select class="filter" id="fcDifficulty"><option value="all">All difficulties</option></select>
+    <select class="filter" id="fcTopic"><option value="all">All topics</option></select>
+  </div>
+  <div class="deck">
+    <div class="deck-meta"><span id="fcPosition">1 / 1</span><span id="fcKnown">0 known</span></div>
+    <div class="progress-bar"><i id="fcProgress"></i></div>
+    <div class="flip-card" id="fcCard"><div class="flip-inner">
+      <div class="face front"><span class="tag">Question</span><div class="qtext" id="fcQ"></div><span class="hint">Click to flip</span></div>
+      <div class="face back"><span class="tag">Answer</span><div class="atext" id="fcA"></div></div>
+    </div></div>
+    <div class="deck-controls">
+      <button class="btn bad" id="fcDontKnow">✗ Still learning</button>
+      <button class="btn" id="fcPrev">← Prev</button>
+      <button class="btn primary" id="fcShuffle">🔀 Shuffle</button>
+      <button class="btn" id="fcNext">Next →</button>
+      <button class="btn good" id="fcKnow">✓ I knew it</button>
+    </div>
+  </div>
+</section>
+
+<section id="quiz">
+  <h2>📝 Practice quiz</h2>
+  <p class="lede">Answer for real before revealing anything — that's what makes it work.</p>
+  <div id="quizRoot"></div>
+</section>
+
+<section id="cheatsheet">
+  <h2>📄 Cheat sheet</h2>
+  <p class="lede">Read this slowly, once, right before the exam. <button class="btn" onclick="window.print()">🖨 Print</button></p>
+  <div class="sheet" id="sheetRoot"></div>
+</section>
+
+<section id="speak">
+  <h2>🗣 Say it out loud</h2>
+  <p class="lede">Close everything. Say each script out loud, twice, from memory.</p>
+  <div id="speakRoot"></div>
+</section>
+
+<section id="danger">
+  <h2>⚠️ Danger questions</h2>
+  <p class="lede">The exact traps examiners love. Try to answer before you reveal.</p>
+  <div id="dangerRoot"></div>
+</section>
+
+<footer>
+  Generated by study-pack-generator · progress is stored only in this browser (localStorage) · reopen this file any time to pick up where you left off.
+</footer>
+
+<script id="pack-data" type="application/json">
+__STUDY_DATA_JSON__
+</script>
+
+<script>
+(function(){
+  "use strict";
+  const DATA = JSON.parse(document.getElementById('pack-data').textContent);
+  const NS = 'studypack:' + (DATA.course||'course') + ':' + (DATA.generated_at||'v1') + ':';
+
+  function store(key, val){ try{ localStorage.setItem(NS+key, JSON.stringify(val)); }catch(e){} }
+  function load(key, fallback){ try{ const v = localStorage.getItem(NS+key); return v===null?fallback:JSON.parse(v); }catch(e){ return fallback; } }
+
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  // ---------- theme ----------
+  const themeBtn = document.getElementById('themeToggle');
+  function applyTheme(t){
+    if(t) document.documentElement.setAttribute('data-theme', t);
+    else document.documentElement.removeAttribute('data-theme');
+  }
+  applyTheme(load('theme', null));
+  themeBtn.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const currentlyDark = current ? current === 'dark' : sysDark;
+    const next = currentlyDark ? 'light' : 'dark';
+    applyTheme(next); store('theme', next);
+  });
+
+  // ---------- header ----------
+  document.getElementById('courseTitle').textContent = DATA.course + ' — Study Pack';
+  document.getElementById('courseSub').textContent = (DATA.hours||'?') + '-hour plan';
+  document.getElementById('introGoal').textContent = DATA.goal || '';
+
+  // ---------- progress ring ----------
+  function updateRing(){
+    const totalTasks = (DATA.schedule||[]).reduce((n,h)=>n+h.tasks.length,0);
+    const doneTasks = (DATA.schedule||[]).reduce((n,h,hi)=>n+h.tasks.filter((t,ti)=>load('task:'+hi+':'+ti,false)).length,0);
+    const totalCards = (DATA.flashcards||[]).length;
+    const knownCards = (DATA.flashcards||[]).filter((c,i)=>load('fc:'+i,null)==='known').length;
+    const parts = [];
+    if(totalTasks) parts.push(doneTasks/totalTasks);
+    if(totalCards) parts.push(knownCards/totalCards);
+    const pct = parts.length ? Math.round((parts.reduce((a,b)=>a+b,0)/parts.length)*100) : 0;
+    document.getElementById('progressRing').style.setProperty('--pct', pct);
+    document.getElementById('progressPct').textContent = pct+'%';
+    if(pct>=100) celebrate();
+  }
+
+  let celebrated = false;
+  function celebrate(){
+    if(celebrated) return; celebrated = true;
+    const colors=['#6d54e0','#0f9d68','#f0b64c','#e5484d','#3ecf8e'];
+    for(let i=0;i<60;i++){
+      const c=document.createElement('div');
+      c.className='confetti';
+      c.style.left=Math.random()*100+'vw';
+      c.style.background=colors[i%colors.length];
+      c.style.animationDuration=(2+Math.random()*1.5)+'s';
+      c.style.transform=`rotate(${Math.random()*360}deg)`;
+      document.body.appendChild(c);
+      setTimeout(()=>c.remove(), 4000);
+    }
+  }
+
+  // ---------- timers ----------
+  function beep(){
+    try{
+      const ctx = new (window.AudioContext||window.webkitAudioContext)();
+      [660,880].forEach((f,i)=>{
+        const o=ctx.createOscillator(), g=ctx.createGain();
+        o.frequency.value=f; o.connect(g); g.connect(ctx.destination);
+        const t0=ctx.currentTime+i*0.18;
+        g.gain.setValueAtTime(0.0001,t0);
+        g.gain.exponentialRampToValueAtTime(0.15,t0+0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001,t0+0.3);
+        o.start(t0); o.stop(t0+0.32);
+      });
+    }catch(e){}
+  }
+  function attachTimer(btn, disp, minutes, doneLabel){
+    let remaining = minutes*60, iv = null;
+    function render(){ const m=Math.floor(remaining/60), s=remaining%60; disp.textContent = (m<10?'0':'')+m+':'+(s<10?'0':'')+s; }
+    render();
+    btn.addEventListener('click', () => {
+      if(iv){ clearInterval(iv); iv=null; btn.textContent='▶ Resume'; return; }
+      btn.textContent='⏸ Pause';
+      iv = setInterval(() => {
+        remaining--;
+        if(remaining<=0){ clearInterval(iv); iv=null; render(); btn.textContent=doneLabel||'✓ Done'; btn.disabled=true; beep(); return; }
+        render();
+      }, 1000);
+    });
+  }
+
+  // ---------- schedule ----------
+  (function renderSchedule(){
+    const root = document.getElementById('scheduleRoot');
+    let cumMinutes = 0;
+    const breakEvery = DATA.breaks_after_every_minutes || 50;
+    let nextBreakAt = breakEvery;
+    (DATA.schedule||[]).forEach((hour, hi) => {
+      const block = document.createElement('div');
+      block.className = 'hour-block';
+      block.innerHTML = `<div class="hour-head"><span class="badge">HOUR ${hour.hour}</span><h3>${esc(hour.title)}</h3></div>
+        <p class="hour-goal">🎯 ${esc(hour.goal)}</p>`;
+      const tasksWrap = document.createElement('div');
+      hour.tasks.forEach((task, ti) => {
+        cumMinutes += task.minutes||0;
+        const key = 'task:'+hi+':'+ti;
+        const done = load(key, false);
+        const div = document.createElement('div');
+        div.className = 'task' + (done?' done':'');
+        div.innerHTML = `<input type="checkbox" ${done?'checked':''}>
+          <div class="task-body">
+            <div class="task-meta">${esc(task.type||'task')} · ${task.minutes||'?'} min</div>
+            <p class="task-title">${esc(task.title)}</p>
+            <p class="task-text">${esc(task.body||task.script||'')}</p>
+            ${task.outcome? `<span class="task-outcome">By the end: ${esc(task.outcome)}</span>`:''}
+            <div class="timer-row"><button class="timer-btn">▶ Start ${task.minutes||25} min timer</button><span class="timer-disp"></span></div>
+          </div>`;
+        const cb = div.querySelector('input');
+        cb.addEventListener('change', () => { store(key, cb.checked); div.classList.toggle('done', cb.checked); updateRing(); });
+        attachTimer(div.querySelector('.timer-btn'), div.querySelector('.timer-disp'), task.minutes||25, '✓ Time!');
+        tasksWrap.appendChild(div);
+      });
+      block.appendChild(tasksWrap);
+      root.appendChild(block);
+      if(cumMinutes >= nextBreakAt && hi < DATA.schedule.length-1){
+        const bb = document.createElement('div');
+        bb.className='break-banner';
+        bb.innerHTML = `<div>⏸ <b>10-MIN BREAK</b> — stand up, water, no screens.</div>
+          <button class="timer-btn">▶ Start break timer</button><span class="timer-disp"></span>`;
+        attachTimer(bb.querySelector('.timer-btn'), bb.querySelector('.timer-disp'), 10, '✓ Back to it');
+        root.appendChild(bb);
+        nextBreakAt += breakEvery;
+      }
+    });
+    updateRing();
+  })();
+
+  // ---------- concepts ----------
+  (function renderConcepts(){
+    const root = document.getElementById('conceptsRoot');
+    (DATA.concepts||[]).forEach((c, i) => {
+      const div = document.createElement('div');
+      div.className = 'concept';
+      div.dataset.search = (c.name+' '+c.explanation).toLowerCase();
+      div.innerHTML = `<div class="concept-head"><h3>${esc(c.name)}</h3><span class="chev">▾</span></div>
+        <div class="concept-body"><div class="concept-inner">
+          <p>${esc(c.explanation)}</p>
+          ${c.analogy?`<div class="analogy"><b>Analogy:</b> ${esc(c.analogy)}</div>`:''}
+          ${c.misconception?`<div class="warn-box">⚠ Common misconception: ${esc(c.misconception)}</div>`:''}
+          ${c.key_question?`<div class="key-q">Key question: ${esc(c.key_question)}</div>`:''}
+        </div></div>`;
+      div.querySelector('.concept-head').addEventListener('click', () => div.classList.toggle('open'));
+      root.appendChild(div);
+    });
+    document.getElementById('conceptSearch').addEventListener('input', e => {
+      const q = e.target.value.toLowerCase();
+      root.querySelectorAll('.concept').forEach(el => { el.style.display = el.dataset.search.includes(q) ? '' : 'none'; });
+    });
+  })();
+
+  // ---------- flashcards ----------
+  (function renderFlashcards(){
+    const all = (DATA.flashcards||[]).map((c,i)=>({...c, idx:i}));
+    if(!all.length) return;
+    const diffSel = document.getElementById('fcDifficulty');
+    const topicSel = document.getElementById('fcTopic');
+    [...new Set(all.map(c=>c.difficulty).filter(Boolean))].forEach(d=>{
+      const o=document.createElement('option'); o.value=d; o.textContent=d; diffSel.appendChild(o);
+    });
+    [...new Set(all.map(c=>c.topic).filter(Boolean))].forEach(t=>{
+      const o=document.createElement('option'); o.value=t; o.textContent=t; topicSel.appendChild(o);
+    });
+
+    let order = all.map(c=>c.idx), pos = 0;
+    const cardEl = document.getElementById('fcCard');
+    const qEl = document.getElementById('fcQ'), aEl = document.getElementById('fcA');
+    const posEl = document.getElementById('fcPosition'), knownEl = document.getElementById('fcKnown'), progEl = document.getElementById('fcProgress');
+
+    function filtered(){
+      return order.filter(idx => {
+        const c = all[idx];
+        const d = diffSel.value, t = topicSel.value;
+        return (d==='all'||c.difficulty===d) && (t==='all'||c.topic===t);
+      });
+    }
+    function currentSet(){ const f = filtered(); return f.length?f:order; }
+    function show(){
+      const set = currentSet();
+      if(pos>=set.length) pos = 0;
+      const idx = set[pos];
+      const c = all[idx];
+      cardEl.classList.remove('flipped');
+      qEl.textContent = c.q; aEl.textContent = c.a;
+      posEl.textContent = (pos+1)+' / '+set.length;
+      const knownCount = all.filter(c2=>load('fc:'+c2.idx,null)==='known').length;
+      knownEl.textContent = knownCount + ' known';
+      progEl.style.width = Math.round((knownCount/all.length)*100)+'%';
+    }
+    cardEl.addEventListener('click', () => cardEl.classList.toggle('flipped'));
+    document.getElementById('fcNext').addEventListener('click', () => { pos = (pos+1) % currentSet().length; show(); });
+    document.getElementById('fcPrev').addEventListener('click', () => { const s=currentSet(); pos = (pos-1+s.length) % s.length; show(); });
+    document.getElementById('fcShuffle').addEventListener('click', () => { order = order.sort(()=>Math.random()-0.5); pos=0; show(); });
+    document.getElementById('fcKnow').addEventListener('click', () => { const idx=currentSet()[pos]; store('fc:'+idx,'known'); updateRing(); document.getElementById('fcNext').click(); });
+    document.getElementById('fcDontKnow').addEventListener('click', () => { const idx=currentSet()[pos]; store('fc:'+idx,'learning'); updateRing(); document.getElementById('fcNext').click(); });
+    diffSel.addEventListener('change', () => { pos=0; show(); });
+    topicSel.addEventListener('change', () => { pos=0; show(); });
+    document.addEventListener('keydown', e => {
+      if(!document.getElementById('flashcards').getBoundingClientRect().top < window.innerHeight) return;
+      if(e.code==='Space'){ e.preventDefault(); cardEl.classList.toggle('flipped'); }
+      if(e.code==='ArrowRight') document.getElementById('fcNext').click();
+      if(e.code==='ArrowLeft') document.getElementById('fcPrev').click();
+    });
+    show();
+  })();
+
+  // ---------- quiz ----------
+  (function renderQuiz(){
+    const root = document.getElementById('quizRoot');
+    const quiz = DATA.quiz || {};
+    function section(title, items, kind){
+      if(!items || !items.length) return;
+      const h = document.createElement('h3'); h.textContent = title; root.appendChild(h);
+      items.forEach((q, i) => {
+        const div = document.createElement('div'); div.className='q-block card';
+        if(kind==='mcq'){
+          div.innerHTML = `<h4>${esc(q.q)}</h4>` +
+            q.options.map((opt,oi)=>`<button class="opt" data-oi="${oi}">${esc(opt)}</button>`).join('') +
+            `<div class="explain">${esc(q.explanation||'')}</div>`;
+          div.querySelectorAll('.opt').forEach(btn => btn.addEventListener('click', () => {
+            const oi = Number(btn.dataset.oi);
+            div.querySelectorAll('.opt').forEach((b,bi) => {
+              b.disabled = true;
+              if(bi===q.correct) b.classList.add('correct');
+              else if(bi===oi) b.classList.add('incorrect');
+            });
+            div.querySelector('.explain').classList.add('show');
+          }));
+        } else {
+          div.innerHTML = `<h4>${esc(q.q)}</h4>
+            <textarea class="answer" placeholder="Type your answer, then reveal the model answer…"></textarea>
+            <div class="reveal"><button class="btn">Reveal model answer</button></div>
+            <div class="model-answer">${esc(q.model_answer)}</div>`;
+          div.querySelector('.reveal button').addEventListener('click', function(){
+            div.querySelector('.model-answer').classList.add('show');
+            this.disabled = true;
+          });
+        }
+        root.appendChild(div);
+      });
+    }
+    section('Multiple choice', quiz.mcq, 'mcq');
+    section('Short answer', quiz.short_answer, 'open');
+    section('Scenario', quiz.scenario, 'open');
+    section('Compare & contrast', quiz.compare, 'open');
+  })();
+
+  // ---------- cheat sheet ----------
+  (function renderSheet(){
+    const root = document.getElementById('sheetRoot');
+    (DATA.cheat_sheet && DATA.cheat_sheet.sections || []).forEach(sec => {
+      const div = document.createElement('div'); div.className='sheet-sec';
+      div.innerHTML = `<h4>${esc(sec.heading)}</h4><ul>${(sec.items||[]).map(it=>`<li>${esc(it)}</li>`).join('')}</ul>`;
+      root.appendChild(div);
+    });
+  })();
+
+  // ---------- speak scripts ----------
+  (function renderSpeak(){
+    const root = document.getElementById('speakRoot');
+    (DATA.say_it_out_loud||[]).forEach((s,i) => {
+      const div = document.createElement('div'); div.className='script-card';
+      div.innerHTML = `<b>${esc(s.title)}</b><blockquote>${esc(s.script)}</blockquote>
+        <div class="timer-row"><button class="timer-btn">▶ Practice (2 min)</button><span class="timer-disp"></span>
+        <button class="btn" style="margin-left:auto">Show coaching tip</button></div>
+        <div class="tip">${esc(s.tip||'')}</div>`;
+      attachTimer(div.querySelector('.timer-btn'), div.querySelector('.timer-disp'), 2, '✓ Nice');
+      div.querySelector('.timer-row .btn').addEventListener('click', function(){ div.querySelector('.tip').classList.add('show'); this.disabled=true; });
+      root.appendChild(div);
+    });
+  })();
+
+  // ---------- danger questions ----------
+  (function renderDanger(){
+    const root = document.getElementById('dangerRoot');
+    (DATA.danger_questions||[]).forEach((d,i) => {
+      const div = document.createElement('div'); div.className='danger';
+      div.innerHTML = `<div class="danger-head"><span>Q${i+1} — ${esc(d.topic||'')}: ${esc(d.question)}</span><span class="chev">▾</span></div>
+        <div class="danger-body"><div class="danger-inner">
+          <p class="why">💥 Why it's a trap: ${esc(d.why_trap)}</p>
+          <p>${esc(d.model_answer)}</p>
+        </div></div>`;
+      div.querySelector('.danger-head').addEventListener('click', () => div.classList.toggle('open'));
+      root.appendChild(div);
+    });
+  })();
+
+})();
+</script>
+</body>
+</html>
