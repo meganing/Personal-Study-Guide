@@ -170,7 +170,14 @@ mkdir -p "${OUTPUTS_DIR}/assignments"
 
 AGENT_PROMPT="Read INSTRUCTIONS.md and execute every instruction in it exactly as written. Do not explain, do not summarise, do not ask questions — just execute all phases now. INPUTS: Course materials folder: ${MATERIALS_DIR}/ Study/work hours: ${HOURS} ${MODE_LINE} Write all output files to: ${OUTPUTS_DIR}/ Write assignment files to: ${OUTPUTS_DIR}/assignments/ Write solver files to: ${OUTPUTS_DIR}/solver/ If source is local, project files are in: ${MATERIALS_DIR}/project/ Begin with Step 0 immediately."
 
-echo "$AGENT_PROMPT" | claude --model claude-sonnet-4-20250514
+# Uses your Claude Code default model (whatever you've set via `/model`) unless
+# CLAUDE_MODEL is set in .env or the shell environment to pin a specific one.
+CLAUDE_ARGS=()
+if [[ -n "${CLAUDE_MODEL:-}" ]]; then
+  CLAUDE_ARGS=(--model "$CLAUDE_MODEL")
+fi
+
+echo "$AGENT_PROMPT" | claude "${CLAUDE_ARGS[@]}"
 
 # ── Done ──────────────────────────────────────────────────────────────────────
 echo ""
