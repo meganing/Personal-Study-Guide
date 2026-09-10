@@ -1,0 +1,9 @@
+# Syllabus
+
+<ul class="ul1">
+<li class="li1"><strong>Competency:</strong> SYS-102 BASIC COMPUTER ARCHITECTURE</li>
+<li class="li1"><strong>Credits: </strong>4</li>
+<li class="li1"><strong>Recordings: &nbsp;<a title="Link to recordings" href="https://cmkl.instructure.com/courses/983/pages/link-to-recordings" data-course-type="wikiPages" data-published="true" data-api-endpoint="https://cmkl.instructure.com/api/v1/courses/983/pages/link-to-recordings" data-api-returntype="Page">Link to recordings</a></strong></li>
+</ul>
+<p class="p1">Instructor&nbsp; -<span> Raveekiat Singhaphandu</span><span data-sheets-root="1"> <a href="mailto:antoine@cmkl.ac.th" target="_blank">Raveekiat@cmkl.ac.th</a></span></p>
+<p class="p1">Course Management Assistant - Ye Yint&nbsp; <a class="inline_disabled" title="Link" href="mailto:Yetint@cmkl.ac.th" target="_blank">Yeyint@cmkl.ac.th</a></p>

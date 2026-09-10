@@ -1,0 +1,26 @@
+[
+  {
+    "name": "SEN-109:00040 Expression Evaluation: module / pattern-matching / generics / traits",
+    "due_at": "2026-02-04T16:59:00Z",
+    "points": 100.0,
+    "description": "<p><a class=\"instructure_file_link inline_disabled\" title=\"eval.zip\" href=\"https://cmkl.instructure.com/courses/897/files/53834?verifier=TzV6BxJMzZNWzLLiU3nOhQphlVSCSn7iY0Ym1Ahe&amp;wrap=1\" target=\"_blank\" data-api-endpoint=\"https://cmkl.instructure.com/api/v1/courses/897/files/53834\" data-api-returntype=\"File\">eval.zip</a></p>\n<p>You are given a partial starter code for&nbsp;a<span>&nbsp;</span><strong class=\"bold\">command-line interface<span>&nbsp;</span></strong>(<strong class=\"bold\">CLI</str"
+  },
+  {
+    "name": "SEN-109:00020 Expression Evaluation: toolchains and tests",
+    "due_at": "2026-02-04T16:59:59Z",
+    "points": 100.0,
+    "description": "<p>Refer to assessment <a title=\"SEN-109:00040 Expression Evaluation: Apply pattern-matching with generics and traits\" href=\"https://cmkl.instructure.com/courses/897/assignments/5845\" data-course-type=\"assignments\" data-published=\"false\" data-api-endpoint=\"https://cmkl.instructure.com/api/v1/courses/897/assignments/5845\" data-api-returntype=\"Assignment\">SEN-109:00040 Expression Evaluation: Apply pattern-matching with generics and traits</a></p>\n<p>Reference on creating tests:</p>\n<p><a href=\"htt"
+  },
+  {
+    "name": "SEN-109:00010 Understanding systems programming",
+    "due_at": "2026-02-20T16:59:00Z",
+    "points": 100.0,
+    "description": "<p>In this task, we will try to analyze and understand a chat server project. The provided source archive: <a class=\"instructure_file_link inline_disabled\" title=\"rust-chat-server.zip\" href=\"https://cmkl.instructure.com/courses/897/files/53837?verifier=mGA54Xnx17T7Mjx9PQ7e5obnVgjmbX47Xzp7VpJK&amp;wrap=1\" target=\"_blank\" data-api-endpoint=\"https://cmkl.instructure.com/api/v1/courses/897/files/53837\" data-api-returntype=\"File\">rust-chat-server.zip</a> include a full implementation of a chat server"
+  },
+  {
+    "name": "SEN-109:00030 Apply techniques to manage memory safely",
+    "due_at": "2026-02-20T16:59:00Z",
+    "points": 100.0,
+    "description": "<p>Refer to <a title=\"SEN-109:00010 Understanding systems programming\" href=\"https://cmkl.instructure.com/courses/897/assignments/5842\" data-course-type=\"assignments\" data-published=\"false\" data-api-endpoint=\"https://cmkl.instructure.com/api/v1/courses/897/assignments/5842\" data-api-returntype=\"Assignment\">SEN-109:00010 Understanding systems programming</a> and the given starter file <a class=\"instructure_file_link inline_disabled\" title=\"rust-chat-server.zip\" href=\"https://cmkl.instructure.com/"
+  }
+]

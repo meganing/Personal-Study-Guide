@@ -1,0 +1,21 @@
+# Syllabus
+
+<ul class="ul1">
+<li class="li1"><strong>Competency:</strong> SEN-109 Modern Systems Programming</li>
+<li class="li1"><strong>Credits: </strong>2</li>
+<li class="li1"><strong>Start Date: </strong>January 21, 2026</li>
+<li class="li1"><strong>End Date:</strong> February 11, 2026</li>
+<li class="li1"><strong>Lecture Day/Hours: </strong>Wednesday 9:00 - 10:30</li>
+<li class="li1"><strong>Lab Day/Hours:</strong> Wednesday 10:30 - 12:00</li>
+<li class="li1"><strong>Office Day/Hours:</strong> Wednesday 12:00 -13:00</li>
+<li class="li1"><strong>Duration:</strong> 4 (Week 2 - Week 5)&nbsp;</li>
+<li class="li1"><strong>Zoom Meeting</strong>:</li>
+</ul>
+<p><a class="inline_disabled" href="https://zoom.us/j/96150753339?pwd=ZeeSoAqHb92AKuoZT6t1qtkbpi0f2N.1" target="_blank">https://zoom.us/j/96150753339?pwd=ZeeSoAqHb92AKuoZT6t1qtkbpi0f2N.1</a></p>
+<p>Meeting ID: 961 5075 3339<br>Passcode: 906081</p>
+<ul class="ul1">
+<li class="li1"><span><strong>Classroom</strong>: 601</span></li>
+</ul>
+<p class="p1">Course Instructor - Dr Akkarit Sangpetch <a href="mailto:akkarit@cmkl.ac.th" target="_blank">akkarit@cmkl.ac.th</a></p>
+<p class="p1">TA: Chanathip Yaiyiam <a href="mailto:chanathip@cmkl.ac.th" target="_blank">chanathip@cmkl.ac.th</a>&nbsp;</p>
+<p class="p1">Course Management Assistant - Ye Yint&nbsp;<a href="mailto:yeyint@cmkl.ac.th"><span class="s2">yeyint@cmkl.ac.th</span></a></p>

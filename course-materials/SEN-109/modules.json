@@ -1,0 +1,130 @@
+[
+  {
+    "module": "Week 1: Introduction + Language Features",
+    "items": [
+      {
+        "title": "sen-109-lec-1.pptx",
+        "type": "File"
+      },
+      {
+        "title": "Lab 0: Getting started - rustup & cargo",
+        "type": "ExternalUrl"
+      },
+      {
+        "title": "Lab 1 (in-class): Guessing Game",
+        "type": "ExternalUrl"
+      },
+      {
+        "title": "Types and Values",
+        "type": "ExternalUrl"
+      },
+      {
+        "title": "Control Flow Basics",
+        "type": "ExternalUrl"
+      },
+      {
+        "title": "Exercise: Collatz Sequence (control flow)",
+        "type": "ExternalUrl"
+      },
+      {
+        "title": "Exercise: Geometry (reference)",
+        "type": "ExternalUrl"
+      },
+      {
+        "title": "SEN-109:00040 Expression Evaluation: module / pattern-matching / generics / traits",
+        "type": "Assignment"
+      },
+      {
+        "title": "SEN-109:00020 Expression Evaluation: toolchains and tests",
+        "type": "Assignment"
+      },
+      {
+        "title": "(Optional) 100 exercises to learn rust",
+        "type": "ExternalUrl"
+      },
+      {
+        "title": "RustRover IDE",
+        "type": "ExternalUrl"
+      }
+    ]
+  },
+  {
+    "module": "Week 2: Patttern Matching / Traits",
+    "items": [
+      {
+        "title": "sen-109-lec-2.pptx",
+        "type": "File"
+      },
+      {
+        "title": "Exercise: Generic min (generics/trait)",
+        "type": "ExternalUrl"
+      },
+      {
+        "title": "Exercise: Elevator Events",
+        "type": "ExternalUrl"
+      },
+      {
+        "title": "Exercise: Expression Evaluation (pattern matching)",
+        "type": "ExternalUrl"
+      },
+      {
+        "title": "Exercise: Counter (Trait)",
+        "type": "ExternalUrl"
+      },
+      {
+        "title": "SEN-109:00010 Understanding systems programming",
+        "type": "Assignment"
+      },
+      {
+        "title": "SEN-109:00030 Apply techniques to manage memory safely",
+        "type": "Assignment"
+      }
+    ]
+  },
+  {
+    "module": "Week 3: Smart pointers / Memory Safety / Async",
+    "items": [
+      {
+        "title": "sen-109-lec-3.pptx",
+        "type": "File"
+      },
+      {
+        "title": "Exercise: Binary Tree",
+        "type": "ExternalUrl"
+      },
+      {
+        "title": "Exercise: Health Statistics",
+        "type": "ExternalUrl"
+      },
+      {
+        "title": "Lab: Basic Tokio",
+        "type": "Page"
+      },
+      {
+        "title": "Exercise: Broadcast Chat",
+        "type": "ExternalUrl"
+      }
+    ]
+  },
+  {
+    "module": "Week 4: GPU Programming",
+    "items": [
+      {
+        "title": "sen-109-lec-4.pptx",
+        "type": "File"
+      },
+      {
+        "title": "Rust CUDA Guide",
+        "type": "ExternalUrl"
+      },
+      {
+        "title": "CubeCL Guide",
+        "type": "ExternalUrl"
+      },
+      {
+        "title": "Optimizing Parallel Reduction in CUDA",
+        "type": "ExternalUrl"
+      }
+    ]
+  }
+]

@@ -1,0 +1,196 @@
+# Lab: Basic Tokio
+
+<h1 id="heading-asynchronouns-rust"><span style="font-size: 14pt;"><a href="https://jbarszczewski.com/basics-of-asynchronous-rust-with-tokio">Source: Basics of asynchronous Rust with Tokio</a></span><br>Introduction</h1>
+<p>Asynchronous code is everywhere now. It's basically a must when you write anything that needs to scale, like API/backend applications. There are different ways to tackle async code in Rust, but we will use the most popular crate for it, called Tokio. Ultimately, we will create a very simple API that can handle multiple requests at a time. Let's start!</p>
+<p>The final code can be found here:<span>&nbsp;</span><a href="https://github.com/jbarszczewski/rust-tokio-tutorial" target="_blank">Tokio tutorial Github repo</a>.</p>
+<h2 id="heading-simple-async-hello-rust">Simple async hello-rust</h2>
+<p>Let's start by creating a basic program that executes a task. Create a project:</p>
+<pre><code class="lang-shell hljs language-shell" data-highlighted="yes"><span class="hljs-meta prompt_">$ </span><span class="language-bash">cargo new tokio-tutorial</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">cd</span> tokio-tutorial</span>
+</code><i class="fa-jelly fa-clipboard copy-icon"></i></pre>
+<p>For this task we will need just one dependency. So open<span>&nbsp;</span><code>Cargo.toml</code><span>&nbsp;</span>and add it:</p>
+<pre><code class="lang-toml hljs language-ini" data-highlighted="yes"><span class="hljs-section">[dependencies]</span>
+<span class="hljs-attr">tokio</span> = {version = <span class="hljs-string">"1.49.0"</span>, features = [<span class="hljs-string">"full"</span>]}
+</code><i class="fa-jelly fa-clipboard copy-icon"></i></pre>
+<p>Now got to<span>&nbsp;</span><code>src/main.rs</code><span>&nbsp;</span>and replace content with:</p>
+<pre><code class="lang-rust hljs language-rust" data-highlighted="yes"><span class="hljs-meta">#[tokio::main]</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">task</span> = tokio::<span class="hljs-title function_ invoke__">spawn</span>(<span class="hljs-keyword">async</span> {
+        <span class="hljs-built_in">println!</span>(<span class="hljs-string">"Hello, rust!"</span>);
+    });
+
+    task.<span class="hljs-keyword">await</span>.<span class="hljs-title function_ invoke__">unwrap</span>();
+}
+</code><i class="fa-jelly fa-clipboard copy-icon"></i></pre>
+<p>And that's all you need to run (<code>cargo run</code>) a simple async hello-rust task! The full code for this chapter can be found<span>&nbsp;</span><a href="https://github.com/jbarszczewski/rust-tokio-tutorial/tree/d31121d512c092ad82440be01a1eeecb118fecde" target="_blank">on my Github</a>. Of course, this example doesn't show the real power of Tokio runtime so let's jump on to more useful example.</p>
+<h2 id="heading-savings-balance-api">Savings Balance API</h2>
+<p>Ok, to spare you from creating another ToDo list API we will do something even simpler: Savings Balance API. The aim is simple, we will expose two methods: GET and POST, to manage our balance. GET will return the current value and POST will add/substract from it. If you went through the Rust Book you probably stumbled across the<span>&nbsp;</span><a href="https://doc.rust-lang.org/stable/book/ch20-00-final-project-a-web-server.html" target="_blank">Multithreaded Web Server project</a>. It's a really great starting point to get your head around threads but requires a lot of boilerplate code (manual thread management etc.). This is where Tokio comes in.</p>
+<h3 id="heading-first-response">First response</h3>
+<p>We will start with a simple server that listens for incoming requests. Replace the content of<span>&nbsp;</span><code>main.rs</code><span>&nbsp;</span>with:</p>
+<pre><code class="lang-rust hljs language-rust" data-highlighted="yes"><span class="hljs-keyword">use</span> tokio::io::AsyncWriteExt;
+<span class="hljs-keyword">use</span> tokio::net::{TcpListener, TcpStream};
+
+<span class="hljs-meta">#[tokio::main]</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">listener</span> = TcpListener::<span class="hljs-title function_ invoke__">bind</span>(<span class="hljs-string">"127.0.0.1:8181"</span>).<span class="hljs-keyword">await</span>.<span class="hljs-title function_ invoke__">unwrap</span>();
+
+    <span class="hljs-keyword">loop</span> {
+        <span class="hljs-keyword">let</span> (stream, _) = listener.<span class="hljs-title function_ invoke__">accept</span>().<span class="hljs-keyword">await</span>.<span class="hljs-title function_ invoke__">unwrap</span>();
+        <span class="hljs-title function_ invoke__">handle_connection</span>(stream).<span class="hljs-keyword">await</span>;
+    }
+}
+
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">handle_connection</span>(<span class="hljs-keyword">mut</span> stream: TcpStream) {
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">contents</span> = <span class="hljs-string">"{\"balance\": 0.00}"</span>;
+
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">response</span> = <span class="hljs-built_in">format!</span>(
+        <span class="hljs-string">"HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\n\r\n{}"</span>,
+        contents.<span class="hljs-title function_ invoke__">len</span>(),
+        contents
+    );
+    stream.<span class="hljs-title function_ invoke__">write</span>(response.<span class="hljs-title function_ invoke__">as_bytes</span>()).<span class="hljs-keyword">await</span>.<span class="hljs-title function_ invoke__">unwrap</span>();
+    stream.<span class="hljs-title function_ invoke__">flush</span>().<span class="hljs-keyword">await</span>.<span class="hljs-title function_ invoke__">unwrap</span>();
+}
+</code><i class="fa-jelly fa-clipboard copy-icon"></i></pre>
+<p>Run it and in your browser navigate to<span>&nbsp;</span><a href="http://127.0.0.1:8181/" target="_blank">http://127.0.0.1:8181</a><span>&nbsp;</span>to see your first response from the server. Some code explanaition:</p>
+<ul>
+<li>TCP listener is created and bound to our local address.</li>
+<li>In a loop we await for an incoming connection.</li>
+<li>Once connection is made, we pass the stream to our handler</li>
+</ul>
+<p><em>Ok but it's not multitasking!</em><span>&nbsp;</span>Exacly, our code is processing only one request at a time. So how do we make it process connections concurrently? Very simple. Just wrap the<span>&nbsp;</span><code>handle_connection()</code><span>&nbsp;</span>in a<span>&nbsp;</span><code>tokio::spawn</code><span>&nbsp;</span>function:</p>
+<pre><code class="lang-rust hljs language-rust" data-highlighted="yes">tokio::<span class="hljs-title function_ invoke__">spawn</span>(<span class="hljs-keyword">async</span> <span class="hljs-keyword">move</span> {
+    <span class="hljs-title function_ invoke__">handle_connection</span>(stream).<span class="hljs-keyword">await</span>;
+});
+</code><i class="fa-jelly fa-clipboard copy-icon"></i></pre>
+<p>And that's it! You now can process multiple connections at a time! Code so far<span>&nbsp;</span><a href="https://github.com/jbarszczewski/rust-tokio-tutorial/tree/12cad3ba7b7528030de26f9678f514ccdbaf4b68" target="_blank">Can be found on GitHub here</a></p>
+<h3 id="heading-get-and-post">GET and POST</h3>
+<p>Before we move to the last part of the tutorial: modyfing balance value, we need to make sure we can read and change the balance.</p>
+<p>To keep things simple, we will have two scenarion:</p>
+<ul>
+<li>GET http://127.0.0.1:8181 As soon as we detect GET request, we return balance.</li>
+<li>POST http://127.0.0.1:8181/62.32 If the method is POST we will read value (max 10 characters) from route, update our balance and return it.</li>
+</ul>
+<p>Of course, this is not the most RESTful or scalable approach but will work for this tutorial just fine.</p>
+<p>The new<span>&nbsp;</span><code>handle_connection</code><span>&nbsp;</span>is looking like this:</p>
+<pre><code class="lang-rust hljs language-rust" data-highlighted="yes"><span class="hljs-keyword">async</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">handle_connection</span>(<span class="hljs-keyword">mut</span> stream: TcpStream) {
+    <span class="hljs-comment">// Read the first 16 characters from the incoming stream.</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">buffer</span> = [<span class="hljs-number">0</span>; <span class="hljs-number">16</span>];
+    stream.<span class="hljs-title function_ invoke__">read</span>(&amp;<span class="hljs-keyword">mut</span> buffer).<span class="hljs-keyword">await</span>.<span class="hljs-title function_ invoke__">unwrap</span>();
+    <span class="hljs-comment">// First 4 characters are used to detect HTTP method</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">method_type</span> = <span class="hljs-keyword">match</span> <span class="hljs-type">str</span>::<span class="hljs-title function_ invoke__">from_utf8</span>(&amp;buffer[<span class="hljs-number">0</span>..<span class="hljs-number">4</span>]) {
+        <span class="hljs-title function_ invoke__">Ok</span>(v) =&gt; v,
+        <span class="hljs-title function_ invoke__">Err</span>(e) =&gt; <span class="hljs-built_in">panic!</span>(<span class="hljs-string">"Invalid UTF-8 sequence: {}"</span>, e),
+    };
+
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">contents</span> = <span class="hljs-keyword">match</span> method_type {
+        <span class="hljs-string">"GET "</span> =&gt; {
+            <span class="hljs-comment">// todo: return real balance</span>
+            <span class="hljs-built_in">format!</span>(<span class="hljs-string">"{{\"balance\": {}}}"</span>, <span class="hljs-number">0.0</span>)
+        }
+        <span class="hljs-string">"POST"</span> =&gt; {
+            <span class="hljs-comment">// Take characters after 'POST /' until whitespace is detected.</span>
+            <span class="hljs-keyword">let</span> <span class="hljs-variable">input</span>: <span class="hljs-type">String</span> = buffer[<span class="hljs-number">6</span>..<span class="hljs-number">16</span>]
+                .<span class="hljs-title function_ invoke__">iter</span>()
+                .<span class="hljs-title function_ invoke__">take_while</span>(|x| **x != <span class="hljs-number">32u8</span>)
+                .<span class="hljs-title function_ invoke__">map</span>(|x| *x <span class="hljs-keyword">as</span> <span class="hljs-type">char</span>)
+                .<span class="hljs-title function_ invoke__">collect</span>();
+            <span class="hljs-keyword">let</span> <span class="hljs-variable">balance_update</span> = input.parse::&lt;<span class="hljs-type">f32</span>&gt;().<span class="hljs-title function_ invoke__">unwrap</span>();
+            <span class="hljs-comment">// todo: add balance update handling</span>
+            <span class="hljs-built_in">format!</span>(<span class="hljs-string">"{{\"balance\": {}}}"</span>, balance_update)
+        }
+        _ =&gt; {
+            <span class="hljs-built_in">panic!</span>(<span class="hljs-string">"Invalid HTTP method!"</span>)
+        }
+    };
+
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">response</span> = <span class="hljs-built_in">format!</span>(
+        <span class="hljs-string">"HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\n\r\n{}"</span>,
+        contents.<span class="hljs-title function_ invoke__">len</span>(),
+        contents
+    );
+    stream.<span class="hljs-title function_ invoke__">write</span>(response.<span class="hljs-title function_ invoke__">as_bytes</span>()).<span class="hljs-keyword">await</span>.<span class="hljs-title function_ invoke__">unwrap</span>();
+    stream.<span class="hljs-title function_ invoke__">flush</span>().<span class="hljs-keyword">await</span>.<span class="hljs-title function_ invoke__">unwrap</span>();
+}
+</code><i class="fa-jelly fa-clipboard copy-icon"></i></pre>
+<p>The idea is that we read first n characters from the incoming request and use that to perform selected operation. For the demo purpose and simplicity we limit our input to a maximum of 10 characters. Note that you may also want to import additional module for <code>stream.read</code><strong>&nbsp;</strong>method:</p>
+<pre>use tokio::io::AsyncReadExt;</pre>
+<p>Try running it now and see how response changes depending on chosen method. Example cURL command:</p>
+<pre><code class="lang-curl">curl --request POST 'http://127.0.0.1:8181/-12.98'
+</code><i class="fa-jelly fa-clipboard copy-icon"></i></pre>
+<h3 id="heading-handling-the-balance">Handling The Balance</h3>
+<p>So far, our handler returns hardcoded results. Let's introduce a variable that will keep the value inbetween the calls. Our balance variable will be shared across tasks and potentially threads so to support this it is wrapped in<span>&nbsp;</span><code>Arc&lt;Mutex&lt;_&gt;&gt;</code>.<span>&nbsp;</span><code>Arc&lt;&gt;</code><span>&nbsp;</span>allows variable to be referenced concurrently from many tasks, and<span>&nbsp;</span><code>Mutex&lt;&gt;</code><span>&nbsp;</span>is a guard that make sure only one tasks can change it at a time (other tasks will have to wait for their turn).</p>
+<p>Below is the full code with balance update. Check the comments on new lines:</p>
+<pre><code class="lang-rust hljs language-rust" data-highlighted="yes"><span class="hljs-keyword">use</span> std::<span class="hljs-type">str</span>;
+<span class="hljs-keyword">use</span> std::sync::{Arc, Mutex, MutexGuard};
+<span class="hljs-keyword">use</span> tokio::io::AsyncReadExt;
+<span class="hljs-keyword">use</span> tokio::io::AsyncWriteExt;
+<span class="hljs-keyword">use</span> tokio::net::{TcpListener, TcpStream};
+
+<span class="hljs-meta">#[tokio::main]</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+    <span class="hljs-comment">// create balance wrapped in Arc and Mutex for cross thread safety</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">balance</span> = Arc::<span class="hljs-title function_ invoke__">new</span>(Mutex::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-number">0.00f32</span>));
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">listener</span> = TcpListener::<span class="hljs-title function_ invoke__">bind</span>(<span class="hljs-string">"127.0.0.1:8181"</span>).<span class="hljs-keyword">await</span>.<span class="hljs-title function_ invoke__">unwrap</span>();
+
+    <span class="hljs-keyword">loop</span> {
+        <span class="hljs-keyword">let</span> (stream, _) = listener.<span class="hljs-title function_ invoke__">accept</span>().<span class="hljs-keyword">await</span>.<span class="hljs-title function_ invoke__">unwrap</span>();
+        <span class="hljs-comment">// Clone the balance Arc and pass it to handler</span>
+        <span class="hljs-keyword">let</span> <span class="hljs-variable">balance</span> = balance.<span class="hljs-title function_ invoke__">clone</span>();
+        tokio::<span class="hljs-title function_ invoke__">spawn</span>(<span class="hljs-keyword">async</span> <span class="hljs-keyword">move</span> {
+            <span class="hljs-title function_ invoke__">handle_connection</span>(stream, balance).<span class="hljs-keyword">await</span>;
+        });
+    }
+}
+
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">handle_connection</span>(<span class="hljs-keyword">mut</span> stream: TcpStream, balance: Arc&lt;Mutex&lt;<span class="hljs-type">f32</span>&gt;&gt;) {
+    <span class="hljs-comment">// Read the first 16 characters from the incoming stream.</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">buffer</span> = [<span class="hljs-number">0</span>; <span class="hljs-number">16</span>];
+    stream.<span class="hljs-title function_ invoke__">read</span>(&amp;<span class="hljs-keyword">mut</span> buffer).<span class="hljs-keyword">await</span>.<span class="hljs-title function_ invoke__">unwrap</span>();
+    <span class="hljs-comment">// First 4 characters are used to detect HTTP method</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">method_type</span> = <span class="hljs-keyword">match</span> <span class="hljs-type">str</span>::<span class="hljs-title function_ invoke__">from_utf8</span>(&amp;buffer[<span class="hljs-number">0</span>..<span class="hljs-number">4</span>]) {
+        <span class="hljs-title function_ invoke__">Ok</span>(v) =&gt; v,
+        <span class="hljs-title function_ invoke__">Err</span>(e) =&gt; <span class="hljs-built_in">panic!</span>(<span class="hljs-string">"Invalid UTF-8 sequence: {}"</span>, e),
+    };
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">contents</span> = <span class="hljs-keyword">match</span> method_type {
+        <span class="hljs-string">"GET "</span> =&gt; {
+            <span class="hljs-comment">// before using balance we need to lock it.</span>
+            <span class="hljs-built_in">format!</span>(<span class="hljs-string">"{{\"balance\": {}}}"</span>, balance.<span class="hljs-title function_ invoke__">lock</span>().<span class="hljs-title function_ invoke__">unwrap</span>())
+        }
+        <span class="hljs-string">"POST"</span> =&gt; {
+            <span class="hljs-comment">// Take characters after 'POST /' until whitespace is detected.</span>
+            <span class="hljs-keyword">let</span> <span class="hljs-variable">input</span>: <span class="hljs-type">String</span> = buffer[<span class="hljs-number">6</span>..<span class="hljs-number">16</span>]
+                .<span class="hljs-title function_ invoke__">iter</span>()
+                .<span class="hljs-title function_ invoke__">take_while</span>(|x| **x != <span class="hljs-number">32u8</span>)
+                .<span class="hljs-title function_ invoke__">map</span>(|x| *x <span class="hljs-keyword">as</span> <span class="hljs-type">char</span>)
+                .<span class="hljs-title function_ invoke__">collect</span>();
+            <span class="hljs-keyword">let</span> <span class="hljs-variable">balance_update</span> = input.parse::&lt;<span class="hljs-type">f32</span>&gt;().<span class="hljs-title function_ invoke__">unwrap</span>();
+
+            <span class="hljs-comment">// acquire lock on our balance and update the value</span>
+            <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">locked_balance</span>: MutexGuard&lt;<span class="hljs-type">f32</span>&gt; = balance.<span class="hljs-title function_ invoke__">lock</span>().<span class="hljs-title function_ invoke__">unwrap</span>();
+            *locked_balance += balance_update;
+            <span class="hljs-built_in">format!</span>(<span class="hljs-string">"{{\"balance\": {}}}"</span>, locked_balance)
+        }
+        _ =&gt; {
+            <span class="hljs-built_in">panic!</span>(<span class="hljs-string">"Invalid HTTP method!"</span>)
+        }
+    };
+
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">response</span> = <span class="hljs-built_in">format!</span>(
+        <span class="hljs-string">"HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\n\r\n{}"</span>,
+        contents.<span class="hljs-title function_ invoke__">len</span>(),
+        contents
+    );
+    stream.<span class="hljs-title function_ invoke__">write</span>(response.<span class="hljs-title function_ invoke__">as_bytes</span>()).<span class="hljs-keyword">await</span>.<span class="hljs-title function_ invoke__">unwrap</span>();
+    stream.<span class="hljs-title function_ invoke__">flush</span>().<span class="hljs-keyword">await</span>.<span class="hljs-title function_ invoke__">unwrap</span>();
+}
+</code><i class="fa-jelly fa-clipboard copy-icon"></i></pre>
+<p>Please note that we are acquiring lock on our balance, but we don't need to unlock it manually. Once the<span>&nbsp;</span><code>MutexGuard</code><span>&nbsp;</span>returned by<span>&nbsp;</span><code>lock()</code><span>&nbsp;</span>goes out of scope, the lock is automatically removed. In our situation it is straight after we're done with preparing response contents.</p>
+<p>Now we are ready to run our app and test if we are getting a proper balance response. Example cURL command:</p>
+<pre><code class="lang-curl">curl --request POST 'http://127.0.0.1:8181/150.50'
+</code><i class="fa-jelly fa-clipboard copy-icon"></i></pre>
+<p>Here is an exercise for you: To see how using lock affects execution of the code try adding some delay (take a look at<span>&nbsp;</span><code>tokio::timer::Delay</code>), long enough to make multiple API calls, just after acquiring a lock!</p>
+<h2 id="heading-conclusion">Conclusion</h2>
+<p>As we can see it's really easy to create an application in Rust that handle async operations thans to Tokio runtime. Of course, for API usually you will use a web framework like Actix, Rocket or Warp (among others) but hopefully you will have a better understanding of how it works "under the hood".</p>
+<p>The final code can be found here:<span>&nbsp;</span><a href="https://github.com/jbarszczewski/rust-tokio-tutorial" target="_blank">Tokio tutorial Github repo</a>.</p>
+<p>Original post: <a href="https://jbarszczewski.com/basics-of-asynchronous-rust-with-tokio">Basics of asynchronous Rust with Tokio</a></p>

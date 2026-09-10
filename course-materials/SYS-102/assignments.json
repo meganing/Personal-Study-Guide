@@ -1,0 +1,46 @@
+[
+  {
+    "id": 5592,
+    "name": "SYS-102:00010 State machine design",
+    "due_at": "2026-05-01T16:59:00Z",
+    "points": 100.0,
+    "description": "<p><a class=\"instructure_file_link instructure_scribd_file inline_disabled\" title=\"SYS102_Assessment1.pdf\" href=\"https://cmkl.instructure.com/courses/983/files/52705?verifier=RGgadu3Qr73clp39k9SAlBZiiyqyKObRz0iYmLlk&amp;wrap=1\" target=\"_blank\" data-api-endpoint=\"https://cmkl.instructure.com/api/v1/courses/983/files/52705\" data-api-returntype=\"File\">SYS102_Assessment1.pdf</a></p>",
+    "submission_types": [
+      "online_upload"
+    ],
+    "has_attachments": false
+  },
+  {
+    "id": 5593,
+    "name": "SYS-102:00020 Assembly Programming",
+    "due_at": "2026-05-01T16:59:00Z",
+    "points": 100.0,
+    "description": "<p><a class=\"instructure_file_link instructure_scribd_file inline_disabled\" title=\"SYS102_Assessment2.pdf\" href=\"https://cmkl.instructure.com/courses/983/files/52711?verifier=cPwrmGIfXdsmufWsOTp8YefHlccfDm5Zc4DH0dZX&amp;wrap=1\" target=\"_blank\" data-api-endpoint=\"https://cmkl.instructure.com/api/v1/courses/983/files/52711\" data-api-returntype=\"File\">SYS102_Assessment2.pdf</a></p>",
+    "submission_types": [
+      "online_upload"
+    ],
+    "has_attachments": false
+  },
+  {
+    "id": 5594,
+    "name": "SYS-102:00030 Computer architecture",
+    "due_at": "2026-05-01T16:59:00Z",
+    "points": 100.0,
+    "description": "<p><a class=\"instructure_file_link instructure_scribd_file inline_disabled\" title=\"SYS102_Assessment3.pdf\" href=\"https://cmkl.instructure.com/courses/983/files/52710?verifier=Tm5vCeyrDY9Mcga3yuheAW9FJqgZVoKIjNus9l09&amp;wrap=1\" target=\"_blank\" data-api-endpoint=\"https://cmkl.instructure.com/api/v1/courses/983/files/52710\" data-api-returntype=\"File\">SYS102_Assessment3.pdf</a></p>",
+    "submission_types": [
+      "online_upload"
+    ],
+    "has_attachments": false
+  },
+  {
+    "id": 5595,
+    "name": "SYS-102:00040 Interrupt-driven programming",
+    "due_at": "2026-05-01T16:59:00Z",
+    "points": 100.0,
+    "description": "<p><a class=\"instructure_file_link instructure_scribd_file inline_disabled\" title=\"SYS102_Assessment4.pdf\" href=\"https://cmkl.instructure.com/courses/983/files/52717?verifier=O6MTGTv8AkGJwaz6WLxxU2aRXXLnp2UQAjJxlWEM&amp;wrap=1\" target=\"_blank\" data-api-endpoint=\"https://cmkl.instructure.com/api/v1/courses/983/files/52717\" data-api-returntype=\"File\">SYS102_Assessment4.pdf</a></p>\n<p>Please download all the files under 'assessment4-materials' and create directory structure as follows</p>\n<p><img src=\"https://cmkl.instructure.com/courses/983/files/52713/preview?verifier=PgWuzMziaBXghqTKW2yhqbrkYNhqcwkSqDutQofB\" alt=\"image.png\" width=\"335\" height=\"307\" loading=\"lazy\" data-api-endpoint=\"https://cmkl.instructure.com/api/v1/courses/983/files/52713\" data-api-returntype=\"File\"></p>",
+    "submission_types": [
+      "online_upload"
+    ],
+    "has_attachments": false
+  }
+]
