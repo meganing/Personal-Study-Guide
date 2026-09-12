@@ -75,7 +75,10 @@
   .progress-bar{height:7px;border-radius:99px;background:var(--bg-raised);overflow:hidden;margin:10px 0 4px}
   .progress-bar > i{display:block;height:100%;background:var(--good);width:0%;transition:width .3s}
   .step{border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;background:var(--bg-alt);overflow:hidden}
+  .step.done{opacity:.6}
+  .step.done .step-head b{text-decoration:line-through}
   .step-head{padding:13px 15px;display:flex;gap:10px;align-items:center;cursor:pointer}
+  .step-head .step-done{width:18px;height:18px;accent-color:var(--good);flex:none}
   .step-head .num{background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:12px;
     width:24px;height:24px;border-radius:50%;display:grid;place-items:center;flex:none}
   .step-head b{flex:1;font-size:14px}
@@ -93,12 +96,57 @@
     border:1px solid var(--border);background:var(--bg-alt);color:var(--text)}
   .done-crit{margin-top:8px;padding:8px 10px;background:var(--good-soft);color:var(--good);border-radius:8px;font-size:12.5px}
   .warn-box{background:var(--warn-soft);border-left:3px solid var(--warn);border-radius:8px;padding:9px 12px;margin:8px 0;font-size:12.5px}
+  .how-list{margin:6px 0;padding-left:18px}
+  .how-list li{margin:4px 0}
+  .glossary-item, .session, .resource{padding:8px 0;border-bottom:1px dashed var(--border);font-size:13px}
+  .glossary-item:last-child, .session:last-child, .resource:last-child{border-bottom:none}
+  .glossary-item b, .session b, .resource b{font-size:13.5px}
+  .session .covers{color:var(--text-dim);font-size:12px;display:block;margin:2px 0}
+  .session p{margin:4px 0 0}
   .hint-item{background:var(--accent-soft);border-radius:8px;padding:9px 12px;margin:6px 0;font-size:12.5px;display:none}
   .hint-item.show{display:block}
   .btn{border:1px solid var(--border);background:var(--bg-alt);color:var(--text);border-radius:10px;padding:8px 13px;font-size:12.5px;font-weight:600}
   .btn:hover{border-color:var(--accent)}
+  .btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+  .btn.good{background:var(--good-soft);color:var(--good);border-color:var(--good)}
+  .btn.bad{background:var(--bad-soft);color:var(--bad);border-color:var(--bad)}
   section{display:none}
   section.active{display:block}
+
+  /* progress ring */
+  .ring{width:38px;height:38px;border-radius:50%;flex:none;display:grid;place-items:center;
+    background:conic-gradient(var(--accent) calc(var(--pct,0)*1%), var(--bg-raised) 0);position:relative;margin-bottom:8px}
+  .ring::after{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--bg-alt)}
+  .ring span{position:relative;font-size:10px;font-weight:700}
+  @keyframes confetti-fall{to{transform:translateY(110vh) rotate(360deg);opacity:0}}
+  .confetti{position:fixed;top:-10px;width:8px;height:14px;z-index:80;animation:confetti-fall linear forwards;pointer-events:none}
+
+  /* per-step timer */
+  .timer-row{margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .timer-btn{border:1px solid var(--border);background:var(--bg-raised);color:var(--text);border-radius:8px;padding:5px 11px;font-size:12px;font-weight:600}
+  .timer-btn:hover{border-color:var(--accent)}
+  .timer-disp{font-variant-numeric:tabular-nums;font-weight:700;font-size:13px;color:var(--text-dim)}
+
+  /* quick-review flip cards */
+  .deck{display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:6px}
+  .deck-meta{display:flex;justify-content:space-between;width:100%;font-size:12px;color:var(--text-dim)}
+  .flip-card{width:100%;height:170px;perspective:1200px}
+  .flip-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;cursor:pointer}
+  .flip-card.flipped .flip-inner{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:var(--radius);border:1px solid var(--border);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:18px;background:var(--bg-raised)}
+  .face.back{transform:rotateY(180deg);background:var(--accent-soft)}
+  .face .tag{position:absolute;top:10px;left:12px;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--text-dim);letter-spacing:.04em}
+  .face .qtext{font-size:15px;font-weight:700}
+  .face .atext{font-size:13.5px}
+  .face .hint{position:absolute;bottom:10px;font-size:11px;color:var(--text-dim)}
+  .deck-controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+
+  /* resources */
+  .resource a{color:var(--accent);text-decoration:none}
+  .resource a:hover{text-decoration:underline}
+  .res-tag{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--text-dim);letter-spacing:.03em}
+
   @media (max-width:800px){
     .app{flex-direction:column}
     aside{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--border)}
@@ -109,6 +157,7 @@
 <body>
 <div class="app">
   <aside>
+    <div class="ring" id="progressRing"><span id="progressPct">0%</span></div>
     <h1 id="sideTitle">__COURSE_TITLE__</h1>
     <p class="hint">Assignment guides</p>
     <div id="navRoot"></div>
@@ -169,6 +218,77 @@ __ASSIGNMENT_DATA_JSON__
     const done = (a.requirements||[]).filter((r,ri)=>load('req:'+a.id+':'+ri,false)).length;
     return done/total;
   }
+  function stepProgress(a){
+    const total = (a.steps||[]).length;
+    if(!total) return 1;
+    const done = (a.steps||[]).filter((s,si)=>load('stepdone:'+a.id+':'+si,false)).length;
+    return done/total;
+  }
+  function assignmentProgress(a){
+    const parts = [];
+    if((a.requirements||[]).length) parts.push(reqProgress(a));
+    if((a.steps||[]).length) parts.push(stepProgress(a));
+    return parts.length ? parts.reduce((x,y)=>x+y,0)/parts.length : 1;
+  }
+
+  // ---------- progress ring + celebration ----------
+  let activeAssignment = null;
+  const celebrated = {};
+  function celebrate(){
+    const colors=['#6d54e0','#0f9d68','#f0b64c','#e5484d','#3ecf8e'];
+    for(let i=0;i<60;i++){
+      const c=document.createElement('div');
+      c.className='confetti';
+      c.style.left=Math.random()*100+'vw';
+      c.style.background=colors[i%colors.length];
+      c.style.animationDuration=(2+Math.random()*1.5)+'s';
+      c.style.transform=`rotate(${Math.random()*360}deg)`;
+      document.body.appendChild(c);
+      setTimeout(()=>c.remove(), 4000);
+    }
+  }
+  function refreshRing(){
+    let pct;
+    if(activeAssignment){ pct = Math.round(assignmentProgress(activeAssignment)*100); }
+    else {
+      const list = DATA.assignments||[];
+      pct = list.length ? Math.round(list.reduce((s,a)=>s+assignmentProgress(a),0)/list.length*100) : 0;
+    }
+    document.getElementById('progressRing').style.setProperty('--pct', pct);
+    document.getElementById('progressPct').textContent = pct+'%';
+    if(activeAssignment && pct>=100 && !celebrated[activeAssignment.id]){ celebrated[activeAssignment.id]=true; celebrate(); }
+  }
+
+  // ---------- pomodoro-style step timers ----------
+  function beep(){
+    try{
+      const ctx = new (window.AudioContext||window.webkitAudioContext)();
+      [660,880].forEach((f,i)=>{
+        const o=ctx.createOscillator(), g=ctx.createGain();
+        o.frequency.value=f; o.connect(g); g.connect(ctx.destination);
+        const t0=ctx.currentTime+i*0.18;
+        g.gain.setValueAtTime(0.0001,t0);
+        g.gain.exponentialRampToValueAtTime(0.15,t0+0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001,t0+0.3);
+        o.start(t0); o.stop(t0+0.32);
+      });
+    }catch(e){}
+  }
+  function attachTimer(btn, disp, minutes, doneLabel){
+    let remaining = minutes*60, iv = null;
+    function render(){ const m=Math.floor(remaining/60), s=remaining%60; disp.textContent = (m<10?'0':'')+m+':'+(s<10?'0':'')+s; }
+    render();
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if(iv){ clearInterval(iv); iv=null; btn.textContent='▶ Resume'; return; }
+      btn.textContent='⏸ Pause';
+      iv = setInterval(() => {
+        remaining--;
+        if(remaining<=0){ clearInterval(iv); iv=null; render(); btn.textContent=doneLabel||'✓ Done'; btn.disabled=true; beep(); return; }
+        render();
+      }, 1000);
+    });
+  }
 
   // nav
   const navRoot = document.getElementById('navRoot');
@@ -197,6 +317,39 @@ __ASSIGNMENT_DATA_JSON__
       </div>
       <div class="card"><p>${esc(a.summary)}</p></div>
 
+      ${(a.glossary&&a.glossary.length) ? `
+      <h3>🔤 Terms used in this guide</h3>
+      <div class="card">
+        ${a.glossary.map(g=>`<div class="glossary-item"><b>${esc(g.term)}</b> — ${esc(g.meaning)}</div>`).join('')}
+      </div>` : ''}
+
+      ${((a.glossary&&a.glossary.length) || (a.common_mistakes&&a.common_mistakes.length)) ? `
+      <h3>🃏 Quick review</h3>
+      <p style="color:var(--text-dim);font-size:12.5px;margin:0 0 10px">Flip through these before you start — click a card to reveal the answer.</p>
+      <div class="card">
+        <div class="deck" id="deck-${a.id}">
+          <div class="deck-meta"><span class="fc-pos">1 / 1</span><span class="fc-known">0 known</span></div>
+          <div class="progress-bar"><i class="fc-progress"></i></div>
+          <div class="flip-card fc-card"><div class="flip-inner">
+            <div class="face front"><span class="tag">?</span><div class="qtext fc-q"></div><span class="hint">Click to flip</span></div>
+            <div class="face back"><span class="tag">Answer</span><div class="atext fc-a"></div></div>
+          </div></div>
+          <div class="deck-controls">
+            <button class="btn bad fc-dontknow">✗ Still learning</button>
+            <button class="btn fc-prev">← Prev</button>
+            <button class="btn primary fc-shuffle">🔀 Shuffle</button>
+            <button class="btn fc-next">Next →</button>
+            <button class="btn good fc-know">✓ I knew it</button>
+          </div>
+        </div>
+      </div>` : ''}
+
+      ${(a.time_plan&&a.time_plan.length) ? `
+      <h3>⏱ How to spend your time</h3>
+      <div class="card">
+        ${a.time_plan.map(t=>`<div class="session"><b>Session ${esc(t.session)} · ${esc(t.hours)}h</b><span class="covers">${esc(t.covers||'')}</span><p>${esc(t.goal||'')}</p></div>`).join('')}
+      </div>` : ''}
+
       ${(a.requirements&&a.requirements.length) ? `
       <h3>✅ Requirements</h3>
       <div class="card checklist" id="req-${a.id}">
@@ -223,24 +376,62 @@ __ASSIGNMENT_DATA_JSON__
       ${(a.hints&&a.hints.length) ? `
       <h3>💡 If you're stuck</h3>
       <div class="card" id="hints-${a.id}"><button class="btn">Reveal next hint (${a.hints.length} available)</button><div class="hint-list"></div></div>` : ''}
+
+      ${(a.resources&&a.resources.length) ? `
+      <h3>📚 Resources</h3>
+      <div class="card">
+        ${a.resources.map(r=>`<div class="resource">${r.type?`<span class="res-tag">${esc(r.type)}</span><br>`:''}<b>${r.url?`<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)} ↗</a>`:esc(r.name)}</b><br>${esc(r.note||'')}</div>`).join('')}
+      </div>` : ''}
     `;
     viewsRoot.appendChild(view);
 
     // requirements
     const reqBox = view.querySelector('#req-'+a.id);
-    if(reqBox){
-      function refreshReq(){
+    function refreshAssignment(){
+      if(reqBox){
         const pct = Math.round(reqProgress(a)*100);
         reqBox.querySelector('.progress-bar i').style.width = pct+'%';
-        navItem.classList.toggle('complete', pct===100);
       }
+      navItem.classList.toggle('complete', Math.round(assignmentProgress(a)*100)===100);
+      refreshRing();
+    }
+    if(reqBox){
       reqBox.querySelectorAll('input[type=checkbox]').forEach(cb => {
         const ri = cb.dataset.ri;
         cb.checked = load('req:'+a.id+':'+ri, false);
         cb.closest('label').classList.toggle('done', cb.checked);
-        cb.addEventListener('change', () => { store('req:'+a.id+':'+ri, cb.checked); cb.closest('label').classList.toggle('done', cb.checked); refreshReq(); });
+        cb.addEventListener('change', () => { store('req:'+a.id+':'+ri, cb.checked); cb.closest('label').classList.toggle('done', cb.checked); refreshAssignment(); });
       });
-      refreshReq();
+      refreshAssignment();
+    }
+
+    // quick-review deck (glossary + common mistakes)
+    const deckEl = view.querySelector('#deck-'+a.id);
+    if(deckEl){
+      const cards = [
+        ...(a.glossary||[]).map(g=>({q:g.term, a:g.meaning})),
+        ...(a.common_mistakes||[]).map(m=>({q:'Mistake: '+m.mistake, a:m.why})),
+      ];
+      let order = cards.map((c,i)=>i), pos = 0;
+      const cardEl = deckEl.querySelector('.fc-card');
+      const qEl = deckEl.querySelector('.fc-q'), aEl = deckEl.querySelector('.fc-a');
+      const posEl = deckEl.querySelector('.fc-pos'), knownEl = deckEl.querySelector('.fc-known'), progEl = deckEl.querySelector('.fc-progress');
+      function show(){
+        const idx = order[pos];
+        cardEl.classList.remove('flipped');
+        qEl.textContent = cards[idx].q; aEl.textContent = cards[idx].a;
+        posEl.textContent = (pos+1)+' / '+order.length;
+        const knownCount = cards.filter((c,i)=>load('qr:'+a.id+':'+i,null)==='known').length;
+        knownEl.textContent = knownCount + ' known';
+        progEl.style.width = Math.round((knownCount/cards.length)*100)+'%';
+      }
+      cardEl.addEventListener('click', () => cardEl.classList.toggle('flipped'));
+      deckEl.querySelector('.fc-next').addEventListener('click', () => { pos = (pos+1) % order.length; show(); });
+      deckEl.querySelector('.fc-prev').addEventListener('click', () => { pos = (pos-1+order.length) % order.length; show(); });
+      deckEl.querySelector('.fc-shuffle').addEventListener('click', () => { order = order.sort(()=>Math.random()-0.5); pos=0; show(); });
+      deckEl.querySelector('.fc-know').addEventListener('click', () => { store('qr:'+a.id+':'+order[pos],'known'); deckEl.querySelector('.fc-next').click(); });
+      deckEl.querySelector('.fc-dontknow').addEventListener('click', () => { store('qr:'+a.id+':'+order[pos],'learning'); deckEl.querySelector('.fc-next').click(); });
+      show();
     }
 
     // steps
@@ -248,18 +439,27 @@ __ASSIGNMENT_DATA_JSON__
     if(stepsRoot){
       (a.steps||[]).forEach((s, si) => {
         const key = 'step:'+a.id+':'+si;
+        const doneKey = 'stepdone:'+a.id+':'+si;
         const div = document.createElement('div');
         div.className = 'step' + (load(key,false)?' open':'');
         div.innerHTML = `<div class="step-head">
+            <input type="checkbox" class="step-done" title="Mark step done">
             <span class="num">${si+1}</span><b>${esc(s.title)}</b><small>${esc(s.est_minutes||'?')} min</small><span class="chev">▾</span>
           </div>
           <div class="step-body"><div class="step-inner">
             ${s.goal?`<p><b>Goal:</b> ${esc(s.goal)}</p>`:''}
-            <p>${esc(s.how)}</p>
+            ${Array.isArray(s.how) ? `<ul class="how-list">${s.how.map(h=>`<li>${esc(h)}</li>`).join('')}</ul>` : `<p>${esc(s.how)}</p>`}
             ${s.code_scaffold ? `<pre><button class="copy-btn">Copy</button><code>${esc(s.code_scaffold.code)}</code></pre>` : ''}
             ${s.done_when?`<div class="done-crit">Done when: ${esc(s.done_when)}</div>`:''}
+            <div class="timer-row"><button class="timer-btn">▶ Start ${esc(s.est_minutes||25)} min timer</button><span class="timer-disp"></span></div>
           </div></div>`;
         div.querySelector('.step-head').addEventListener('click', () => { div.classList.toggle('open'); store(key, div.classList.contains('open')); });
+        const doneCb = div.querySelector('.step-done');
+        doneCb.checked = load(doneKey, false);
+        div.classList.toggle('done', doneCb.checked);
+        doneCb.addEventListener('click', e => e.stopPropagation());
+        doneCb.addEventListener('change', () => { store(doneKey, doneCb.checked); div.classList.toggle('done', doneCb.checked); refreshAssignment(); });
+        attachTimer(div.querySelector('.timer-btn'), div.querySelector('.timer-disp'), s.est_minutes||25, '✓ Time!');
         const copyBtn = div.querySelector('.copy-btn');
         if(copyBtn) copyBtn.addEventListener('click', (e) => {
           e.stopPropagation();
@@ -293,13 +493,16 @@ __ASSIGNMENT_DATA_JSON__
     document.getElementById('view-'+id).classList.add('active');
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     const items = navRoot.querySelectorAll('.nav-item');
-    if(id==='overview') items[0].classList.add('active');
+    if(id==='overview'){ items[0].classList.add('active'); activeAssignment = null; }
     else {
       const idx = (DATA.assignments||[]).findIndex(a=>a.id===id);
       if(idx>-1) items[idx+1].classList.add('active');
+      activeAssignment = (DATA.assignments||[]).find(a=>a.id===id) || null;
     }
+    refreshRing();
     window.scrollTo(0,0);
   }
+  refreshRing();
 })();
 </script>
 </body>

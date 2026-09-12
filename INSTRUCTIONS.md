@@ -320,8 +320,21 @@ recommended start date/order if due dates are available) — this becomes the
 ## [ASSIGNMENT] PHASE 2 — PER-ASSIGNMENT COMPLETION GUIDE
 
 For EACH assignment, build one record for the `assignments` array (becomes
-the `assignments` field in Phase 3). Keep the same depth and quality bar as a
-full written guide — this is rendered directly, not summarized further:
+the `assignments` field in Phase 3).
+
+### Writing rules — ADHD-friendly, beginner-friendly, mandatory:
+- Assume the student is a beginner in this specific topic. The first time a
+  non-everyday term appears (mutex, recursion, big-O, whatever the domain
+  needs), define it in one short clause inline — don't assume it's known.
+- `how` is an array of 2-5 short bullets, NOT a paragraph. Each bullet is one
+  concrete, scannable action or fact — one idea per bullet, plain words.
+- No step longer than 30 minutes. If a step needs more, split it into two
+  steps instead of writing a longer one.
+- Direct, active, second-person tone ("Open X. Do Y.") — no filler, no
+  throat-clearing, no restating the obvious.
+- `summary` and `common_mistakes[].why` follow the same rule: short sentences,
+  no walls of text.
+- Every step still ends with `done_when`: one concrete, self-checkable sign.
 
 ```json
 {
@@ -330,26 +343,46 @@ full written guide — this is rendered directly, not summarized further:
   "type": "coding",
   "est_hours": 4,
   "due": "2026-09-20",
-  "summary": "2-3 sentence plain-English rewrite of the goal — not copied from the brief, rewritten so the deliverable is immediately clear.",
+  "summary": "1-2 short sentences, plain English: what the deliverable is, not copied from the brief.",
+  "glossary": [{"term": "Mutex", "meaning": "A lock only one thread can hold at a time."}],
   "requirements": ["Requirement 1 rewritten clearly", "Requirement 2", "..."],
+  "time_plan": [
+    {"session": 1, "hours": 2, "covers": "Steps 1-2", "goal": "One-sentence outcome for this work session."}
+  ],
   "steps": [
     {
       "title": "What to do in this step",
-      "est_minutes": 30,
+      "est_minutes": 25,
       "goal": "What you will have by the end of this step",
-      "how": "Very detailed instructions: exact approach, which lecture concepts apply (reference file + slide), what to watch out for.",
+      "how": ["Short concrete action 1.", "Short concrete action 2 — name the exact file/command/concept.", "What to watch out for, in one line."],
       "code_scaffold": {"lang": "python", "code": "# Starter code or structure to follow"},
       "done_when": "Specific, checkable completion criterion"
     }
   ],
   "lecture_refs": [{"concept": "...", "source": "sen-109-lec-2.pptx", "slides": "4-8"}],
-  "common_mistakes": [{"mistake": "...", "why": "Why it happens and how to avoid it"}],
+  "common_mistakes": [{"mistake": "...", "why": "Short reason, one sentence."}],
   "testing": {"description": "Specific test cases or verification steps, with expected outputs.", "commands": ["pytest test_x.py"]},
-  "hints": ["Specific hint for the hardest part (revealed one at a time in the UI)", "..."]
+  "hints": ["Specific hint for the hardest part (revealed one at a time in the UI)", "..."],
+  "resources": [{"name": "Real, well-known reference (man page, official docs, video tutorial, classic paper)", "note": "One line: why a beginner needs this.", "type": "doc", "url": "https://... (optional)"}]
 }
 ```
 `code_scaffold` is optional — omit it entirely for non-coding steps rather than
 leaving it null. `commands` may be an empty array for non-code testing steps.
+`glossary` covers only terms actually used in this assignment's guide (aim for
+4-8). `time_plan` splits the assignment's `est_hours` into work sessions sized
+for a beginner's actual attention span (60-120 min each) so the student knows
+how to spend the HOURS they have — this is the "help with time" piece,
+equivalent to study mode's hour blocks.
+
+`resources` (aim for 4-6, mix of types): each has a `type` (e.g. `video`,
+`doc`, `article`, `paper`) and an optional `url`. If a tool that can browse
+the web is available, look the resource up for real and only include `url`
+when you have confirmed, from that lookup, that the page/video actually
+exists — a search result you did not verify is not enough. If no browsing
+tool is available, or you can't confirm a link, omit `url` entirely and give
+just `name`/`note` so the student can search for it themselves. Never type a
+URL from memory or guess a plausible-looking one — a wrong or dead link is
+worse than no link.
 
 ---
 
