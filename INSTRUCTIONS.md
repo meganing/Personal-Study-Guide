@@ -20,9 +20,16 @@
 The run.sh script will pass these as context in the prompt:
 - COURSE_DIR: path to course materials folder
 - HOURS: study/work hours available
-- MODE: one of `study` | `assignment` | `solver`
+- MODE: one of `study` | `assignment` | `solver` | `roadmap`
 
-If MODE is not specified, auto-detect using rule 0C below.
+If MODE is not specified, auto-detect using rule 0C below (this only applies
+to `study` | `assignment` | `solver` — `roadmap` is never auto-detected and
+is only ever passed explicitly, since it has no course folder to scan).
+
+**If MODE is `roadmap`, stop reading here and skip straight to the
+`[ROADMAP]` section below** — it defines its own inputs (no COURSE_DIR/HOURS),
+its own startup print, and its own phases. The rest of Step 0 (0B-0E) and
+everything in STUDY/ASSIGNMENT/SOLVER below does not apply to it.
 
 ### 0B — Read manifest
 Read `<COURSE_DIR>/manifest.json` for course_name and study_hours.
@@ -536,12 +543,145 @@ Include enough `questions` entries to cover every non-trivial design decision
 ---
 
 # ══════════════════════════════════════════════════════
+# MODE: roadmap
+# ══════════════════════════════════════════════════════
+# Triggered by: --mode roadmap ONLY — never auto-detected. There is no
+# course folder here; the learner describes a goal directly instead.
+# Produces: outputs/roadmap/index.html — an interactive learning roadmap
+# with a phase-by-phase plan, real study resources, and a study-log/streak
+# tracker the learner uses over time as they actually study.
+# ─────────────────────────────────────────────────────
+
+## [ROADMAP] PHASE 0 — READ INPUTS & START
+
+run.sh passes these instead of COURSE_DIR/HOURS:
+- TOPIC: free text, e.g. "Japanese" or "Machine Learning"
+- TOPIC_TYPE: `subject` | `language`
+- CURRENT_LEVEL: free text — where the learner is starting from
+- TARGET_LEVEL: free text — what they want to be able to do/know
+- DURATION: free text, e.g. "2 months", "1 year"
+- WEEKLY_HOURS: number — hours/week they can realistically commit
+
+Create `<OUTPUTS_DIR>/roadmap/` (run.sh also creates this, but ensure it
+exists). Then print:
+```
+════════════════════════════════════════════════════════
+🚀 LEARNING AGENT STARTED
+Topic     : <TOPIC> (<TOPIC_TYPE>)
+Level     : <CURRENT_LEVEL> → <TARGET_LEVEL>
+Duration  : <DURATION> · <WEEKLY_HOURS>h/week
+Mode      : roadmap
+════════════════════════════════════════════════════════
+```
+
+---
+
+## [ROADMAP] PHASE 1 — RESEARCH THE PATH
+
+- Draw on real, well-established knowledge of how this topic is normally
+  learned in sequence: for a `language`, that means a CEFR-style progression
+  (or the equivalent for non-European languages) across listening, speaking,
+  reading, writing, vocab, and grammar; for a `subject`, that means the
+  standard prerequisite chain and canonical curriculum a competent teacher
+  would use.
+- If a tool that can browse the web is available, look up real, current,
+  well-regarded resources for this specific TOPIC (courses, books, apps,
+  communities) rather than relying only on memory — apply the same
+  verification rule as assignment mode's `resources` field below.
+- Sanity-check DURATION against CURRENT_LEVEL → TARGET_LEVEL. If it's
+  unrealistic as literally stated (e.g. "true beginner to fluent in 2
+  weeks"), do not refuse and do not silently ignore it — build the most
+  honest plan that fits the time given, and say so plainly in `overview`
+  (e.g. "this gets you a solid survival-conversation foundation, not
+  fluency, in 2 weeks — fluency realistically takes years of immersion").
+
+---
+
+## [ROADMAP] PHASE 2 — BUILD THE PHASES (ADHD-FRIENDLY)
+
+Split DURATION into 3-8 phases with realistic timeframes (fewer, longer
+phases for a short DURATION; more for a year or longer). Writing rules:
+
+- Every `milestone` must be concretely checkable/observable by the learner
+  themselves — "hold a 5-minute self-introduction from memory" is good,
+  "get better at speaking" is not.
+- `focus_areas` and `milestones` are short bullets (1-2 sentences each), not
+  paragraphs — same rule as assignment mode.
+- Each phase ends with one concrete `checkpoint`: a specific self-test that
+  tells the learner they're ready for the next phase.
+- Pace milestones to WEEKLY_HOURS — don't write a plan that assumes more
+  time than the learner said they have.
+
+```json
+{
+  "id": "phase-1",
+  "title": "Foundations: hiragana, katakana, and core sentence patterns",
+  "timeframe": "Weeks 1-4",
+  "goal": "One sentence: what you'll be able to do by the end of this phase.",
+  "focus_areas": ["Hiragana reading & writing", "Katakana reading & writing", "Basic sentence structure (X wa Y desu)"],
+  "milestones": ["Read any hiragana word without sounding out each letter", "Introduce yourself in 3-4 full sentences"],
+  "resources": [{"name": "Real, well-known resource for THIS phase", "type": "app", "note": "Why this fits this phase specifically.", "url": "https://... (optional, verified)"}],
+  "checkpoint": "A concrete self-test to know you're ready for phase 2."
+}
+```
+
+---
+
+## [ROADMAP] PHASE 3 — OVERALL MATERIALS & CONSISTENCY TIPS
+
+Build:
+- `materials`: 4-8 general resources not tied to one specific phase (e.g. a
+  community/subreddit/Discord, a reference grammar, an overall course) —
+  same real-resources-only, verify-before-linking rule as assignment mode.
+- `tips`: 3-5 short, ADHD-friendly consistency habits for THIS topic/duration
+  (e.g. "10 minutes every day beats 2 hours once a week — streaks are the
+  whole game here"). One sentence each.
+
+---
+
+## [ROADMAP] PHASE 4 — ASSEMBLE THE INTERACTIVE ROADMAP
+
+1. Assemble one JSON object:
+   ```json
+   {
+     "topic": "<TOPIC>",
+     "topic_type": "<TOPIC_TYPE>",
+     "current_level": "<CURRENT_LEVEL>",
+     "target_level": "<TARGET_LEVEL>",
+     "duration": "<DURATION>",
+     "weekly_hours": <WEEKLY_HOURS>,
+     "generated_at": "<ISO 8601 timestamp of now>",
+     "overview": "2-4 sentences: the plan and why it's paced this way — see the realism note in Phase 1.",
+     "weekly_commitment": "Plain-English restatement of how to spread WEEKLY_HOURS across a week (e.g. '~30-45 min most days beats one long weekend session').",
+     "tips": [ ... from Phase 3 ... ],
+     "phases": [ ... from Phase 2 ... ],
+     "materials": [ ... from Phase 3 ... ]
+   }
+   ```
+2. Read the template at `templates/roadmap_pack.html` (repo root, do not
+   modify the template file itself).
+3. Replace every `__TOPIC_TITLE__` with the plain-text TOPIC (HTML-escape
+   `&`, `<`, `>`).
+4. Replace the single `__ROADMAP_DATA_JSON__` with the JSON object from step
+   1, applying the same validity and `</script` escaping rules as every
+   other mode.
+5. Write the result to `outputs/roadmap/index.html`. This is the only file
+   the learner needs — it also holds their study-log/streak tracker, which
+   lives entirely in the page's own `localStorage` and needs no data from
+   this generation step.
+
+---
+---
+
+# ══════════════════════════════════════════════════════
 # QUALITY STANDARDS (ALL MODES)
 # ══════════════════════════════════════════════════════
 
 Before writing any file:
 - No hallucinated facts — if unsure, mark [VERIFY]
 - All file references must be real files that exist in the course folder
+  (not applicable to roadmap mode, which has no course folder — it follows
+  its own resource-verification rule in `[ROADMAP] PHASE 1` instead)
 - All code must be complete and runnable — no placeholder `# TODO` unless
   explicitly noted as student exercise
 - CSV is correctly quoted
@@ -551,6 +691,9 @@ Before writing any file:
   keys verbatim and will silently render nothing for a misspelled or missing key
 - Escape any literal `</script` inside a JSON string value as `<\/script`
 - Never edit the template files in `templates/` themselves — only read them
+- Never invent a URL for a `resources`/`materials` entry — only include one
+  you actually verified exists (via a browsing tool), otherwise omit `url`
+  and give just `name`/`note`
 
 ---
 
@@ -564,8 +707,8 @@ After ALL files are written, print:
 ════════════════════════════════════════════════════════
 ✅ PACK COMPLETE
 ════════════════════════════════════════════════════════
-Course : <course_name>
-Hours  : <hours>
+Course : <course_name>              (roadmap mode: Topic  : <TOPIC>)
+Hours  : <hours>                    (roadmap mode: Duration: <DURATION>)
 Mode   : <mode>
 
 Output files:
@@ -574,6 +717,7 @@ Output files:
 START HERE → <outputs/index.html                    for study mode>
              <outputs/assignments/index.html         for assignment mode>
              <outputs/solver/index.html               for solver mode>
+             <outputs/roadmap/index.html              for roadmap mode>
 
 Open that file directly in any browser — no server needed.
 ════════════════════════════════════════════════════════

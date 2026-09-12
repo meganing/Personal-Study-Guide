@@ -1,6 +1,6 @@
-# study-pack-generator
+# Personal Study Guide
 
-An AI workflow that reads your course materials or project descriptions and generates a personalized, ADHD-friendly study pack. Transforms lecture slides, PDFs, and assignment briefs into a single **interactive HTML page** — flip flashcards, a live-feedback quiz, collapsible concept/step cards, Pomodoro + break timers, and progress tracking, all in one file you just double-click open.
+An AI workflow that reads your course materials or project descriptions — or just a topic/language you name yourself — and generates a personalized, ADHD-friendly study pack. Transforms lecture slides, PDFs, and assignment briefs (or nothing but a goal) into a single **interactive HTML page** — flip flashcards, a live-feedback quiz, collapsible concept/step cards, Pomodoro + break timers, and progress tracking, all in one file you just double-click open.
 
 ## Why ADHD-friendly?
 
@@ -45,11 +45,12 @@ Currently built for Claude Code. Support for other AI agents/runners is planned 
 
 ## Output Modes
 
-Pick one of three presets when you run it:
+Pick one of four presets when you run it:
 
 - **📚 Study mode**: ADHD-friendly study schedules with concept summaries, flashcards, and practice materials
 - **📝 Assignment mode**: Step-by-step completion guides for individual assignments
 - **🔧 Solver mode**: Complete working solutions with comprehension guides
+- **🗺 Roadmap mode**: A learning roadmap for a topic or language you name yourself — no course files needed, just a goal and a timeframe
 
 ## Quick Start
 
@@ -120,6 +121,23 @@ Pick one of three presets when you run it:
 - Self-check "questions you must be able to answer" with reveal-answer and a persisted "I can explain this" checklist
 - 30-minute crash course for solution comprehension
 
+### Roadmap mode (learn a topic or language from scratch)
+```bash
+./run.sh Japanese 5 --mode roadmap
+./run.sh "Machine Learning" 6 --mode roadmap \
+  --type=subject --current="knows Python" --target="ship a small ML project" --duration="3 months"
+```
+No course files needed — you're prompted for (or pass as flags) a **type**
+(subject or language), your **current level**, your **target level**, and a
+**duration** (e.g. "2 months", "1 year"). The first argument is the topic
+itself, the second is hours/week you can commit.
+
+**Generates one interactive page (`outputs/roadmap/index.html`) with:**
+- A phase-by-phase roadmap sized to your duration and weekly hours, each phase with focus areas, checkable milestones, a checkpoint self-test, and phase-specific resources
+- General materials (apps, books, courses, communities) for the whole plan — real, verified links where available
+- A **study log**: log each session's date/minutes/notes, see a day streak, total hours, and a GitHub-style 12-week heatmap — all saved in your browser so it persists across visits
+- The same progress ring, confetti, and dark/light mode as the other modes
+
 ## Using it for a personal or class project (not a full course)
 
 `COURSE-CODE` is just a folder label — you don't need a real course for this
@@ -153,15 +171,22 @@ Notes:
 ./run.sh <course> <hours> [options]
 
 Options:
-  --mode <mode>     study | assignment | solver | auto (default: auto)
+  --mode <mode>     study | assignment | solver | roadmap | auto (default: auto)
   --skip-fetch      Use existing materials, don't fetch from Canvas
   --source=local    Drop files manually instead of Canvas fetch
+
+Roadmap-mode-only options (prompted interactively if omitted):
+  --type=<type>         subject | language
+  --current=<text>      Current level, e.g. "complete beginner"
+  --target=<text>       Target level/goal, e.g. "conversational"
+  --duration=<text>     e.g. "2 months", "1 year"
 
 Examples:
   ./run.sh SEN-109 10                           # Auto-detect mode
   ./run.sh SEN-109 10 --mode study              # Study pack for exam
   ./run.sh SEN-109 10 --mode assignment         # Assignment guides
   ./run.sh SEN-109 10 --skip-fetch --mode study # Use existing files
+  ./run.sh Japanese 5 --mode roadmap            # Learning roadmap, prompts for details
 ```
 
 ## File Organization
@@ -188,10 +213,16 @@ course-materials/COURSE-CODE/outputs/
 ├── 05a_flashcards.csv         # Anki import file (same cards as in index.html)
 ├── assignments/
 │   └── index.html             # ★ START HERE — interactive assignment guide (assignment mode)
-└── solver/
-    ├── index.html              # ★ START HERE — interactive comprehension guide (solver mode)
-    └── solution/               # Complete, runnable solution files
+├── solver/
+│   ├── index.html              # ★ START HERE — interactive comprehension guide (solver mode)
+│   └── solution/               # Complete, runnable solution files
+└── roadmap/
+    └── index.html              # ★ START HERE — interactive roadmap + study log (roadmap mode)
 ```
+Roadmap mode has no input structure — it's driven entirely by the TOPIC,
+level, and duration you give `run.sh`, so `course-materials/<topic>/` only
+ever contains `outputs/roadmap/`.
+
 Each `index.html` is self-contained — open it directly in a browser, no server
 or build step required. See [Interactive HTML output](#interactive-html-output)
 above for what's in it.

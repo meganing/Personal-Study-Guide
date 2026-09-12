@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TOPIC_TITLE__ — Roadmap</title>
+<style>
+  :root{
+    --bg:#faf8f5; --bg-alt:#ffffff; --bg-raised:#f1ede6;
+    --text:#1a1a1a; --text-dim:#5b5b5b; --border:#e5e1da;
+    --accent:#6d54e0; --accent-ink:#ffffff; --accent-soft:#efeafd;
+    --good:#0f9d68; --good-soft:#e3f7ee;
+    --bad:#e5484d; --bad-soft:#fdeaea;
+    --warn:#b8790a; --warn-soft:#fdf1de;
+    --radius:16px; --radius-sm:10px;
+    --shadow:0 1px 2px rgba(20,16,8,.04), 0 8px 24px rgba(20,16,8,.06);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#15161c; --bg-alt:#1c1e26; --bg-raised:#242631;
+      --text:#f2f1ee; --text-dim:#a7a7b2; --border:#2d2f3a;
+      --accent:#9b86ff; --accent-ink:#15161c; --accent-soft:#2a2450;
+      --good:#3ecf8e; --good-soft:#0f2e24;
+      --bad:#ff6b70; --bad-soft:#3a1c1e;
+      --warn:#f0b64c; --warn-soft:#3a2c10;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#15161c; --bg-alt:#1c1e26; --bg-raised:#242631;
+    --text:#f2f1ee; --text-dim:#a7a7b2; --border:#2d2f3a;
+    --accent:#9b86ff; --accent-ink:#15161c; --accent-soft:#2a2450;
+    --good:#3ecf8e; --good-soft:#0f2e24;
+    --bad:#ff6b70; --bad-soft:#3a1c1e;
+    --warn:#f0b64c; --warn-soft:#3a2c10;
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5; padding-bottom:80px;}
+  a{color:var(--accent)}
+  button{font:inherit;cursor:pointer}
+  .wrap{max-width:900px;margin:0 auto;padding:0 20px}
+  header.top{position:sticky;top:0;z-index:50;background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+  .top-inner{max-width:900px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:14px}
+  .title-block{flex:1;min-width:0}
+  .title-block h1{font-size:17px;margin:0;font-weight:700;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+  .title-block .sub{font-size:12px;color:var(--text-dim)}
+  .ring{width:40px;height:40px;border-radius:50%;flex:none;display:grid;place-items:center;
+    background:conic-gradient(var(--accent) calc(var(--pct,0)*1%), var(--bg-raised) 0);position:relative}
+  .ring::after{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--bg-alt)}
+  .ring span{position:relative;font-size:10px;font-weight:700}
+  .icon-btn{border:1px solid var(--border);background:var(--bg-alt);color:var(--text);
+    border-radius:10px;width:36px;height:36px;display:grid;place-items:center;flex:none}
+  .icon-btn:hover{border-color:var(--accent)}
+  nav.tabs{max-width:900px;margin:10px auto 0;padding:0 20px;display:flex;gap:6px;overflow-x:auto;
+    scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  nav.tabs a{flex:none;padding:7px 13px;border-radius:999px;border:1px solid var(--border);
+    background:var(--bg-alt);color:var(--text-dim);text-decoration:none;font-size:13px;font-weight:600}
+  nav.tabs a:hover{color:var(--text);border-color:var(--accent)}
+  section{max-width:900px;margin:34px auto 0;padding:0 20px;scroll-margin-top:100px}
+  section > h2{font-size:20px;margin:0 0 4px}
+  section > .lede{color:var(--text-dim);font-size:13.5px;margin:0 0 18px}
+  .card{background:var(--bg-alt);border:1px solid var(--border);border-radius:var(--radius);
+    padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow)}
+  .goal-banner{background:var(--accent-soft);border:1px solid var(--accent);border-radius:var(--radius);
+    padding:14px 18px;margin:14px 0 16px;font-size:14px}
+  .goal-banner b{color:var(--accent)}
+  .meta-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 18px}
+  .pill{font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--bg-raised);color:var(--text-dim)}
+  .pill.accent{background:var(--accent-soft);color:var(--accent)}
+  .tips-list{margin:0;padding-left:18px;font-size:13.5px}
+  .tips-list li{margin-bottom:6px}
+
+  /* phase cards */
+  .phase{border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;background:var(--bg-alt);overflow:hidden}
+  .phase-head{padding:14px 16px;display:flex;gap:12px;align-items:center;cursor:pointer}
+  .phase-head .num{background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:13px;
+    width:26px;height:26px;border-radius:50%;display:grid;place-items:center;flex:none}
+  .phase-head .ph-title{flex:1;min-width:0}
+  .phase-head .ph-title b{display:block;font-size:15px}
+  .phase-head .ph-title small{color:var(--text-dim);font-size:11.5px}
+  .phase-head .chev{color:var(--text-dim);transition:transform .18s;flex:none}
+  .phase.open .chev{transform:rotate(180deg)}
+  .phase.complete .num{background:var(--good)}
+  .phase-body{max-height:0;overflow:hidden;transition:max-height .35s ease}
+  .phase.open .phase-body{max-height:3000px}
+  .phase-inner{padding:0 16px 18px;font-size:13.5px}
+  .phase-inner h4{font-size:12px;text-transform:uppercase;letter-spacing:.03em;color:var(--text-dim);margin:14px 0 6px}
+  .phase-inner ul{margin:0;padding-left:18px}
+  .phase-inner li{margin-bottom:4px}
+  .ms-list label{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px dashed var(--border);font-size:13.5px}
+  .ms-list label:last-child{border-bottom:none}
+  .ms-list input{margin-top:3px;width:17px;height:17px;accent-color:var(--good);flex:none}
+  .ms-list label.done span{text-decoration:line-through;color:var(--text-dim)}
+  .checkpoint{margin-top:12px;padding:10px 12px;background:var(--warn-soft);border-left:3px solid var(--warn);border-radius:8px;font-size:12.5px}
+  .checkpoint b{color:var(--warn)}
+  .progress-bar{height:6px;border-radius:99px;background:var(--bg-raised);overflow:hidden;margin:6px 0 0}
+  .progress-bar > i{display:block;height:100%;background:var(--good);width:0%;transition:width .3s}
+
+  /* resources */
+  .resource{padding:8px 0;border-bottom:1px dashed var(--border);font-size:13px}
+  .resource:last-child{border-bottom:none}
+  .resource b{font-size:13.5px}
+  .resource a{text-decoration:none}
+  .resource a:hover{text-decoration:underline}
+  .res-tag{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--text-dim);letter-spacing:.03em}
+
+  /* study log */
+  .log-form{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:6px}
+  .log-form .field{display:flex;flex-direction:column;gap:4px;font-size:11.5px;color:var(--text-dim);font-weight:600}
+  .log-form input[type=date], .log-form input[type=number], .log-form input[type=text]{
+    padding:9px 11px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font:inherit;font-size:13.5px}
+  .log-form input[type=number]{width:90px}
+  .log-form input[type=text]{width:220px}
+  .btn{border:1px solid var(--border);background:var(--bg-alt);color:var(--text);border-radius:10px;
+    padding:9px 14px;font-size:13px;font-weight:600}
+  .btn:hover{border-color:var(--accent)}
+  .btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+  .stat-row{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+  .stat{flex:1;min-width:120px;background:var(--bg-raised);border-radius:var(--radius-sm);padding:12px 14px;text-align:center}
+  .stat .num{font-size:22px;font-weight:800;color:var(--accent)}
+  .stat .lbl{font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.03em}
+  .heat-wrap{overflow-x:auto;padding-bottom:4px}
+  .heat-grid{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:3px;width:max-content}
+  .heat-cell{width:12px;height:12px;border-radius:3px;background:var(--bg-raised)}
+  .heat-cell.lvl-1{background:color-mix(in srgb, var(--good) 30%, var(--bg-raised))}
+  .heat-cell.lvl-2{background:color-mix(in srgb, var(--good) 55%, var(--bg-raised))}
+  .heat-cell.lvl-3{background:color-mix(in srgb, var(--good) 80%, var(--bg-raised))}
+  .heat-cell.lvl-4{background:var(--good)}
+  .log-entry{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--border);font-size:13px}
+  .log-entry:last-child{border-bottom:none}
+  .log-entry .le-date{font-weight:700;flex:none;width:92px}
+  .log-entry .le-min{color:var(--accent);font-weight:700;flex:none;width:70px}
+  .log-entry .le-note{flex:1;min-width:0;color:var(--text-dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .le-del{background:none;border:none;color:var(--bad);font-size:16px;line-height:1;flex:none}
+  .empty-note{color:var(--text-dim);font-size:13px;font-style:italic}
+
+  @keyframes confetti-fall{to{transform:translateY(110vh) rotate(360deg);opacity:0}}
+  .confetti{position:fixed;top:-10px;width:8px;height:14px;z-index:80;animation:confetti-fall linear forwards;pointer-events:none}
+
+  footer{max-width:900px;margin:50px auto 0;padding:20px;text-align:center;font-size:12px;color:var(--text-dim)}
+  section{display:none}
+  section.active{display:block}
+  @media (max-width:560px){
+    .log-form input[type=text]{width:100%}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="ring" id="progressRing"><span id="progressPct">0%</span></div>
+    <div class="title-block">
+      <h1 id="pageTitle">__TOPIC_TITLE__</h1>
+      <div class="sub" id="pageSub">Roadmap</div>
+    </div>
+    <button class="icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">◐</button>
+  </div>
+  <nav class="tabs">
+    <a href="#overview">🧭 Overview</a>
+    <a href="#roadmap">🗺 Roadmap</a>
+    <a href="#materials">📚 Materials</a>
+    <a href="#log">🔥 Study log</a>
+  </nav>
+</header>
+
+<section id="overview">
+  <h2>🧭 Overview</h2>
+  <div class="meta-row" id="overviewPills"></div>
+  <div class="goal-banner"><b>The plan:</b> <span id="overviewText"></span></div>
+  <div class="card">
+    <b>Weekly commitment</b>
+    <p id="weeklyCommitment" style="margin:6px 0 0;font-size:13.5px"></p>
+  </div>
+  <div class="card">
+    <b>Staying consistent</b>
+    <ul class="tips-list" id="tipsList" style="margin-top:8px"></ul>
+  </div>
+</section>
+
+<section id="roadmap">
+  <h2>🗺 Roadmap</h2>
+  <p class="lede">Work through phases in order. Check off milestones as you go — a phase turns green once every milestone in it is done.</p>
+  <div id="phasesRoot"></div>
+</section>
+
+<section id="materials">
+  <h2>📚 Materials</h2>
+  <p class="lede">General resources for the whole plan. Phase-specific resources are inside each phase in the Roadmap tab.</p>
+  <div class="card" id="materialsRoot"></div>
+</section>
+
+<section id="log">
+  <h2>🔥 Study log</h2>
+  <p class="lede">Log each study session — even 10 minutes counts. Consistency is what this tracks, not perfection.</p>
+  <div class="card">
+    <div class="log-form">
+      <div class="field">Date<input type="date" id="logDate"></div>
+      <div class="field">Minutes<input type="number" id="logMinutes" min="1" step="1" placeholder="30"></div>
+      <div class="field">Note (optional)<input type="text" id="logNote" placeholder="What did you cover?"></div>
+      <button class="btn primary" id="logSubmit">+ Log session</button>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat"><div class="num" id="statStreak">0</div><div class="lbl">Day streak</div></div>
+    <div class="stat"><div class="num" id="statHours">0</div><div class="lbl">Hours logged</div></div>
+    <div class="stat"><div class="num" id="statSessions">0</div><div class="lbl">Sessions</div></div>
+  </div>
+
+  <div class="card">
+    <b>Last 12 weeks</b>
+    <div class="heat-wrap" style="margin-top:10px"><div class="heat-grid" id="heatGrid"></div></div>
+  </div>
+
+  <div class="card">
+    <b>Recent sessions</b>
+    <div id="logEntries" style="margin-top:8px"></div>
+  </div>
+</section>
+
+<footer>
+  Generated by Personal Study Guide · your roadmap progress and study log are stored only in this browser (localStorage) · reopen this file any time to pick up where you left off.
+</footer>
+
+<script id="pack-data" type="application/json">
+__ROADMAP_DATA_JSON__
+</script>
+
+<script>
+(function(){
+  "use strict";
+  const DATA = JSON.parse(document.getElementById('pack-data').textContent);
+  const NS = 'roadmappack:' + (DATA.topic||'topic') + ':' + (DATA.generated_at||'v1') + ':';
+
+  function store(key, val){ try{ localStorage.setItem(NS+key, JSON.stringify(val)); }catch(e){} }
+  function load(key, fallback){ try{ const v = localStorage.getItem(NS+key); return v===null?fallback:JSON.parse(v); }catch(e){ return fallback; } }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function fmtDate(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+
+  // ---------- theme ----------
+  const themeBtn = document.getElementById('themeToggle');
+  function applyTheme(t){ if(t) document.documentElement.setAttribute('data-theme', t); else document.documentElement.removeAttribute('data-theme'); }
+  applyTheme(load('theme', null));
+  themeBtn.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const currentlyDark = current ? current==='dark' : sysDark;
+    const next = currentlyDark ? 'light' : 'dark';
+    applyTheme(next); store('theme', next);
+  });
+
+  // ---------- header ----------
+  document.getElementById('pageTitle').textContent = DATA.topic || 'Roadmap';
+  document.getElementById('pageSub').textContent = (DATA.duration||'?') + ' plan · ' + (DATA.weekly_hours||'?') + 'h/week';
+
+  // ---------- confetti ----------
+  function celebrate(){
+    const colors=['#6d54e0','#0f9d68','#f0b64c','#e5484d','#3ecf8e'];
+    for(let i=0;i<60;i++){
+      const c=document.createElement('div');
+      c.className='confetti';
+      c.style.left=Math.random()*100+'vw';
+      c.style.background=colors[i%colors.length];
+      c.style.animationDuration=(2+Math.random()*1.5)+'s';
+      c.style.transform=`rotate(${Math.random()*360}deg)`;
+      document.body.appendChild(c);
+      setTimeout(()=>c.remove(), 4000);
+    }
+  }
+
+  // ---------- progress ring (milestone completion) ----------
+  let ringCelebrated = false;
+  function allMilestones(){
+    const out = [];
+    (DATA.phases||[]).forEach((p, pi) => (p.milestones||[]).forEach((m, mi) => out.push('ms:'+(p.id||pi)+':'+mi)));
+    return out;
+  }
+  function refreshRing(){
+    const keys = allMilestones();
+    const pct = keys.length ? Math.round(keys.filter(k=>load(k,false)).length/keys.length*100) : 0;
+    document.getElementById('progressRing').style.setProperty('--pct', pct);
+    document.getElementById('progressPct').textContent = pct+'%';
+    if(pct>=100 && !ringCelebrated){ ringCelebrated = true; celebrate(); }
+  }
+
+  // ---------- overview ----------
+  (function renderOverview(){
+    const pills = document.getElementById('overviewPills');
+    const items = [
+      DATA.topic_type ? (DATA.topic_type==='language'?'🗣 Language':'📘 Subject') : '',
+      DATA.current_level ? ('From: '+DATA.current_level) : '',
+      DATA.target_level ? ('To: '+DATA.target_level) : '',
+      DATA.duration ? ('⏳ '+DATA.duration) : '',
+    ].filter(Boolean);
+    items.forEach((t,i) => {
+      const span = document.createElement('span');
+      span.className = 'pill' + (i===0?' accent':'');
+      span.textContent = t;
+      pills.appendChild(span);
+    });
+    document.getElementById('overviewText').textContent = DATA.overview || '';
+    document.getElementById('weeklyCommitment').textContent = DATA.weekly_commitment || '';
+    const tipsRoot = document.getElementById('tipsList');
+    (DATA.tips||[]).forEach(t => { const li = document.createElement('li'); li.textContent = t; tipsRoot.appendChild(li); });
+  })();
+
+  // ---------- phases ----------
+  (function renderPhases(){
+    const root = document.getElementById('phasesRoot');
+    (DATA.phases||[]).forEach((p, pi) => {
+      const pid = p.id || ('phase-'+pi);
+      const div = document.createElement('div');
+      div.className = 'phase' + (load('open:'+pid, pi===0) ? ' open' : '');
+      div.innerHTML = `<div class="phase-head">
+          <span class="num">${pi+1}</span>
+          <div class="ph-title"><b>${esc(p.title)}</b><small>${esc(p.timeframe||'')}</small></div>
+          <span class="chev">▾</span>
+        </div>
+        <div class="phase-body"><div class="phase-inner">
+          ${p.goal?`<p><b>Goal:</b> ${esc(p.goal)}</p>`:''}
+          ${(p.focus_areas&&p.focus_areas.length)?`<h4>Focus areas</h4><ul>${p.focus_areas.map(f=>`<li>${esc(f)}</li>`).join('')}</ul>`:''}
+          ${(p.milestones&&p.milestones.length)?`
+          <h4>Milestones</h4>
+          <div class="progress-bar"><i class="ms-bar"></i></div>
+          <div class="ms-list">${p.milestones.map((m,mi)=>`<label><input type="checkbox" data-mi="${mi}"><span>${esc(m)}</span></label>`).join('')}</div>` : ''}
+          ${(p.resources&&p.resources.length)?`
+          <h4>Resources for this phase</h4>
+          ${p.resources.map(r=>`<div class="resource">${r.type?`<span class="res-tag">${esc(r.type)}</span><br>`:''}<b>${r.url?`<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)} ↗</a>`:esc(r.name)}</b><br>${esc(r.note||'')}</div>`).join('')}` : ''}
+          ${p.checkpoint?`<div class="checkpoint"><b>✅ Checkpoint:</b> ${esc(p.checkpoint)}</div>`:''}
+        </div></div>`;
+      div.querySelector('.phase-head').addEventListener('click', () => { div.classList.toggle('open'); store('open:'+pid, div.classList.contains('open')); });
+      root.appendChild(div);
+
+      const msList = div.querySelector('.ms-list');
+      if(msList){
+        function refreshPhase(){
+          const boxes = [...msList.querySelectorAll('input[type=checkbox]')];
+          const done = boxes.filter(b=>b.checked).length;
+          const pct = boxes.length ? Math.round(done/boxes.length*100) : 0;
+          div.querySelector('.ms-bar').style.width = pct+'%';
+          div.classList.toggle('complete', boxes.length>0 && done===boxes.length);
+          refreshRing();
+        }
+        msList.querySelectorAll('input[type=checkbox]').forEach(cb => {
+          const mi = cb.dataset.mi;
+          cb.checked = load('ms:'+pid+':'+mi, false);
+          cb.closest('label').classList.toggle('done', cb.checked);
+          cb.addEventListener('change', () => { store('ms:'+pid+':'+mi, cb.checked); cb.closest('label').classList.toggle('done', cb.checked); refreshPhase(); });
+        });
+        refreshPhase();
+      }
+    });
+    refreshRing();
+  })();
+
+  // ---------- materials ----------
+  (function renderMaterials(){
+    const root = document.getElementById('materialsRoot');
+    const items = DATA.materials||[];
+    if(!items.length){ root.innerHTML = '<p class="empty-note">No general materials listed.</p>'; return; }
+    root.innerHTML = items.map(r=>`<div class="resource">${r.type?`<span class="res-tag">${esc(r.type)}</span><br>`:''}<b>${r.url?`<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)} ↗</a>`:esc(r.name)}</b><br>${esc(r.note||'')}</div>`).join('');
+  })();
+
+  // ---------- study log ----------
+  (function studyLog(){
+    const dateInput = document.getElementById('logDate');
+    const minutesInput = document.getElementById('logMinutes');
+    const noteInput = document.getElementById('logNote');
+    const submitBtn = document.getElementById('logSubmit');
+    const today = new Date(); today.setHours(0,0,0,0);
+    dateInput.value = fmtDate(today);
+
+    function getLog(){ return load('log', []); }
+    function setLog(l){ store('log', l); }
+    function minutesByDate(){
+      const map = {};
+      getLog().forEach(e => { map[e.date] = (map[e.date]||0) + Number(e.minutes||0); });
+      return map;
+    }
+    function computeStreak(){
+      const map = minutesByDate();
+      let d = new Date(today);
+      if(!(fmtDate(d) in map)) d.setDate(d.getDate()-1);
+      let streak = 0;
+      while((fmtDate(d) in map) && map[fmtDate(d)]>0){
+        streak++;
+        d.setDate(d.getDate()-1);
+      }
+      return streak;
+    }
+    function level(mins){
+      if(!mins || mins<=0) return 0;
+      if(mins<20) return 1;
+      if(mins<45) return 2;
+      if(mins<90) return 3;
+      return 4;
+    }
+    function renderHeatmap(){
+      const grid = document.getElementById('heatGrid');
+      grid.innerHTML = '';
+      const days = 84;
+      const start = new Date(today); start.setDate(start.getDate() - (days-1));
+      start.setDate(start.getDate() - start.getDay());
+      const map = minutesByDate();
+      let d = new Date(start);
+      while(d <= today){
+        const key = fmtDate(d);
+        const mins = map[key]||0;
+        const cell = document.createElement('div');
+        cell.className = 'heat-cell lvl-'+level(mins);
+        cell.title = key + (mins ? ` — ${mins} min` : ' — no study logged');
+        grid.appendChild(cell);
+        d.setDate(d.getDate()+1);
+      }
+    }
+    function renderEntries(){
+      const root = document.getElementById('logEntries');
+      const log = getLog().slice().sort((a,b)=> a.date < b.date ? 1 : (a.date > b.date ? -1 : 0));
+      if(!log.length){ root.innerHTML = '<p class="empty-note">No sessions logged yet — log your first one above.</p>'; return; }
+      root.innerHTML = '';
+      log.slice(0,10).forEach((e) => {
+        const realIdx = getLog().indexOf(e);
+        const div = document.createElement('div');
+        div.className = 'log-entry';
+        div.innerHTML = `<span class="le-date">${esc(e.date)}</span><span class="le-min">${esc(e.minutes)} min</span><span class="le-note">${esc(e.note||'')}</span><button class="le-del" title="Delete">×</button>`;
+        div.querySelector('.le-del').addEventListener('click', () => {
+          const l = getLog(); l.splice(realIdx,1); setLog(l); refreshAll();
+        });
+        root.appendChild(div);
+      });
+    }
+    function refreshStats(){
+      const log = getLog();
+      document.getElementById('statStreak').textContent = computeStreak();
+      document.getElementById('statHours').textContent = (log.reduce((s,e)=>s+Number(e.minutes||0),0)/60).toFixed(1);
+      document.getElementById('statSessions').textContent = log.length;
+    }
+    function checkStreakCelebration(){
+      const streak = computeStreak();
+      [7,30,100].forEach(n => {
+        if(streak>=n && !load('streakcelebrated:'+n,false)){
+          store('streakcelebrated:'+n, true);
+          celebrate();
+        }
+      });
+    }
+    function refreshAll(){
+      refreshStats();
+      renderHeatmap();
+      renderEntries();
+    }
+    submitBtn.addEventListener('click', () => {
+      const date = dateInput.value || fmtDate(today);
+      const minutes = Number(minutesInput.value);
+      if(!minutes || minutes<=0){ minutesInput.focus(); return; }
+      const log = getLog();
+      log.push({date, minutes, note: (noteInput.value||'').trim()});
+      setLog(log);
+      minutesInput.value = ''; noteInput.value = '';
+      refreshAll();
+      checkStreakCelebration();
+    });
+    refreshAll();
+  })();
+
+  // ---------- tabs ----------
+  function activate(id){
+    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+    const el = document.getElementById(id);
+    if(el) el.classList.add('active');
+  }
+  document.querySelectorAll('nav.tabs a').forEach(a => {
+    a.addEventListener('click', (e) => { e.preventDefault(); activate(a.getAttribute('href').slice(1)); history.replaceState(null,'','#'+a.getAttribute('href').slice(1)); window.scrollTo(0,0); });
+  });
+  activate((location.hash||'#overview').slice(1));
+
+})();
+</script>
+</body>
+</html>
