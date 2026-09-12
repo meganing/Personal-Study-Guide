@@ -318,7 +318,7 @@ This project is designed to be extensible:
 
 ## License
 
-[Specify your license here]
+MIT — see [LICENSE](LICENSE).
 
 ## Acknowledgments
 
