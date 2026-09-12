@@ -120,6 +120,33 @@ Pick one of three presets when you run it:
 - Self-check "questions you must be able to answer" with reveal-answer and a persisted "I can explain this" checklist
 - 30-minute crash course for solution comprehension
 
+## Using it for a personal or class project (not a full course)
+
+`COURSE-CODE` is just a folder label — you don't need a real course for this
+to work. Drop a single project brief/spec (plus any reference material) and
+generate both a concept study pack and a step-by-step completion guide for
+it, exactly like the course examples in `course-materials/`:
+
+```bash
+# 1. Drop your project doc(s) into course-materials/MY-PROJECT/project/
+./run.sh MY-PROJECT 8 --source=local
+
+# 2. Generate the concept study pack (topic map, flashcards, cheat sheet...)
+./run.sh MY-PROJECT 8 --mode study --skip-fetch
+
+# 3. Generate the step-by-step completion guide
+./run.sh MY-PROJECT 8 --mode assignment --skip-fetch
+```
+
+Works for:
+- **Personal projects** — a side project spec, a portfolio piece, a self-assigned build
+- **Class projects** — a single assignment/project brief without a full course of lecture material
+
+Notes:
+- `--source=local` prompts you once to drop files into `course-materials/MY-PROJECT/project/`; use `--skip-fetch` on the following runs against the same folder so it reuses those files instead of asking again.
+- Assignment mode reads `assignments.json` first, then falls back to scanning brief files (`.pdf` `.txt` `.md`) directly — make sure your project doc is one of those formats.
+- If your project already includes starter/source code, drop that in too — the folder will auto-detect `solver` mode instead unless you pass `--mode` explicitly.
+
 ## Command Options
 
 ```bash
