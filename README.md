@@ -347,6 +347,13 @@ This project is designed to be extensible:
 - **Learning styles:** Customize output templates
 - **Assessment types:** Add new question formats
 
+## Updates
+
+- 2026.05  v1.0 — initial project setup with study, assignment, and solver modes
+- 2026.09  v1.1 — adding modes for assignment and project guided
+- 2026.09  v1.2 — fixing learning guide/pack presentation
+- 2026.09  v1.3 — adding language learning mode and subject/topic learning
+
 ## License
 
 MIT — see [LICENSE](LICENSE).

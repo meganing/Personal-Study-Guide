@@ -129,8 +129,16 @@ if [[ "$MODE" == "roadmap" ]]; then
     die "Invalid --type '$RM_TYPE'. Use: subject | language"
   fi
 
-  [[ -z "$RM_CURRENT" ]]  && read -rp "  Current level (e.g. \"complete beginner\", \"know the basics\"): " RM_CURRENT
-  [[ -z "$RM_TARGET" ]]   && read -rp "  Target level / goal (e.g. \"conversational\", \"job-ready\"): " RM_TARGET
+  if [[ "$RM_TYPE" == "language" ]]; then
+    CURRENT_PROMPT="  Current level (e.g. \"complete beginner\", \"know basic greetings\", \"can hold simple conversations\"): "
+    TARGET_PROMPT="  Target level / goal (e.g. \"conversational for travel\", \"JLPT N3\", \"fluent enough to work in it\"): "
+  else
+    CURRENT_PROMPT="  Current level (e.g. \"complete beginner\", \"know the basics\", \"comfortable with fundamentals\"): "
+    TARGET_PROMPT="  Target level / goal (e.g. \"can build a small project\", \"job-ready\", \"pass the certification exam\"): "
+  fi
+
+  [[ -z "$RM_CURRENT" ]]  && read -rp "$CURRENT_PROMPT" RM_CURRENT
+  [[ -z "$RM_TARGET" ]]   && read -rp "$TARGET_PROMPT" RM_TARGET
   [[ -z "$RM_DURATION" ]] && read -rp "  Duration (e.g. \"2 months\", \"1 year\"): " RM_DURATION
   echo ""
 
