@@ -4,37 +4,44 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>__COURSE_TITLE__ — Assignment Guides</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,400..700&family=Manrope:wght@400..800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#faf8f5; --bg-alt:#ffffff; --bg-raised:#f1ede6;
-    --text:#1a1a1a; --text-dim:#5b5b5b; --border:#e5e1da;
-    --accent:#6d54e0; --accent-ink:#ffffff; --accent-soft:#efeafd;
-    --good:#0f9d68; --good-soft:#e3f7ee;
-    --bad:#e5484d; --bad-soft:#fdeaea;
-    --warn:#b8790a; --warn-soft:#fdf1de;
-    --radius:16px; --radius-sm:10px;
-    --shadow:0 1px 2px rgba(20,16,8,.04), 0 8px 24px rgba(20,16,8,.06);
-    color-scheme:light;
+    --bg:#e8e8e6; --bg-alt:#ffffff; --bg-raised:#f1f1ef;
+    --text:#111111; --text-dim:#5d5d5a; --border:#e2e2de;
+    --accent:#111111; --accent-ink:#ffffff; --accent-soft:#e6f6b0;
+    --ink:#141414; --on-ink:#f4f4f2; --lime:#dcf3a0; --on-lime:#111111;
+    --good:#1d8a55; --good-soft:#e4f5e9;
+    --bad:#d64045; --bad-soft:#fcebea;
+    --warn:#9a6200; --warn-soft:#fbf0d9;
+    --radius:28px; --radius-md:20px; --radius-sm:14px;
+    --font-display:"Archivo","Arial Narrow",-apple-system,BlinkMacSystemFont,sans-serif;
+    --font-body:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color-scheme: light;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --bg:#15161c; --bg-alt:#1c1e26; --bg-raised:#242631;
-      --text:#f2f1ee; --text-dim:#a7a7b2; --border:#2d2f3a;
-      --accent:#9b86ff; --accent-ink:#15161c; --accent-soft:#2a2450;
-      --good:#3ecf8e; --good-soft:#0f2e24;
-      --bad:#ff6b70; --bad-soft:#3a1c1e;
-      --warn:#f0b64c; --warn-soft:#3a2c10;
-      color-scheme:dark;
+      --bg:#0c0c0d; --bg-alt:#161618; --bg-raised:#212124;
+      --text:#f2f2ef; --text-dim:#a3a3a0; --border:#2b2b2f;
+      --accent:#d6f07f; --accent-ink:#111111; --accent-soft:#2a3216;
+      --ink:#000000; --on-ink:#f2f2ef; --lime:#d6f07f; --on-lime:#111111;
+      --good:#4fd18b; --good-soft:#12291d;
+      --bad:#ff6b6f; --bad-soft:#341819;
+      --warn:#f0b64c; --warn-soft:#33270f;
+      color-scheme: dark;
     }
   }
   :root[data-theme="dark"]{
-    --bg:#15161c; --bg-alt:#1c1e26; --bg-raised:#242631;
-    --text:#f2f1ee; --text-dim:#a7a7b2; --border:#2d2f3a;
-    --accent:#9b86ff; --accent-ink:#15161c; --accent-soft:#2a2450;
-    --good:#3ecf8e; --good-soft:#0f2e24;
-    --bad:#ff6b70; --bad-soft:#3a1c1e;
-    --warn:#f0b64c; --warn-soft:#3a2c10;
-    color-scheme:dark;
+    --bg:#0c0c0d; --bg-alt:#161618; --bg-raised:#212124;
+    --text:#f2f2ef; --text-dim:#a3a3a0; --border:#2b2b2f;
+    --accent:#d6f07f; --accent-ink:#111111; --accent-soft:#2a3216;
+    --ink:#000000; --on-ink:#f2f2ef; --lime:#d6f07f; --on-lime:#111111;
+    --good:#4fd18b; --good-soft:#12291d;
+    --bad:#ff6b6f; --bad-soft:#341819;
+    --warn:#f0b64c; --warn-soft:#33270f;
+    color-scheme: dark;
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--text);
@@ -152,6 +159,167 @@
     aside{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--border)}
     main{padding:20px}
   }
+  /* THEME:START — bento look shared with the study pack (black, white and lime) */
+  body{font-family:var(--font-body);-webkit-font-smoothing:antialiased;padding:16px 16px 80px}
+  a{color:inherit}
+  :focus-visible{outline:2px solid var(--text);outline-offset:2px}
+  h1,h2{font-family:var(--font-display);font-stretch:82%;font-weight:500;letter-spacing:-.02em}
+  h2{text-transform:uppercase;font-size:clamp(28px,4vw,42px);line-height:.95;margin:0 0 14px}
+  h3{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-dim);margin:24px 0 10px}
+  header.top{position:sticky;top:12px;max-width:1040px;margin:0 auto 16px;border:1px solid var(--border);border-radius:28px;
+    background:color-mix(in srgb, var(--bg-alt) 90%, transparent);padding:4px 0 10px}
+  header.top .top-inner{max-width:none}
+  header.top h1{font-size:clamp(20px,2.6vw,28px);text-transform:uppercase;line-height:1}
+  nav.tabs{max-width:none}
+  nav.tabs a,nav.tabs button{border:0;background:transparent;color:var(--text-dim);transition:background .15s,color .15s}
+  nav.tabs a:hover,nav.tabs button:hover{background:var(--bg-raised);color:var(--text)}
+  nav.tabs a.active,nav.tabs button.active{background:var(--ink);color:var(--on-ink)}
+  section{max-width:1040px;background:var(--bg-alt);border:1px solid var(--border);border-radius:28px;padding:28px;margin:16px auto 0}
+  section > .lede{max-width:600px}
+  .card,.qa-card{background:var(--bg-raised);border:0;border-radius:20px;box-shadow:none;padding:18px 20px}
+  .goal-banner,.big-picture{background:var(--ink);color:var(--on-ink);border:1px solid var(--border);border-radius:20px;padding:20px 22px;font-size:15px;font-weight:600}
+  .goal-banner b{color:var(--lime)}
+  .pill{background:transparent;border:1.5px solid var(--text);color:var(--text);padding:4px 12px}
+  .pill.accent{background:var(--lime);color:var(--on-lime);border-color:var(--lime)}
+  .btn,.timer-btn{border:1.5px solid var(--text);background:transparent;color:var(--text);border-radius:999px;font-weight:700}
+  .btn:hover,.timer-btn:hover{background:var(--bg-alt);border-color:var(--text)}
+  .btn.primary{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+  .btn.good{background:transparent;border-color:var(--good);color:var(--good)}
+  .btn.bad{background:transparent;border-color:var(--bad);color:var(--bad)}
+  .icon-btn{border-radius:999px;border:1.5px solid var(--text);background:transparent}
+  .ring{background:conic-gradient(var(--text) calc(var(--pct,0)*1%), var(--bg-raised) 0)}
+  .ring span{z-index:1}
+  .step,.phase,.file-block{background:var(--bg-raised);border:0;border-radius:20px}
+  .step.open,.phase.open{background:var(--bg-alt);box-shadow:inset 0 0 0 1.5px var(--text)}
+  .step-head .num,.phase-head .num{background:var(--ink);color:var(--on-ink)}
+  .phase.complete .num{background:var(--lime);color:var(--on-lime)}
+  .step-body,.fsec-body,.phase-body{transition:max-height .35s ease}
+  .step.open .step-body,.fsec.open .fsec-body,.phase.open .phase-body{max-height:6000px}
+  .file-head{background:var(--ink);color:var(--on-ink);border-radius:20px 20px 0 0}
+  .fsec{border-top-color:var(--border)}
+  pre{border-radius:14px}
+  .done-crit,.say-box,.hint-item,.model-answer,.ready-banner{background:var(--lime);color:var(--on-lime);border-color:var(--lime);border-radius:14px}
+  .face{border:0;border-radius:20px}
+  .face.back{background:var(--lime);color:var(--on-lime)}
+  .progress-bar > i{background:var(--text)}
+  .stat{background:var(--bg-raised);border-radius:20px}
+  .stat .num{font-family:var(--font-display);font-stretch:85%;font-weight:500;font-size:34px;color:var(--text)}
+  table th{background:transparent}
+  footer{max-width:1040px}
+  @media (max-width:560px){ body{padding:10px 10px 60px} section{padding:18px;border-radius:22px} header.top{border-radius:22px} }
+  .app{gap:16px;max-width:1280px;margin:0 auto;align-items:flex-start;min-height:0}
+  aside{border:1px solid var(--border);border-radius:28px;top:16px;height:calc(100vh - 32px);padding:20px 14px}
+  aside h1{font-size:24px;text-transform:uppercase;line-height:1;margin:4px 0}
+  .nav-item{border-radius:16px}
+  .nav-item.active{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+  .nav-item.active .nt small{color:var(--on-ink);opacity:.7}
+  .nav-item.complete .dot{background:var(--lime);box-shadow:0 0 0 1.5px var(--text)}
+  main{background:var(--bg-alt);border:1px solid var(--border);border-radius:28px;max-width:none}
+  main section{background:none;border:0;border-radius:0;padding:0;margin:0;max-width:880px}
+  @media (max-width:800px){ aside{height:auto;position:static} }
+  /* THEME:END */
+
+  /* VIZ:START — interactive diagram styles (same block in study, assignment and solver packs) */
+  .viz{margin:14px 0;border:1px solid var(--border);border-radius:22px;background:var(--bg-alt);padding:16px;min-width:0}
+  .viz-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  .viz-chip{font-size:11px;font-weight:700;padding:4px 11px;border-radius:999px;background:var(--ink);color:var(--on-ink);letter-spacing:.03em;text-transform:uppercase}
+  .viz-title{font-size:14.5px}
+  .viz-stage{position:relative}
+  .viz button{font:inherit;cursor:pointer}
+  .viz-node{border:1.5px solid var(--text);background:var(--bg-alt);color:var(--text);border-radius:999px;
+    padding:8px 15px;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:8px;line-height:1.25;
+    transition:background .2s,color .2s,border-color .2s,transform .2s}
+  .viz-node small{font-size:10.5px;font-weight:800;opacity:.55}
+  .viz-node:hover{transform:translateY(-2px)}
+  .viz-node.seen{background:var(--bg-raised)}
+  .viz-node.active{background:var(--lime);color:var(--on-lime);border-color:var(--lime);transform:scale(1.05)}
+  .viz-node.active small{opacity:.8}
+
+  .viz-flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 6px}
+  .viz-arrow{width:26px;height:2px;background:var(--text-dim);position:relative;flex:none}
+  .viz-arrow::after{content:"";position:absolute;right:-1px;top:-4px;border:5px solid transparent;border-left:7px solid var(--text-dim);border-right:0}
+
+  .viz-timeline{display:flex;flex-direction:column;gap:10px;padding-left:22px;position:relative}
+  .viz-timeline::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:var(--border)}
+  .viz-timeline .viz-node{align-self:flex-start;position:relative}
+  .viz-timeline .viz-node::before{content:"";position:absolute;left:-21px;top:50%;width:12px;height:12px;margin-top:-6px;border-radius:50%;background:var(--bg-alt);border:2px solid var(--text)}
+  .viz-timeline .viz-node.active::before{background:var(--lime);border-color:var(--text)}
+
+  .viz-ring{position:relative;width:min(100%,430px);aspect-ratio:1;margin:0 auto}
+  .viz-ring svg{position:absolute;inset:0;width:100%;height:100%}
+  .viz-ring-line{fill:none;stroke:var(--text-dim);stroke-width:.5;stroke-dasharray:1.6 1.6;opacity:.6}
+  .viz-ring-head{fill:var(--text-dim)}
+  .viz-ring-center{position:absolute;inset:33%;display:grid;place-items:center;text-align:center;border-radius:50%;
+    background:var(--ink);color:var(--on-ink);font-weight:700;font-size:12.5px;padding:10px;line-height:1.25}
+  .viz-ring .viz-node{position:absolute;transform:translate(-50%,-50%);max-width:34%;justify-content:center;text-align:center;
+    flex-direction:column;gap:2px;border-radius:18px;padding:7px 10px;font-size:12px}
+  .viz-ring .viz-node:hover{transform:translate(-50%,-50%) translateY(-2px)}
+  .viz-ring .viz-node.active{transform:translate(-50%,-50%) scale(1.06)}
+
+  .viz-hierarchy{display:flex;flex-direction:column;gap:38px;padding:4px 0}
+  .viz-row{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;position:relative;z-index:1}
+  .viz-row .viz-node{flex-direction:column;gap:1px;border-radius:16px}
+  .viz-links{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+  .viz-links path{fill:none;stroke:var(--text-dim);stroke-width:1.6;opacity:.45;transition:stroke .2s,opacity .2s,stroke-width .2s}
+  .viz-links path.on{stroke:var(--text);opacity:1;stroke-width:2.4}
+
+  .viz-table-wrap{overflow-x:auto;border-radius:14px;border:1px solid var(--border)}
+  .viz-table{border-collapse:collapse;width:100%;font-size:13px;margin:0}
+  .viz-table th{text-transform:none;letter-spacing:0;font-size:13px;color:var(--text)}
+  .viz-table tr:hover td{background:none}
+  .viz-table th,.viz-table td{padding:10px 12px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top;transition:opacity .2s,background .2s}
+  .viz-table tbody tr:last-child th,.viz-table tbody tr:last-child td{border-bottom:0}
+  .viz-table thead th{background:var(--bg-raised)}
+  .viz-table tbody th{font-weight:700;white-space:nowrap}
+  .viz-table tr[data-r]{cursor:pointer}
+  .viz-table tr[data-r]:hover{background:var(--bg-raised)}
+  .viz-table tr.active th,.viz-table tr.active td{background:var(--lime);color:var(--on-lime)}
+  .viz-table .dim{opacity:.25}
+  .viz-col{border:1.5px solid var(--text);border-radius:999px;background:transparent;color:var(--text);padding:5px 12px;font-weight:700;font-size:12.5px;white-space:nowrap}
+  .viz-col.active{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+
+  .viz-layers{display:flex;flex-direction:column;gap:6px}
+  .viz-dir{font-size:11.5px;color:var(--text-dim);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+  .viz-layer{display:flex;justify-content:space-between;align-items:center;gap:10px;border:0;border-radius:14px;
+    background:var(--bg-raised);color:var(--text);padding:12px 16px;font-size:13.5px;font-weight:600;text-align:left;
+    margin-inline:calc(var(--i) * 1.6%);transition:background .2s,transform .2s}
+  .viz-layer small{font-size:11px;color:var(--text-dim);font-weight:700}
+  .viz-layer:hover{transform:translateX(3px)}
+  .viz-layer.active{background:var(--lime);color:var(--on-lime)}
+  .viz-layer.active small{color:var(--on-lime)}
+
+  .viz-trace{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:12px}
+  .viz-code{margin:0;background:var(--ink);color:var(--on-ink);border-radius:16px;padding:12px 0;font:12.5px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    max-height:320px;overflow:auto;position:relative;border:1px solid var(--border)}
+  .viz-code .ln{display:block;padding:0 14px;white-space:pre;transition:background .2s}
+  .viz-code .ln i{display:inline-block;width:2.3em;opacity:.38;font-style:normal;user-select:none}
+  .viz-code .ln.active{background:color-mix(in srgb, var(--lime) 26%, transparent);box-shadow:inset 3px 0 var(--lime)}
+  .viz-vars-h{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-dim);margin-bottom:8px}
+  .viz-var{display:flex;justify-content:space-between;gap:10px;padding:8px 12px;border-radius:12px;background:var(--bg-raised);margin-bottom:6px;
+    font:12.5px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  .viz-var b{overflow-wrap:anywhere;text-align:right}
+  .viz-var.changed{background:var(--lime);color:var(--on-lime);animation:viz-pop .5s ease}
+
+  .viz-steps{display:flex;align-items:center;gap:8px;margin-top:16px;flex-wrap:wrap}
+  .viz-btn{border:1.5px solid var(--text);background:transparent;color:var(--text);border-radius:999px;padding:6px 14px;font-weight:700;font-size:12.5px}
+  .viz-btn:hover{background:var(--bg-raised)}
+  .viz-btn.primary{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+  .viz-count{font-size:12px;color:var(--text-dim);margin-left:auto;font-variant-numeric:tabular-nums}
+  .viz-detail{margin-top:12px;border-radius:16px;background:var(--ink);color:var(--on-ink);padding:13px 16px;font-size:13.5px;min-height:50px;border:1px solid var(--border)}
+  .viz-detail p{margin:4px 0 0;opacity:.85}
+  .viz-hint{opacity:.7;font-size:12.5px}
+  .viz-vars .viz-hint{color:var(--text-dim);opacity:1}
+  .viz-path{margin-top:8px;font-size:12px;opacity:.9}
+  .viz-path i{color:var(--lime);font-style:normal;font-weight:700;padding:0 2px}
+  .viz-detail.pulse{animation:viz-pop .35s ease}
+  @keyframes viz-pop{from{transform:scale(.98);opacity:.6}to{transform:none;opacity:1}}
+  @media (max-width:620px){
+    .viz-trace{grid-template-columns:1fr}
+    .viz-ring .viz-node{font-size:11px;padding:5px 7px}
+    .viz-hierarchy{gap:30px}
+  }
+  @media (prefers-reduced-motion: reduce){ .viz *, .viz-detail{animation:none !important;transition:none !important} }
+  /* VIZ:END */
 </style>
 </head>
 <body>
@@ -175,6 +343,242 @@
     <div id="assignmentViews"></div>
   </main>
 </div>
+
+<script>
+/* VIZ:START — interactive diagram engine (same block in study, assignment and solver packs) */
+(function(){
+  "use strict";
+  const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function h(tag, cls, html){ const e = document.createElement(tag); if(cls) e.className = cls; if(html!=null) e.innerHTML = html; return e; }
+  const LABELS = {flow:'Process', cycle:'Cycle', hierarchy:'Structure', compare:'Compare', layers:'Layers', timeline:'Timeline', trace:'Code trace'};
+
+  // Every diagram: header, stage (the picture), optional step controls, detail panel
+  function shell(v){
+    const box = h('figure', 'viz');
+    box.innerHTML = `<figcaption class="viz-head"><span class="viz-chip">${esc(LABELS[v.type]||'Diagram')}</span><b class="viz-title">${esc(v.title||'')}</b></figcaption>`;
+    const stage = h('div', 'viz-stage viz-' + v.type);
+    const detail = h('div', 'viz-detail', `<span class="viz-hint">${esc(v.caption || 'Tap any part of the diagram to learn more.')}</span>`);
+    box.append(stage, detail);
+    return {box, stage, detail};
+  }
+  function setDetail(detail, title, body, extra){
+    detail.innerHTML = `<b>${esc(title)}</b>${body ? `<p>${esc(body)}</p>` : ''}${extra||''}`;
+    detail.classList.remove('pulse'); void detail.offsetWidth; detail.classList.add('pulse');
+  }
+
+  // Prev / Play / Next controls for diagrams that are read step by step
+  function stepper(box, detail, count, onStep){
+    const bar = h('div', 'viz-steps');
+    bar.innerHTML = `<button class="viz-btn" data-a="prev" aria-label="Previous step">←</button>
+      <button class="viz-btn primary" data-a="play">▶ Play</button>
+      <button class="viz-btn" data-a="next" aria-label="Next step">→</button>
+      <span class="viz-count">${count} steps</span>`;
+    box.insertBefore(bar, detail);
+    const playBtn = bar.querySelector('[data-a=play]'), countEl = bar.querySelector('.viz-count');
+    let cur = -1, timer = null;
+    function go(i){ cur = Math.max(0, Math.min(count-1, i)); countEl.textContent = 'Step ' + (cur+1) + ' of ' + count; onStep(cur); }
+    function stop(){ clearInterval(timer); timer = null; playBtn.textContent = '▶ Play'; }
+    bar.addEventListener('click', e => {
+      const btn = e.target.closest('button'); if(!btn) return;
+      const a = btn.dataset.a;
+      if(a === 'prev'){ stop(); go(cur-1); }
+      if(a === 'next'){ stop(); go(cur+1); }
+      if(a === 'play'){
+        if(timer){ stop(); return; }
+        if(cur >= count-1) cur = -1;
+        playBtn.textContent = '⏸ Pause'; go(cur+1);
+        timer = setInterval(() => { if(cur >= count-1){ stop(); return; } go(cur+1); }, 2200);
+      }
+    });
+    return {go: i => { stop(); go(i); }};
+  }
+
+  // flow: steps in order with arrows · timeline: dated events on a line
+  function sequence(v){
+    const items = v.steps || v.events || [];
+    const {box, stage, detail} = shell(v);
+    const nodes = items.map((s, i) => {
+      const tag = v.type === 'timeline' ? (s.when || '') : (i+1);
+      const b = h('button', 'viz-node', `<small>${esc(tag)}</small><span>${esc(s.label)}</span>`);
+      stage.appendChild(b);
+      if(v.type === 'flow' && i < items.length-1) stage.appendChild(h('span', 'viz-arrow'));
+      return b;
+    });
+    const step = stepper(box, detail, items.length, i => {
+      nodes.forEach((n, j) => { n.classList.toggle('active', j === i); n.classList.toggle('seen', j < i); });
+      const s = items[i];
+      setDetail(detail, (v.type === 'timeline' && s.when ? s.when + ' — ' : '') + s.label, s.detail);
+    });
+    nodes.forEach((n, i) => n.addEventListener('click', () => step.go(i)));
+    return box;
+  }
+
+  // cycle: steps around a loop that repeats
+  function cycle(v){
+    const items = v.steps || [], n = items.length, R = 36;
+    const {box, stage, detail} = shell(v);
+    const ring = h('div', 'viz-ring');
+    let svg = `<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="${R}" class="viz-ring-line"/>`;
+    for(let i = 0; i < n; i++){
+      const a = ((i + 0.5) / n) * 2 * Math.PI - Math.PI / 2;
+      const x = 50 + R * Math.cos(a), y = 50 + R * Math.sin(a), deg = a * 180 / Math.PI + 90;
+      svg += `<path d="M -2.4 -2.2 L 2 0 L -2.4 2.2 Z" class="viz-ring-head" transform="translate(${x.toFixed(2)} ${y.toFixed(2)}) rotate(${deg.toFixed(1)})"/>`;
+    }
+    ring.innerHTML = svg + '</svg>';
+    if(v.center) ring.appendChild(h('div', 'viz-ring-center', esc(v.center)));
+    const nodes = items.map((s, i) => {
+      const a = (i / n) * 2 * Math.PI - Math.PI / 2;
+      const b = h('button', 'viz-node', `<small>${i+1}</small><span>${esc(s.label)}</span>`);
+      b.style.left = (50 + R * Math.cos(a)) + '%';
+      b.style.top = (50 + R * Math.sin(a)) + '%';
+      ring.appendChild(b);
+      return b;
+    });
+    stage.appendChild(ring);
+    const step = stepper(box, detail, n, i => {
+      nodes.forEach((x, j) => { x.classList.toggle('active', j === i); x.classList.toggle('seen', j < i); });
+      setDetail(detail, items[i].label, items[i].detail);
+    });
+    nodes.forEach((x, i) => x.addEventListener('click', () => step.go(i)));
+    return box;
+  }
+
+  // hierarchy: a tree (class inheritance, parts of a system, a taxonomy)
+  function hierarchy(v){
+    const byId = {};
+    (v.nodes || []).forEach(n => { byId[n.id] = Object.assign({kids: []}, n); });
+    const all = Object.values(byId), roots = [];
+    all.forEach(n => { if(n.parent && byId[n.parent]) byId[n.parent].kids.push(n); else roots.push(n); });
+    const rows = [];
+    (function walk(list, d){ list.forEach(n => { (rows[d] = rows[d] || []).push(n); walk(n.kids, d+1); }); })(roots, 0);
+
+    const {box, stage, detail} = shell(v);
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'viz-links'); svg.setAttribute('aria-hidden', 'true');
+    stage.appendChild(svg);
+    rows.forEach(r => {
+      const row = h('div', 'viz-row');
+      r.forEach(n => {
+        n.el = h('button', 'viz-node', `<span>${esc(n.label)}</span>${n.tag ? `<small>${esc(n.tag)}</small>` : ''}`);
+        row.appendChild(n.el);
+      });
+      stage.appendChild(row);
+    });
+
+    let sel = null;
+    function chain(n){ const c = []; while(n){ c.push(n); n = n.parent ? byId[n.parent] : null; } return c; }
+    function highlight(){
+      const ids = new Set(sel ? chain(sel).map(n => n.id) : []);
+      all.forEach(n => { n.el.classList.toggle('active', n === sel); n.el.classList.toggle('seen', n !== sel && ids.has(n.id)); });
+      svg.querySelectorAll('path').forEach(p => p.classList.toggle('on', ids.has(p.dataset.id)));
+    }
+    function draw(){
+      const base = stage.getBoundingClientRect();
+      if(!base.width) return;
+      svg.setAttribute('viewBox', `0 0 ${base.width} ${base.height}`);
+      let d = '';
+      all.forEach(n => {
+        if(!n.parent || !byId[n.parent]) return;
+        const a = byId[n.parent].el.getBoundingClientRect(), b = n.el.getBoundingClientRect();
+        const x1 = a.left + a.width/2 - base.left, y1 = a.bottom - base.top;
+        const x2 = b.left + b.width/2 - base.left, y2 = b.top - base.top, my = (y1 + y2) / 2;
+        d += `<path data-id="${esc(n.id)}" d="M${x1},${y1} C${x1},${my} ${x2},${my} ${x2},${y2}"/>`;
+      });
+      svg.innerHTML = d;
+      highlight();
+    }
+    all.forEach(n => n.el.addEventListener('click', () => {
+      sel = n; highlight();
+      const c = chain(n);
+      // "Square extends AbstractShape" reads child first; plain arrows read top-down
+      const path = c.length < 2 ? '' : v.relation
+        ? c.map(x => esc(x.label)).join(` <i>${esc(v.relation)}</i> `)
+        : c.reverse().map(x => esc(x.label)).join(' <i>→</i> ');
+      setDetail(detail, n.label, n.detail, path ? `<div class="viz-path">${path}</div>` : '');
+    }));
+    if('ResizeObserver' in window) new ResizeObserver(draw).observe(stage);
+    else window.addEventListener('resize', draw);
+    requestAnimationFrame(draw);
+    return box;
+  }
+
+  // compare: options side by side, one row per criterion
+  function compare(v){
+    const cols = v.columns || [], rows = v.rows || [];
+    const {box, stage, detail} = shell(v);
+    const wrap = h('div', 'viz-table-wrap');
+    wrap.innerHTML = `<table class="viz-table"><thead><tr><th></th>${cols.map((c, i) => `<th><button class="viz-col" data-col="${i}">${esc(c)}</button></th>`).join('')}</tr></thead>
+      <tbody>${rows.map((r, ri) => `<tr data-r="${ri}"><th>${esc(r.label)}</th>${(r.values||[]).map((val, ci) => `<td data-c="${ci}">${esc(val)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+    stage.appendChild(wrap);
+    let focus = null;
+    wrap.addEventListener('click', e => {
+      const col = e.target.closest('.viz-col');
+      if(col){
+        const c = +col.dataset.col;
+        focus = focus === c ? null : c;
+        wrap.querySelectorAll('td[data-c]').forEach(x => x.classList.toggle('dim', focus !== null && +x.dataset.c !== focus));
+        wrap.querySelectorAll('.viz-col').forEach(x => x.classList.toggle('active', +x.dataset.col === focus));
+        if(focus !== null) setDetail(detail, cols[c], (v.column_notes || [])[c] || 'Showing only this column. Tap it again to see all.');
+        return;
+      }
+      const tr = e.target.closest('tr[data-r]'); if(!tr) return;
+      wrap.querySelectorAll('tr[data-r]').forEach(x => x.classList.toggle('active', x === tr));
+      const r = rows[+tr.dataset.r];
+      setDetail(detail, r.label, r.note || cols.map((c, i) => c + ': ' + ((r.values||[])[i] || '—')).join(' · '));
+    });
+    return box;
+  }
+
+  // layers: a stack where each level sits on the one below (memory, network, architecture)
+  function layers(v){
+    const items = v.layers || [];
+    const {box, stage, detail} = shell(v);
+    if(v.direction) stage.appendChild(h('div', 'viz-dir', esc(v.direction)));
+    const btns = items.map((l, i) => {
+      const b = h('button', 'viz-layer', `<span>${esc(l.label)}</span>${l.tag ? `<small>${esc(l.tag)}</small>` : ''}`);
+      b.style.setProperty('--i', i);
+      b.addEventListener('click', () => { btns.forEach(x => x.classList.toggle('active', x === b)); setDetail(detail, l.label, l.detail); });
+      stage.appendChild(b);
+      return b;
+    });
+    return box;
+  }
+
+  // trace: run code one line at a time and watch the variables change
+  function trace(v){
+    const lines = String(v.code || '').split('\n'), steps = v.steps || [];
+    const {box, stage, detail} = shell(v);
+    const code = h('pre', 'viz-code');
+    code.innerHTML = lines.map((l, i) => `<span class="ln" data-l="${i+1}"><i>${i+1}</i>${esc(l) || ' '}</span>`).join('');
+    const vars = h('div', 'viz-vars');
+    const varsTitle = `<div class="viz-vars-h">${esc(v.vars_title || 'Variables')}</div>`;
+    vars.innerHTML = varsTitle + '<div class="viz-hint">Press ▶ Play or → to run the code one line at a time.</div>';
+    stage.append(code, vars);
+    stepper(box, detail, steps.length, i => {
+      const s = steps[i], before = i > 0 ? (steps[i-1].vars || {}) : {};
+      code.querySelectorAll('.ln').forEach(x => x.classList.toggle('active', +x.dataset.l === s.line));
+      const act = code.querySelector('.ln.active');
+      if(act) code.scrollTop = act.offsetTop - code.clientHeight / 2;
+      const entries = Object.entries(s.vars || {});
+      vars.innerHTML = varsTitle + (entries.length
+        ? entries.map(([k, val]) => `<div class="viz-var${String(before[k]) !== String(val) ? ' changed' : ''}"><span>${esc(k)}</span><b>${esc(val)}</b></div>`).join('')
+        : '<div class="viz-hint">Nothing stored yet.</div>');
+      setDetail(detail, 'Line ' + s.line, s.note);
+    });
+    return box;
+  }
+
+  const RENDER = {flow: sequence, timeline: sequence, cycle, hierarchy, compare, layers, trace};
+  // Returns a ready-to-insert element, or null if the spec is missing or broken
+  function render(v){
+    if(!v || !RENDER[v.type]) return null;
+    try { return RENDER[v.type](v); }
+    catch(e){ console.warn('Visual could not be drawn:', v.title, e); return null; }
+  }
+  window.Viz = {render};
+})();
+/* VIZ:END */
+</script>
 
 <script id="pack-data" type="application/json">
 __ASSIGNMENT_DATA_JSON__
@@ -316,15 +720,16 @@ __ASSIGNMENT_DATA_JSON__
         <span class="pill">Due: ${esc(a.due||'unknown')}</span>
       </div>
       <div class="card"><p>${esc(a.summary)}</p></div>
+      ${(a.visuals&&a.visuals.length) ? `<h3>How it fits together</h3><div class="viz-list" id="visuals-${a.id}"></div>` : ''}
 
       ${(a.glossary&&a.glossary.length) ? `
-      <h3>🔤 Terms used in this guide</h3>
+      <h3>Terms used in this guide</h3>
       <div class="card">
         ${a.glossary.map(g=>`<div class="glossary-item"><b>${esc(g.term)}</b> — ${esc(g.meaning)}</div>`).join('')}
       </div>` : ''}
 
       ${((a.glossary&&a.glossary.length) || (a.common_mistakes&&a.common_mistakes.length)) ? `
-      <h3>🃏 Quick review</h3>
+      <h3>Quick review</h3>
       <p style="color:var(--text-dim);font-size:12.5px;margin:0 0 10px">Flip through these before you start — click a card to reveal the answer.</p>
       <div class="card">
         <div class="deck" id="deck-${a.id}">
@@ -345,40 +750,40 @@ __ASSIGNMENT_DATA_JSON__
       </div>` : ''}
 
       ${(a.time_plan&&a.time_plan.length) ? `
-      <h3>⏱ How to spend your time</h3>
+      <h3>How to spend your time</h3>
       <div class="card">
         ${a.time_plan.map(t=>`<div class="session"><b>Session ${esc(t.session)} · ${esc(t.hours)}h</b><span class="covers">${esc(t.covers||'')}</span><p>${esc(t.goal||'')}</p></div>`).join('')}
       </div>` : ''}
 
       ${(a.requirements&&a.requirements.length) ? `
-      <h3>✅ Requirements</h3>
+      <h3>Requirements</h3>
       <div class="card checklist" id="req-${a.id}">
         <div class="progress-bar"><i></i></div>
         ${a.requirements.map((r,ri)=>`<label><input type="checkbox" data-ri="${ri}"><span>${esc(r)}</span></label>`).join('')}
       </div>` : ''}
 
-      ${(a.steps&&a.steps.length) ? `<h3>🗺 Step-by-step guide</h3><div id="steps-${a.id}"></div>` : ''}
+      ${(a.steps&&a.steps.length) ? `<h3>Step-by-step guide</h3><div id="steps-${a.id}"></div>` : ''}
 
       ${(a.lecture_refs&&a.lecture_refs.length) ? `
-      <h3>🔗 Relevant lecture material</h3>
+      <h3>Relevant lecture material</h3>
       <table><thead><tr><th>Concept</th><th>Source</th><th>Slides/Pages</th></tr></thead>
       <tbody>${a.lecture_refs.map(l=>`<tr><td>${esc(l.concept)}</td><td>${esc(l.source)}</td><td>${esc(l.slides||'')}</td></tr>`).join('')}</tbody></table>` : ''}
 
       ${(a.common_mistakes&&a.common_mistakes.length) ? `
-      <h3>⚠ Common mistakes</h3>
+      <h3>Common mistakes</h3>
       ${a.common_mistakes.map(m=>`<div class="warn-box"><b>${esc(m.mistake)}</b> — ${esc(m.why)}</div>`).join('')}` : ''}
 
       ${a.testing ? `
-      <h3>🧪 How to test your work</h3>
+      <h3>How to test your work</h3>
       <div class="card"><p>${esc(a.testing.description||'')}</p>
       ${(a.testing.commands||[]).map(c=>`<pre><code>${esc(c)}</code></pre>`).join('')}</div>` : ''}
 
       ${(a.hints&&a.hints.length) ? `
-      <h3>💡 If you're stuck</h3>
+      <h3>If you're stuck</h3>
       <div class="card" id="hints-${a.id}"><button class="btn">Reveal next hint (${a.hints.length} available)</button><div class="hint-list"></div></div>` : ''}
 
       ${(a.resources&&a.resources.length) ? `
-      <h3>📚 Resources</h3>
+      <h3>Resources</h3>
       <div class="card">
         ${a.resources.map(r=>`<div class="resource">${r.type?`<span class="res-tag">${esc(r.type)}</span><br>`:''}<b>${r.url?`<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)} ↗</a>`:esc(r.name)}</b><br>${esc(r.note||'')}</div>`).join('')}
       </div>` : ''}
@@ -434,6 +839,10 @@ __ASSIGNMENT_DATA_JSON__
       show();
     }
 
+    // overview diagrams
+    const vizRoot = view.querySelector('#visuals-'+a.id);
+    if(vizRoot && window.Viz) a.visuals.forEach(v => { const el = Viz.render(v); if(el) vizRoot.appendChild(el); });
+
     // steps
     const stepsRoot = view.querySelector('#steps-'+a.id);
     if(stepsRoot){
@@ -449,6 +858,7 @@ __ASSIGNMENT_DATA_JSON__
           <div class="step-body"><div class="step-inner">
             ${s.goal?`<p><b>Goal:</b> ${esc(s.goal)}</p>`:''}
             ${Array.isArray(s.how) ? `<ul class="how-list">${s.how.map(h=>`<li>${esc(h)}</li>`).join('')}</ul>` : `<p>${esc(s.how)}</p>`}
+            <div class="viz-slot"></div>
             ${s.code_scaffold ? `<pre><button class="copy-btn">Copy</button><code>${esc(s.code_scaffold.code)}</code></pre>` : ''}
             ${s.done_when?`<div class="done-crit">Done when: ${esc(s.done_when)}</div>`:''}
             <div class="timer-row"><button class="timer-btn">▶ Start ${esc(s.est_minutes||25)} min timer</button><span class="timer-disp"></span></div>
@@ -460,6 +870,8 @@ __ASSIGNMENT_DATA_JSON__
         doneCb.addEventListener('click', e => e.stopPropagation());
         doneCb.addEventListener('change', () => { store(doneKey, doneCb.checked); div.classList.toggle('done', doneCb.checked); refreshAssignment(); });
         attachTimer(div.querySelector('.timer-btn'), div.querySelector('.timer-disp'), s.est_minutes||25, '✓ Time!');
+        const stepViz = window.Viz && Viz.render(s.visual);
+        if(stepViz) div.querySelector('.viz-slot').appendChild(stepViz);
         const copyBtn = div.querySelector('.copy-btn');
         if(copyBtn) copyBtn.addEventListener('click', (e) => {
           e.stopPropagation();

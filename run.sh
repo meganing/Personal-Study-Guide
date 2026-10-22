@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────────────
-# run.sh — Personal Study Guide launcher
+# run.sh — Study Guide Generator launcher
 # See README.md for full usage guide
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -29,6 +29,7 @@ RM_TYPE=""       # roadmap: subject | language
 RM_CURRENT=""    # roadmap: current level
 RM_TARGET=""     # roadmap: target level
 RM_DURATION=""   # roadmap: e.g. "2 months", "1 year"
+FETCH_ARGS=()    # Canvas filters passed through to canvas_fetcher.py
 
 for i in $(seq 1 $#); do
   case "${!i}" in
@@ -48,16 +49,25 @@ for i in $(seq 1 $#); do
       RM_TARGET="${!i#--target=}" ;;
     --duration=*)
       RM_DURATION="${!i#--duration=}" ;;
+    --module=*)
+      FETCH_ARGS+=(--module "${!i#--module=}") ;;
+    --search=*)
+      FETCH_ARGS+=(--search "${!i#--search=}") ;;
+    --only=*)
+      FETCH_ARGS+=(--only "${!i#--only=}") ;;
+    --since=*)
+      FETCH_ARGS+=(--since "${!i#--since=}") ;;
   esac
 done
 
 # ── Help / usage ──────────────────────────────────────────────────────────────
 if [[ -z "$COURSE" || "$COURSE" == "--help" || "$COURSE" == "-h" ]]; then
   echo ""
-  echo -e "${BOLD}Personal Study Guide${RESET} — Claude-powered study & assignment tool"
+  echo -e "${BOLD}Study Guide Generator${RESET} — Claude-powered study & assignment tool"
   echo ""
   echo -e "${BOLD}Usage:${RESET}"
   echo -e "  ./run.sh <course> <hours> [--mode <mode>] [--skip-fetch]"
+  echo -e "  ./run.sh <course> <hours> --mode study --module=\"Week 3\"   (fetch only part of the course)"
   echo -e "  ./run.sh <topic> <weekly-hours> --mode roadmap [--type=...] [--current=...] [--target=...] [--duration=...]"
   echo ""
   echo -e "${BOLD}Modes:${RESET}"
@@ -74,6 +84,13 @@ if [[ -z "$COURSE" || "$COURSE" == "--help" || "$COURSE" == "-h" ]]; then
   echo -e "  ./run.sh SEN-109 10 --skip-fetch --mode study"
   echo -e "  ./run.sh Japanese 5 --mode roadmap"
   echo -e "  ./run.sh \"Machine Learning\" 6 --mode roadmap --type=subject --current=\"knows Python\" --target=\"ship a small ML project\" --duration=\"3 months\""
+  echo ""
+  echo -e "${BOLD}Fetch only part of a course (Canvas):${RESET}"
+  echo -e "  --module=\"Week 3\"     content from modules whose name contains this"
+  echo -e "  --search=Lab3         files/pages/assignments whose name contains this"
+  echo -e "  --only=files,pages    syllabus, modules, assignments, pages, files"
+  echo -e "  --since=2026-10-01    only items updated on or after this date"
+  echo -e "  List module names:    python3 canvas_fetcher.py SEN-109 --list"
   echo ""
   echo -e "  See ${BOLD}README.md${RESET} for the full guide."
   echo ""
@@ -180,9 +197,9 @@ else
 
     # Pass --include-assignment-files for assignment/solver modes
     if [[ "$MODE" == "assignment" || "$MODE" == "solver" ]]; then
-      python3 canvas_fetcher.py "$COURSE" --hours "$HOURS" --include-assignment-files
+      python3 canvas_fetcher.py "$COURSE" --hours "$HOURS" --include-assignment-files ${FETCH_ARGS[@]+"${FETCH_ARGS[@]}"}
     else
-      python3 canvas_fetcher.py "$COURSE" --hours "$HOURS"
+      python3 canvas_fetcher.py "$COURSE" --hours "$HOURS" ${FETCH_ARGS[@]+"${FETCH_ARGS[@]}"}
     fi
 
     ok "Canvas materials saved to ${MATERIALS_DIR}/"

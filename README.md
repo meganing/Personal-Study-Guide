@@ -1,367 +1,121 @@
-# Personal Study Guide
+# Study Guide Generator
 
-An AI workflow that reads your course materials or project descriptions — or just a topic/language you name yourself — and generates a personalized, ADHD-friendly study pack. Transforms lecture slides, PDFs, and assignment briefs (or nothing but a goal) into a single **interactive HTML page** — flip flashcards, a live-feedback quiz, collapsible concept/step cards, Pomodoro + break timers, and progress tracking, all in one file you just double-click open.
+Turn your course materials into one **interactive study page**, made by AI (Claude Code).
 
-## Why ADHD-friendly?
+Give it lecture slides, PDFs or an assignment brief, from Canvas or your own files. You get a single `index.html` with a study schedule, interactive diagrams, flashcards, a quiz, a cheat sheet and timers. It's designed to be ADHD-friendly: short tasks, clear goals and built-in breaks.
 
-The study output is specifically designed for ADHD learners — this is the most distinctive thing about it:
+## What you can make
 
-- **25-minute task blocks** with clear end goals
-- **Mandatory 10-minute breaks** every 50 minutes
-- **Direct action language** ("Open this file, read it twice")
-- **Active learning tasks** (write, say aloud, draw)
-- **Visual analogies** for abstract concepts
-- **Common mistake warnings** to prevent confusion
-- **Multiple learning modalities** (visual, auditory, kinesthetic)
+| Mode | You give it | You get |
+|---|---|---|
+| `study` | Lecture slides / notes | Hour-by-hour plan, concept cards with diagrams, flashcards, quiz, cheat sheet |
+| `assignment` | An assignment brief | A step-by-step guide with code scaffolds, hints and a checklist |
+| `solver` | A brief + starter code | A working solution and a guide that teaches you how it works |
+| `roadmap` | Just a topic, e.g. "Japanese" | A phase-by-phase learning plan with milestones and a study log |
 
-## Interactive HTML output
+## Setup (once)
 
-Every mode produces a single self-contained `index.html` — no server, no build
-step, no internet connection needed. Open it in any browser and:
+You need **Python 3** and **[Claude Code](https://claude.com/claude-code)**.
 
-- **Flip flashcards** — click to reveal, mark "I knew it" / "Still learning",
-  filter by topic/difficulty, shuffle
-- **Live quiz feedback** — multiple choice highlights correct/incorrect
-  instantly; short-answer questions reveal a model answer on demand
-- **Collapsible concept cards, steps, and code walkthroughs** — search/filter,
-  accordion-style, code blocks with a one-click copy button
-- **Built-in timers** — a focus timer per task block and an automatic 10-minute
-  break timer, with a sound when time's up
-- **Progress tracking** — checkboxes, known/learning flashcard state, and a
-  completion ring, all saved in your browser (`localStorage`) so closing and
-  reopening the file picks up where you left off
-- **Dark/light mode** — follows your system theme, with a manual toggle
-- **Printable cheat sheet** — a `Print` button gives a clean, nav-free page
-
-Progress is stored per-browser and per-generation — regenerating a pack starts
-progress fresh, since the content (and therefore task order) may have changed.
-
-Flashcards are also exported as `05a_flashcards.csv` for Anki import, since
-that's a separate workflow worth keeping outside the browser.
-
-## Compatibility
-
-Currently built for Claude Code. Support for other AI agents/runners is planned for a future release.
-
-## Output Modes
-
-Pick one of four presets when you run it:
-
-- **📚 Study mode**: ADHD-friendly study schedules with concept summaries, flashcards, and practice materials
-- **📝 Assignment mode**: Step-by-step completion guides for individual assignments
-- **🔧 Solver mode**: Complete working solutions with comprehension guides
-- **🗺 Roadmap mode**: A learning roadmap for a topic or language you name yourself — no course files needed, just a goal and a timeframe
-
-## Quick Start
-
-### Prerequisites
-- Python 3.x
-- Claude Code CLI (`npm install -g @anthropic-ai/claude-code`)
-- Canvas API access (for automatic material fetching)
-
-### Setup
-1. **Clone and configure:**
-   ```bash
-   git clone <repository-url>
-   cd LearningAgent
-   ```
-
-2. **Create `.env` file:**
-   ```bash
-   CANVAS_TOKEN=your_canvas_api_token
-   CANVAS_URL=https://your-institution.instructure.com
-   ```
-
-3. **Run it:**
-   ```bash
-   # Auto-detect mode from course materials
-   ./run.sh COURSE-CODE 10
-
-   # Specify a preset explicitly
-   ./run.sh SYS-102 10 --mode study
-   ./run.sh CS-201 8 --mode assignment
-   ./run.sh MATH-301 6 --mode solver
-   ```
-
-## Usage Examples
-
-### Study mode (exam prep)
 ```bash
-./run.sh SYS-102 10 --mode study
+npm install -g @anthropic-ai/claude-code
 ```
-**Generates one interactive page (`outputs/index.html`) with:**
-- Hour-by-hour ADHD-friendly study schedule — checkable tasks with built-in focus timers
-- Concept summary cards with analogies and common mistakes
-- 30 flip-to-reveal flashcards (also exported as CSV for Anki import)
-- Practice quiz with instant feedback and model answers
-- One-page printable cheat sheet for exam day
-- "Say it out loud" scripts with a practice timer
-- Danger questions targeting examiner traps
-
-### Assignment mode (project guidance)
 ```bash
-./run.sh CS-301 12 --mode assignment
+git clone https://github.com/meganing/study-guide-generator.git
 ```
-**Generates one interactive page (`outputs/assignments/index.html`) with:**
-- Sidebar overview of all assignments with time estimates
-- Step-by-step completion guide per assignment, with a persisted checklist
-- Code scaffolds with a one-click copy button
-- Relevant lecture material references
-- Common mistakes and testing strategies
-- Hints that reveal one at a time so you don't spoil the rest
-
-### Solver mode (working solutions)
 ```bash
-./run.sh PHYS-201 8 --mode solver
+cd study-guide-generator && cp env.example .env
 ```
-**Generates a runnable solution plus one interactive page (`outputs/solver/index.html`) with:**
-- Complete working solution (ready to submit) in `outputs/solver/solution/`
-- Tabbed comprehension guide: Big Picture, Task Analysis, Solution Notes, Code Walkthrough, Q&A Practice
-- Code walkthrough with collapsible file/section explanations
-- Self-check "questions you must be able to answer" with reveal-answer and a persisted "I can explain this" checklist
-- 30-minute crash course for solution comprehension
 
-### Roadmap mode (learn a topic or language from scratch)
+If you use Canvas, open `.env` and fill in two lines. Get the token from **Canvas → Account → Settings → New Access Token**.
+
+```
+CANVAS_TOKEN=your_token_here
+CANVAS_URL=https://your-school.instructure.com
+```
+
+No Canvas? Skip this step and use your own files (see below).
+
+## Use it
+
+```bash
+./run.sh <course> <hours> --mode <mode>
+```
+
+It asks whether your files come from **Canvas** or your **own folder**. When it finishes, it opens the page in your browser.
+
+**Examples**
+
+```bash
+./run.sh SEN-304 10 --mode study
+```
+```bash
+./run.sh SEN-304 6 --mode assignment
+```
 ```bash
 ./run.sh Japanese 5 --mode roadmap
-./run.sh "Machine Learning" 6 --mode roadmap \
-  --type=subject --current="knows Python" --target="ship a small ML project" --duration="3 months"
 ```
-No course files needed — you're prompted for (or pass as flags) a **type**
-(subject or language), your **current level**, your **target level**, and a
-**duration** (e.g. "2 months", "1 year"). The first argument is the topic
-itself, the second is hours/week you can commit.
 
-**Generates one interactive page (`outputs/roadmap/index.html`) with:**
-- A phase-by-phase roadmap sized to your duration and weekly hours, each phase with focus areas, checkable milestones, a checkpoint self-test, and phase-specific resources
-- General materials (apps, books, courses, communities) for the whole plan — real, verified links where available
-- A **study log**: log each session's date/minutes/notes, see a day streak, total hours, and a GitHub-style 12-week heatmap — all saved in your browser so it persists across visits
-- The same progress ring, confetti, and dark/light mode as the other modes
+- **`<course>`** is a Canvas course code, or any folder name you choose (for example `MY-PROJECT`).
+- **`<hours>`** is how much time you have. For `roadmap`, it's hours per week.
 
-## Using it for a personal or class project (not a full course)
+### Using your own files
 
-`COURSE-CODE` is just a folder label — you don't need a real course for this
-to work. Drop a single project brief/spec (plus any reference material) and
-generate both a concept study pack and a step-by-step completion guide for
-it, exactly like the course examples in `course-materials/`:
+Choose **Local** when asked, then drop your files into the folder it shows: `course-materials/<course>/project/`. PDF, PPTX, TXT, MD and code files all work.
 
+### Only part of a Canvas course
+
+Add a filter to fetch just what you need:
+
+| Flag | Fetches |
+|---|---|
+| `--module="Week 3"` | Only that module |
+| `--search=Lab3` | Only items whose name contains "Lab3" |
+| `--only=files,pages` | Only those types (`syllabus`, `modules`, `assignments`, `pages`, `files`) |
+| `--since=2026-10-01` | Only items changed since that date |
+
+To see a course's module names:
 ```bash
-# 1. Drop your project doc(s) into course-materials/MY-PROJECT/project/
-./run.sh MY-PROJECT 8 --source=local
-
-# 2. Generate the concept study pack (topic map, flashcards, cheat sheet...)
-./run.sh MY-PROJECT 8 --mode study --skip-fetch
-
-# 3. Generate the step-by-step completion guide
-./run.sh MY-PROJECT 8 --mode assignment --skip-fetch
+python3 canvas_fetcher.py SEN-304 --list
 ```
 
-Works for:
-- **Personal projects** — a side project spec, a portfolio piece, a self-assigned build
-- **Class projects** — a single assignment/project brief without a full course of lecture material
+### Other options
 
-Notes:
-- `--source=local` prompts you once to drop files into `course-materials/MY-PROJECT/project/`; use `--skip-fetch` on the following runs against the same folder so it reuses those files instead of asking again.
-- Assignment mode reads `assignments.json` first, then falls back to scanning brief files (`.pdf` `.txt` `.md`) directly — make sure your project doc is one of those formats.
-- If your project already includes starter/source code, drop that in too — the folder will auto-detect `solver` mode instead unless you pass `--mode` explicitly.
+| Flag | What it does |
+|---|---|
+| `--skip-fetch` | Reuse files you already have; don't download again |
+| `--source=local` | Use your own files without being asked |
 
-## Command Options
+## Where to find your page
 
-```bash
-./run.sh <course> <hours> [options]
+Open the `index.html` inside `course-materials/<course>/outputs/`:
 
-Options:
-  --mode <mode>     study | assignment | solver | roadmap | auto (default: auto)
-  --skip-fetch      Use existing materials, don't fetch from Canvas
-  --source=local    Drop files manually instead of Canvas fetch
+| Mode | File |
+|---|---|
+| study | `outputs/index.html` |
+| assignment | `outputs/assignments/index.html` |
+| solver | `outputs/solver/index.html` (solution code in `outputs/solver/solution/`) |
+| roadmap | `outputs/roadmap/index.html` |
 
-Roadmap-mode-only options (prompted interactively if omitted):
-  --type=<type>         subject | language
-  --current=<text>      Current level, e.g. "complete beginner"
-  --target=<text>       Target level/goal, e.g. "conversational"
-  --duration=<text>     e.g. "2 months", "1 year"
-
-Examples:
-  ./run.sh SEN-109 10                           # Auto-detect mode
-  ./run.sh SEN-109 10 --mode study              # Study pack for exam
-  ./run.sh SEN-109 10 --mode assignment         # Assignment guides
-  ./run.sh SEN-109 10 --skip-fetch --mode study # Use existing files
-  ./run.sh Japanese 5 --mode roadmap            # Learning roadmap, prompts for details
-```
-
-## File Organization
-
-### Input structure
-```
-course-materials/
-├── COURSE-CODE/
-│   ├── manifest.json           # Course metadata
-│   ├── assignments.json        # Assignment details
-│   ├── files/
-│   │   ├── lecture-1.pdf      # Lecture slides
-│   │   ├── lecture-2.pptx     # More lectures
-│   │   └── lab-materials/     # Lab files
-│   └── project/               # Manual file drop (--source=local)
-```
-
-### Output structure
-```
-course-materials/COURSE-CODE/outputs/
-├── index.html                 # ★ START HERE — interactive study pack (study/auto mode)
-├── 01_topic_map.json          # Internal working data — all course topics analyzed
-├── 02_priority_list.json      # Internal working data — study priority order
-├── 05a_flashcards.csv         # Anki import file (same cards as in index.html)
-├── assignments/
-│   └── index.html             # ★ START HERE — interactive assignment guide (assignment mode)
-├── solver/
-│   ├── index.html              # ★ START HERE — interactive comprehension guide (solver mode)
-│   └── solution/               # Complete, runnable solution files
-└── roadmap/
-    └── index.html              # ★ START HERE — interactive roadmap + study log (roadmap mode)
-```
-Roadmap mode has no input structure — it's driven entirely by the TOPIC,
-level, and duration you give `run.sh`, so `course-materials/<topic>/` only
-ever contains `outputs/roadmap/`.
-
-Each `index.html` is self-contained — open it directly in a browser, no server
-or build step required. See [Interactive HTML output](#interactive-html-output)
-above for what's in it.
-
-## Canvas Integration
-
-### Automatic fetching
-Fetches from Canvas automatically:
-- Lecture slides and course files
-- Assignment briefs and rubrics
-- Course syllabus and schedule
-- Any linked external resources
-
-### Manual file drop
-For courses without Canvas access:
-```bash
-./run.sh COURSE-CODE 10 --source=local
-# Drop files into: course-materials/COURSE-CODE/project/
-# Supports: .pdf .pptx .txt .md .py .js .cpp .zip and more
-```
-
-## Supported File Types
-
-- **Lectures:** PDF, PPTX, TXT, MD
-- **Code:** PY, JS, TS, CPP, C, RS, JAVA
-- **Documents:** PDF, TXT, MD, DOCX
-- **Archives:** ZIP, TAR, RAR (auto-extracted)
-- **Assignments:** Any text-based format
-
-## Assessment Coverage
-
-### Study mode maps to common assessment types:
-- **Exams:** Comprehensive study schedules with practice questions
-- **Quizzes:** Targeted concept summaries and flashcards
-- **Projects:** Technical concept foundation for implementation
-- **Labs:** Hands-on skill development with theoretical backing
-
-### Assignment mode handles:
-- **Programming projects** with code scaffolds
-- **Research papers** with outline and source guidance
-- **Problem sets** with step-by-step solutions
-- **Design projects** with methodology and evaluation
-
-## Customization
-
-### Study hours
-Adjust total study time based on course difficulty:
-- **Light courses:** 4-6 hours
-- **Standard courses:** 8-12 hours
-- **Heavy courses:** 15-20 hours
-
-### Learning preferences
-Claude adapts output to different learning needs:
-- Visual learners get diagrams and concept maps
-- Auditory learners get speaking scripts and explanations
-- Kinesthetic learners get hands-on exercises and building tasks
+It's one file, so double-click it. Your progress (ticked tasks, known flashcards) is saved in your browser. Flashcards are also saved as `05a_flashcards.csv` for Anki.
 
 ## Troubleshooting
 
-### Common issues
-
-**"No materials found"**
-```bash
-# Check if course materials were fetched
-ls course-materials/COURSE-CODE/
-# If empty, try manual fetch or check Canvas credentials
-```
-
-**"Canvas authentication failed"**
-```bash
-# Verify .env file exists and contains valid tokens
-cat .env
-# Test Canvas connection manually
-```
-
-**"Files not generated"**
-- Ensure Claude Code CLI is installed and authenticated
-- Check that course materials exist in expected directories
-- Try running with `--skip-fetch` if materials already exist
-
-### Getting help
-1. Check the course-materials directory structure
-2. Verify Canvas API permissions
-3. Ensure all prerequisites are installed
-4. Run with manual file drop mode for debugging
-
-## Advanced Usage
-
-### Batch processing
-```bash
-# Process multiple courses
-for course in SYS-102 CS-201 MATH-301; do
-  ./run.sh $course 10 --mode study
-done
-```
-
-### Custom study plans
-The schedule lives as data inside `outputs/index.html`, in a
-`<script id="pack-data" type="application/json">` block. To tweak time blocks,
-add personal notes, or adjust break timing, edit that JSON directly — the page
-re-renders it on load, no build step needed. For bigger changes (different
-topics, different hours), just re-run `./run.sh` — it regenerates the whole
-pack, though note this resets saved progress (see
-[Interactive HTML output](#interactive-html-output)).
-
-### Integration with Anki
-```bash
-# Import flashcards
-# 1. Open Anki
-# 2. File → Import
-# 3. Select: course-materials/COURSE-CODE/outputs/05a_flashcards.csv
-# 4. Configure field mapping
-# 5. Import and start daily review
-```
-
-## Contributing
-
-This project is designed to be extensible:
-
-- **New presets:** Add to `INSTRUCTIONS.md`
-- **File types:** Extend parsing in `canvas_fetcher.py`
-- **Learning styles:** Customize output templates
-- **Assessment types:** Add new question formats
+| Problem | Fix |
+|---|---|
+| `CANVAS_TOKEN not set` | Create `.env` from `env.example` and add your token |
+| `No course found` | The error lists your courses; use the code exactly as shown |
+| `claude not found` | Install Claude Code with the `npm` command above |
+| `No materials found` | Run once without `--skip-fetch`, or add files to `project/` |
 
 ## Updates
 
-- 2026.05  v1.0 — initial project setup with study, assignment, and solver modes
-- 2026.09  v1.1 — adding modes for assignment and project guided
-- 2026.09  v1.2 — fixing learning guide/pack presentation
-- 2026.09  v1.3 — adding language learning mode and subject/topic learning
+- **v1.4 (2026-10):** fetch part of a Canvas course; new design; interactive diagrams
+- **v1.3 (2026-09):** roadmap mode for any topic or language
+- **v1.2 (2026-09):** better page layout
+- **v1.1 (2026-09):** assignment and project guides
+- **v1.0 (2026-05):** first release with study, assignment and solver modes
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
-
-## Acknowledgments
-
-Built with Claude Code for content analysis and generation. Designed for neurodivergent learners and evidence-based study techniques.
-
----
-
-**Need help?** Open an issue or check the troubleshooting section above. Works best with well-organized course materials and clear learning objectives.
+MIT. See [LICENSE](LICENSE).

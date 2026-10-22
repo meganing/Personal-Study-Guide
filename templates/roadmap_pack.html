@@ -4,36 +4,43 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>__TOPIC_TITLE__ — Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,400..700&family=Manrope:wght@400..800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#faf8f5; --bg-alt:#ffffff; --bg-raised:#f1ede6;
-    --text:#1a1a1a; --text-dim:#5b5b5b; --border:#e5e1da;
-    --accent:#6d54e0; --accent-ink:#ffffff; --accent-soft:#efeafd;
-    --good:#0f9d68; --good-soft:#e3f7ee;
-    --bad:#e5484d; --bad-soft:#fdeaea;
-    --warn:#b8790a; --warn-soft:#fdf1de;
-    --radius:16px; --radius-sm:10px;
-    --shadow:0 1px 2px rgba(20,16,8,.04), 0 8px 24px rgba(20,16,8,.06);
+    --bg:#e8e8e6; --bg-alt:#ffffff; --bg-raised:#f1f1ef;
+    --text:#111111; --text-dim:#5d5d5a; --border:#e2e2de;
+    --accent:#111111; --accent-ink:#ffffff; --accent-soft:#e6f6b0;
+    --ink:#141414; --on-ink:#f4f4f2; --lime:#dcf3a0; --on-lime:#111111;
+    --good:#1d8a55; --good-soft:#e4f5e9;
+    --bad:#d64045; --bad-soft:#fcebea;
+    --warn:#9a6200; --warn-soft:#fbf0d9;
+    --radius:28px; --radius-md:20px; --radius-sm:14px;
+    --font-display:"Archivo","Arial Narrow",-apple-system,BlinkMacSystemFont,sans-serif;
+    --font-body:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --bg:#15161c; --bg-alt:#1c1e26; --bg-raised:#242631;
-      --text:#f2f1ee; --text-dim:#a7a7b2; --border:#2d2f3a;
-      --accent:#9b86ff; --accent-ink:#15161c; --accent-soft:#2a2450;
-      --good:#3ecf8e; --good-soft:#0f2e24;
-      --bad:#ff6b70; --bad-soft:#3a1c1e;
-      --warn:#f0b64c; --warn-soft:#3a2c10;
+      --bg:#0c0c0d; --bg-alt:#161618; --bg-raised:#212124;
+      --text:#f2f2ef; --text-dim:#a3a3a0; --border:#2b2b2f;
+      --accent:#d6f07f; --accent-ink:#111111; --accent-soft:#2a3216;
+      --ink:#000000; --on-ink:#f2f2ef; --lime:#d6f07f; --on-lime:#111111;
+      --good:#4fd18b; --good-soft:#12291d;
+      --bad:#ff6b6f; --bad-soft:#341819;
+      --warn:#f0b64c; --warn-soft:#33270f;
       color-scheme: dark;
     }
   }
   :root[data-theme="dark"]{
-    --bg:#15161c; --bg-alt:#1c1e26; --bg-raised:#242631;
-    --text:#f2f1ee; --text-dim:#a7a7b2; --border:#2d2f3a;
-    --accent:#9b86ff; --accent-ink:#15161c; --accent-soft:#2a2450;
-    --good:#3ecf8e; --good-soft:#0f2e24;
-    --bad:#ff6b70; --bad-soft:#3a1c1e;
-    --warn:#f0b64c; --warn-soft:#3a2c10;
+    --bg:#0c0c0d; --bg-alt:#161618; --bg-raised:#212124;
+    --text:#f2f2ef; --text-dim:#a3a3a0; --border:#2b2b2f;
+    --accent:#d6f07f; --accent-ink:#111111; --accent-soft:#2a3216;
+    --ink:#000000; --on-ink:#f2f2ef; --lime:#d6f07f; --on-lime:#111111;
+    --good:#4fd18b; --good-soft:#12291d;
+    --bad:#ff6b6f; --bad-soft:#341819;
+    --warn:#f0b64c; --warn-soft:#33270f;
     color-scheme: dark;
   }
   *{box-sizing:border-box}
@@ -149,6 +156,55 @@
   @media (max-width:560px){
     .log-form input[type=text]{width:100%}
   }
+  /* THEME:START — bento look shared with the study pack (black, white and lime) */
+  body{font-family:var(--font-body);-webkit-font-smoothing:antialiased;padding:16px 16px 80px}
+  a{color:inherit}
+  :focus-visible{outline:2px solid var(--text);outline-offset:2px}
+  h1,h2{font-family:var(--font-display);font-stretch:82%;font-weight:500;letter-spacing:-.02em}
+  h2{text-transform:uppercase;font-size:clamp(28px,4vw,42px);line-height:.95;margin:0 0 14px}
+  h3{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-dim);margin:24px 0 10px}
+  header.top{position:sticky;top:12px;max-width:1040px;margin:0 auto 16px;border:1px solid var(--border);border-radius:28px;
+    background:color-mix(in srgb, var(--bg-alt) 90%, transparent);padding:4px 0 10px}
+  header.top .top-inner{max-width:none}
+  header.top h1{font-size:clamp(20px,2.6vw,28px);text-transform:uppercase;line-height:1}
+  nav.tabs{max-width:none}
+  nav.tabs a,nav.tabs button{border:0;background:transparent;color:var(--text-dim);transition:background .15s,color .15s}
+  nav.tabs a:hover,nav.tabs button:hover{background:var(--bg-raised);color:var(--text)}
+  nav.tabs a.active,nav.tabs button.active{background:var(--ink);color:var(--on-ink)}
+  section{max-width:1040px;background:var(--bg-alt);border:1px solid var(--border);border-radius:28px;padding:28px;margin:16px auto 0}
+  section > .lede{max-width:600px}
+  .card,.qa-card{background:var(--bg-raised);border:0;border-radius:20px;box-shadow:none;padding:18px 20px}
+  .goal-banner,.big-picture{background:var(--ink);color:var(--on-ink);border:1px solid var(--border);border-radius:20px;padding:20px 22px;font-size:15px;font-weight:600}
+  .goal-banner b{color:var(--lime)}
+  .pill{background:transparent;border:1.5px solid var(--text);color:var(--text);padding:4px 12px}
+  .pill.accent{background:var(--lime);color:var(--on-lime);border-color:var(--lime)}
+  .btn,.timer-btn{border:1.5px solid var(--text);background:transparent;color:var(--text);border-radius:999px;font-weight:700}
+  .btn:hover,.timer-btn:hover{background:var(--bg-alt);border-color:var(--text)}
+  .btn.primary{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+  .btn.good{background:transparent;border-color:var(--good);color:var(--good)}
+  .btn.bad{background:transparent;border-color:var(--bad);color:var(--bad)}
+  .icon-btn{border-radius:999px;border:1.5px solid var(--text);background:transparent}
+  .ring{background:conic-gradient(var(--text) calc(var(--pct,0)*1%), var(--bg-raised) 0)}
+  .ring span{z-index:1}
+  .step,.phase,.file-block{background:var(--bg-raised);border:0;border-radius:20px}
+  .step.open,.phase.open{background:var(--bg-alt);box-shadow:inset 0 0 0 1.5px var(--text)}
+  .step-head .num,.phase-head .num{background:var(--ink);color:var(--on-ink)}
+  .phase.complete .num{background:var(--lime);color:var(--on-lime)}
+  .step-body,.fsec-body,.phase-body{transition:max-height .35s ease}
+  .step.open .step-body,.fsec.open .fsec-body,.phase.open .phase-body{max-height:6000px}
+  .file-head{background:var(--ink);color:var(--on-ink);border-radius:20px 20px 0 0}
+  .fsec{border-top-color:var(--border)}
+  pre{border-radius:14px}
+  .done-crit,.say-box,.hint-item,.model-answer,.ready-banner{background:var(--lime);color:var(--on-lime);border-color:var(--lime);border-radius:14px}
+  .face{border:0;border-radius:20px}
+  .face.back{background:var(--lime);color:var(--on-lime)}
+  .progress-bar > i{background:var(--text)}
+  .stat{background:var(--bg-raised);border-radius:20px}
+  .stat .num{font-family:var(--font-display);font-stretch:85%;font-weight:500;font-size:34px;color:var(--text)}
+  table th{background:transparent}
+  footer{max-width:1040px}
+  @media (max-width:560px){ body{padding:10px 10px 60px} section{padding:18px;border-radius:22px} header.top{border-radius:22px} }
+  /* THEME:END */
 </style>
 </head>
 <body>
@@ -163,15 +219,15 @@
     <button class="icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">◐</button>
   </div>
   <nav class="tabs">
-    <a href="#overview">🧭 Overview</a>
-    <a href="#roadmap">🗺 Roadmap</a>
-    <a href="#materials">📚 Materials</a>
-    <a href="#log">🔥 Study log</a>
+    <a href="#overview">Overview</a>
+    <a href="#roadmap">Roadmap</a>
+    <a href="#materials">Materials</a>
+    <a href="#log">Study log</a>
   </nav>
 </header>
 
 <section id="overview">
-  <h2>🧭 Overview</h2>
+  <h2>Overview</h2>
   <div class="meta-row" id="overviewPills"></div>
   <div class="goal-banner"><b>The plan:</b> <span id="overviewText"></span></div>
   <div class="card">
@@ -185,19 +241,19 @@
 </section>
 
 <section id="roadmap">
-  <h2>🗺 Roadmap</h2>
+  <h2>Roadmap</h2>
   <p class="lede">Work through phases in order. Check off milestones as you go — a phase turns green once every milestone in it is done.</p>
   <div id="phasesRoot"></div>
 </section>
 
 <section id="materials">
-  <h2>📚 Materials</h2>
+  <h2>Materials</h2>
   <p class="lede">General resources for the whole plan. Phase-specific resources are inside each phase in the Roadmap tab.</p>
   <div class="card" id="materialsRoot"></div>
 </section>
 
 <section id="log">
-  <h2>🔥 Study log</h2>
+  <h2>Study log</h2>
   <p class="lede">Log each study session — even 10 minutes counts. Consistency is what this tracks, not perfection.</p>
   <div class="card">
     <div class="log-form">
@@ -226,7 +282,7 @@
 </section>
 
 <footer>
-  Generated by Personal Study Guide · your roadmap progress and study log are stored only in this browser (localStorage) · reopen this file any time to pick up where you left off.
+  Generated by Study Guide Generator · your roadmap progress and study log are stored only in this browser (localStorage) · reopen this file any time to pick up where you left off.
 </footer>
 
 <script id="pack-data" type="application/json">
@@ -475,6 +531,7 @@ __ROADMAP_DATA_JSON__
     document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
     const el = document.getElementById(id);
     if(el) el.classList.add('active');
+    document.querySelectorAll('nav.tabs a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#'+id));
   }
   document.querySelectorAll('nav.tabs a').forEach(a => {
     a.addEventListener('click', (e) => { e.preventDefault(); activate(a.getAttribute('href').slice(1)); history.replaceState(null,'','#'+a.getAttribute('href').slice(1)); window.scrollTo(0,0); });

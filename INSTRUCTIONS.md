@@ -35,6 +35,14 @@ everything in STUDY/ASSIGNMENT/SOLVER below does not apply to it.
 Read `<COURSE_DIR>/manifest.json` for course_name and study_hours.
 If missing, infer from folder name and use HOURS argument.
 
+**Partial fetches.** If the manifest has a non-empty `filters` object (any of
+`modules`, `search`, `since` set), the student fetched only part of the
+course. The folder may still hold files from earlier, larger fetches, so in
+every mode read ONLY the paths listed in `manifest.fetched`, plus anything in
+`project/`. Scope the pack to that content: don't pad it with topics from
+the rest of the course. Mention the filter in the pack `goal`
+(e.g. "…for the Week 3 module").
+
 ### 0C — Auto-detect mode (only if --mode not passed)
 Scan the course folder:
 - If folder contains ONLY lecture files (pptx, pdf, txt) → MODE = study
@@ -74,7 +82,8 @@ Then immediately begin the phase set for the detected/specified mode.
 
 ## [STUDY] PHASE 1 — INGEST & MAP
 
-Read ALL files in the course folder recursively:
+Read ALL files in the course folder recursively (or, after a partial fetch,
+only the paths in `manifest.fetched` — see 0B):
 - `.pptx`: extract text from every slide (slide number + text)
 - `.pdf`: extract text from every page
 - `.txt` / `.md`: read fully
@@ -185,10 +194,23 @@ Build the `concepts` array (becomes the `concepts` field in Phase 6):
     "explanation": "3-5 sentence explanation.",
     "analogy": "Vivid concrete analogy.",
     "misconception": "What students get wrong and why.",
-    "key_question": "Examiner-style question."
+    "key_question": "Examiner-style question.",
+    "visual": { "...": "optional — see VISUALS below" }
   }
 ]
 ```
+
+**Visuals.** Give a concept a `visual` whenever a picture explains it faster
+than words: a process, a structure, a comparison, a cycle, a stack of layers,
+or code whose state changes line by line. Aim for at least 60% of concepts.
+Skip it for a concept that is just a definition. Pick the type with the
+VISUALS table at the end of this file, and use the course's own examples
+(real class names, real variables, real numbers from the slides).
+
+Also build 2-3 big-picture `visuals` for the whole pack (they become the
+top-level `visuals` field in Phase 6 and appear in a "Visual guide" section
+near the top). Good choices: how the main topics connect (`hierarchy`), the
+order things happen in (`flow`), or the course's key comparison (`compare`).
 
 ---
 
@@ -262,6 +284,7 @@ markdown files from earlier versions of this tool.
      "generated_at": "<ISO 8601 timestamp of now>",
      "goal": "<overall pack goal from Phase 3>",
      "breaks_after_every_minutes": 50,
+     "visuals": [ ... 2-3 big-picture diagrams from Phase 4 ... ],
      "schedule": [ ... from Phase 3 ... ],
      "concepts": [ ... from Phase 4 ... ],
      "flashcards": [ ... from Phase 5A ... ],
@@ -363,9 +386,11 @@ the `assignments` field in Phase 3).
       "goal": "What you will have by the end of this step",
       "how": ["Short concrete action 1.", "Short concrete action 2 — name the exact file/command/concept.", "What to watch out for, in one line."],
       "code_scaffold": {"lang": "python", "code": "# Starter code or structure to follow"},
+      "visual": { "...": "optional — see VISUALS below" },
       "done_when": "Specific, checkable completion criterion"
     }
   ],
+  "visuals": [ "optional — 1-2 diagrams of how the whole deliverable fits together" ],
   "lecture_refs": [{"concept": "...", "source": "sen-109-lec-2.pptx", "slides": "4-8"}],
   "common_mistakes": [{"mistake": "...", "why": "Short reason, one sentence."}],
   "testing": {"description": "Specific test cases or verification steps, with expected outputs.", "commands": ["pytest test_x.py"]},
@@ -374,7 +399,12 @@ the `assignments` field in Phase 3).
 }
 ```
 `code_scaffold` is optional — omit it entirely for non-coding steps rather than
-leaving it null. `commands` may be an empty array for non-code testing steps.
+leaving it null. The same goes for `visual` and `visuals` (see the VISUALS
+table at the end of this file). Add a step `visual` when the step is hard to
+picture: the order of operations (`flow`), how the files or classes relate
+(`hierarchy`), or what the scaffold code does line by line (`trace`). Add
+assignment-level `visuals` (1-2) showing how the finished deliverable fits
+together, e.g. the program's main loop or its class structure. `commands` may be an empty array for non-code testing steps.
 `glossary` covers only terms actually used in this assignment's guide (aim for
 4-8). `time_plan` splits the assignment's `est_hours` into work sessions sized
 for a beginner's actual attention span (60-120 min each) so the student knows
@@ -502,11 +532,13 @@ Build the `comprehension` object (becomes the `comprehension` field in Phase 4):
           "what": "Plain English explanation of what this does.",
           "why": "The reasoning — what alternatives exist and why this approach was chosen.",
           "key_lines": {"lang": "python", "code": "the most important line(s), with an inline comment"},
-          "say": "Exact spoken explanation the student can use in an oral or viva."
+          "say": "Exact spoken explanation the student can use in an oral or viva.",
+          "visual": { "...": "optional — see VISUALS below; a `trace` of this section is ideal" }
         }
       ]
     }
   ],
+  "visuals": [ "1-3 big-picture diagrams: the class/file structure, the main flow of the program" ],
   "concepts": [{"concept": "...", "where": "function name", "lecture_ref": "lecture file + slide"}],
   "questions": [{"q": "Question about the solution", "answer": "Full answer", "say": "Natural spoken version"}],
   "good_points": ["Specific things done well that the student can mention"],
@@ -515,6 +547,11 @@ Build the `comprehension` object (becomes the `comprehension` field in Phase 4):
 ```
 Include enough `questions` entries to cover every non-trivial design decision
 (aim for 5-8) — these become a self-check practice deck in the UI.
+
+`visuals` appear under the big picture; always include at least one (the
+structure of the solution as a `hierarchy`, or its main loop as a `flow`).
+Give the 1-3 trickiest file `sections` a `trace` visual that steps through
+their code with real example values, so the student can see it run.
 
 ---
 
@@ -691,9 +728,60 @@ Before writing any file:
   keys verbatim and will silently render nothing for a misspelled or missing key
 - Escape any literal `</script` inside a JSON string value as `<\/script`
 - Never edit the template files in `templates/` themselves — only read them
+- Every `visual` must use one of the types in the VISUALS table below with
+  exactly those field names; an unknown type or misspelled field is skipped
+  silently, so the student just sees no diagram
 - Never invent a URL for a `resources`/`materials` entry — only include one
   you actually verified exists (via a browsing tool), otherwise omit `url`
   and give just `name`/`note`
+
+---
+
+# ══════════════════════════════════════════════════════
+# VISUALS — interactive diagram schema (study, assignment, solver)
+# ══════════════════════════════════════════════════════
+
+Every `visual` / `visuals[]` entry is one object with a `type`, a short
+`title`, and an optional `caption` (the hint shown before the student taps
+anything). The template draws it as an interactive diagram: tapping a part
+shows its `detail`, and step-based types get ◀ ▶ Play controls. Keep every
+`label` to 1-4 words and every `detail` to 1-2 short sentences. Use 3-7
+parts per diagram; split a bigger idea into two diagrams.
+
+| type | Use it for | Fields |
+|---|---|---|
+| `flow` | Steps that happen in order (an algorithm, a request, what a constructor does) | `steps: [{label, detail}]` |
+| `cycle` | A loop that repeats (event loop, TCP handshake retry, the scientific method) | `steps: [{label, detail}]`, optional `center` (text in the middle) |
+| `hierarchy` | A tree: class inheritance, parts of a system, a taxonomy | `nodes: [{id, label, parent?, tag?, detail}]` (root has no `parent`), optional `relation` (e.g. `"extends"`, read child → parent) |
+| `compare` | Two to four options side by side | `columns: ["A", "B"]`, `rows: [{label, values: ["…", "…"], note?}]`, optional `column_notes: ["…", "…"]` |
+| `layers` | A stack where each level builds on the one below (memory, network layers, architecture) | `layers: [{label, tag?, detail}]` top first, optional `direction` (e.g. `"Data flows down"`) |
+| `timeline` | Dated or ordered events (history, a project's phases, an object's life) | `events: [{when, label, detail}]` |
+| `trace` | Code running line by line with variables changing | `code: "line 1\nline 2…"`, `steps: [{line, vars: {name: value}, note}]`, optional `vars_title` |
+
+Rules for `trace`: `line` is 1-based into `code`; `vars` is the FULL set of
+variables at that moment (not just the changed ones, the template highlights
+changes itself); keep `code` under ~15 lines and use real example values.
+
+Example (`hierarchy`):
+```json
+{"type": "hierarchy", "title": "The shape classes", "relation": "extends",
+ "nodes": [
+   {"id": "shape", "label": "AbstractShape", "tag": "abstract", "detail": "Holds the anchor and vertices; declares draw() with no body."},
+   {"id": "sq", "label": "Square", "parent": "shape", "detail": "Builds 4 corners from the anchor and side length."},
+   {"id": "tri", "label": "Triangle", "parent": "shape", "detail": "Stores 3 corners; move() shifts each by dx, dy."}
+ ]}
+```
+
+Example (`trace`):
+```json
+{"type": "trace", "title": "Which draw() runs?", "vars_title": "Objects",
+ "code": "AbstractShape s;\ns = new Square(10, 5, 6);\ns.draw(g);",
+ "steps": [
+   {"line": 1, "vars": {"s": "null"}, "note": "A parent-type variable that can point at any shape."},
+   {"line": 2, "vars": {"s": "→ Square"}, "note": "s now points at a Square object."},
+   {"line": 3, "vars": {"s": "→ Square", "runs": "Square.draw()"}, "note": "Java uses the real object's method: polymorphism."}
+ ]}
+```
 
 ---
 
